@@ -1,0 +1,110 @@
+@import "tailwindcss";
+
+/* Enable class-based dark mode (toggle) instead of OS preference only */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+  Elegant palette built on color theory:
+  - Neutral slate base (analogous, low-saturation) for calm, professional feel.
+  - A single teal accent (the "lead" hue) for cohesion + a complementary amber
+    used sparingly as a secondary highlight.
+*/
+:root {
+  --background: #f8fafc;
+  --background-elevated: #ffffff;
+  --foreground: #0f172a;
+  --muted: #475569;
+  --border: #e2e8f0;
+  --card: #ffffff;
+
+  --accent: #0d9488;
+  --accent-hover: #0f766e;
+  --accent-soft: #ccfbf1;
+  --secondary: #d97706;
+
+  --grid: rgba(15, 23, 42, 0.04);
+}
+
+.dark {
+  --background: #0b1120;
+  --background-elevated: #0f172a;
+  --foreground: #e2e8f0;
+  --muted: #94a3b8;
+  --border: #1e293b;
+  --card: #0f172a;
+
+  --accent: #2dd4bf;
+  --accent-hover: #5eead4;
+  --accent-soft: rgba(45, 212, 191, 0.12);
+  --secondary: #fbbf24;
+
+  --grid: rgba(226, 232, 240, 0.04);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-background-elevated: var(--background-elevated);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-card: var(--card);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-soft: var(--accent-soft);
+  --color-secondary: var(--secondary);
+
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+* {
+  border-color: var(--border);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+/* Decorative dotted grid used in the hero background */
+.bg-grid {
+  background-image: radial-gradient(var(--grid) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+/* Animated gradient text for headings */
+.text-gradient {
+  background: linear-gradient(120deg, var(--accent), var(--secondary));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Subtle reusable card surface */
+.surface {
+  background: var(--card);
+  border: 1px solid var(--border);
+}
+
+::selection {
+  background: var(--accent);
+  color: #ffffff;
+}
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
