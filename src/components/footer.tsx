@@ -22,10 +22,10 @@ export function Footer() {
         <div>
           <a href="#home" className="flex items-center gap-2 font-bold">
             <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent text-sm font-black text-white">
-              L
+              E
             </span>
             <span className="text-lg tracking-tight">
-              Luis<span className="text-accent">.</span>
+              Elian<span className="text-accent">.</span>
             </span>
           </a>
           <p className="mt-3 max-w-xs text-sm text-muted">{t.footer.tagline}</p>
@@ -85,7 +85,7 @@ export function Footer() {
 
       <div className="mx-auto mt-10 flex w-full max-w-6xl flex-col items-center justify-between gap-2 border-t border-border pt-6 text-xs text-muted sm:flex-row">
         <p>
-          &copy; {year} Luis Caizapanta. {t.footer.rights}
+          &copy; {year} Elian Caizapanta. {t.footer.rights}
         </p>
         <p>{t.footer.builtWith}</p>
       </div>

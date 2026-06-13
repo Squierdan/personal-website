@@ -58,7 +58,8 @@ export function Projects() {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.3 }}
-              className="surface group flex flex-col overflow-hidden rounded-2xl"
+              whileHover={{ y: -6 }}
+              className="surface group flex flex-col overflow-hidden rounded-2xl transition-shadow hover:shadow-2xl hover:shadow-accent/10"
             >
               <div
                 className="relative flex h-40 items-center justify-center overflow-hidden"
@@ -67,7 +68,7 @@ export function Projects() {
                 }}
               >
                 <span
-                  className="text-4xl font-black opacity-30 transition-transform duration-500 group-hover:scale-110"
+                  className="text-4xl font-black opacity-30 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-2"
                   style={{ color: project.accent }}
                 >
                   {project.title
@@ -147,7 +148,7 @@ function FilterButton({
     <button
       type="button"
       onClick={onClick}
-      className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
+      className={`rounded-full px-4 py-1.5 text-sm font-medium transition-all hover:-translate-y-0.5 ${
         active
           ? "bg-accent text-white"
           : "surface text-muted hover:border-accent hover:text-accent"

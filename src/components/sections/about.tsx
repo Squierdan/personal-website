@@ -28,7 +28,7 @@ export function About() {
             {skills.map((skill) => (
               <li
                 key={skill}
-                className="surface rounded-lg px-3.5 py-2 text-sm font-medium transition-colors hover:border-accent hover:text-accent"
+                className="surface lift-card rounded-lg px-3.5 py-2 text-sm font-medium hover:border-accent hover:text-accent"
               >
                 {skill}
               </li>

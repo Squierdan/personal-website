@@ -37,14 +37,14 @@ export function Contact() {
               type="text"
               name="name"
               placeholder={t.contact.namePlaceholder}
-              className="surface w-full rounded-xl px-4 py-3 text-sm outline-none transition-colors focus:border-accent"
+              className="surface focus-glow w-full rounded-xl px-4 py-3 text-sm outline-none transition-all focus:border-accent"
             />
             <input
               required
               type="email"
               name="email"
               placeholder={t.contact.emailPlaceholder}
-              className="surface w-full rounded-xl px-4 py-3 text-sm outline-none transition-colors focus:border-accent"
+              className="surface focus-glow w-full rounded-xl px-4 py-3 text-sm outline-none transition-all focus:border-accent"
             />
           </div>
           <textarea
@@ -52,12 +52,12 @@ export function Contact() {
             name="message"
             rows={5}
             placeholder={t.contact.messagePlaceholder}
-            className="surface w-full resize-none rounded-xl px-4 py-3 text-sm outline-none transition-colors focus:border-accent"
+            className="surface focus-glow w-full resize-none rounded-xl px-4 py-3 text-sm outline-none transition-all focus:border-accent"
           />
           <button
             type="submit"
             disabled={status === "sending"}
-            className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-accent px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-accent/25 transition-all hover:bg-accent-hover disabled:opacity-60 sm:w-auto"
+            className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-accent px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-accent/25 transition-all hover:-translate-y-0.5 hover:bg-accent-hover hover:shadow-accent/40 disabled:opacity-60 sm:w-auto"
           >
             <Send className="h-4 w-4" />
             {status === "sending"

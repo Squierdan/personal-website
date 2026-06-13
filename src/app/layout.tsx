@@ -18,11 +18,11 @@ const siteUrl = "https://personal-website.example.com";
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Luis Caizapanta — Software Engineer",
-    template: "%s · Luis Caizapanta",
+    default: "Elian Caizapanta — Software Engineer",
+    template: "%s · Elian Caizapanta",
   },
   description:
-    "Personal website and portfolio of Luis Caizapanta, software engineer building modern, scalable and human-centered web products.",
+    "Personal website and portfolio of Elian Caizapanta, software engineer building modern, scalable and human-centered web products.",
   keywords: [
     "software engineer",
     "ingeniero de software",
@@ -32,20 +32,20 @@ export const metadata: Metadata = {
     "React",
     "TypeScript",
   ],
-  authors: [{ name: "Luis Caizapanta" }],
+  authors: [{ name: "Elian Caizapanta" }],
   openGraph: {
     type: "website",
-    title: "Luis Caizapanta — Software Engineer",
+    title: "Elian Caizapanta — Software Engineer",
     description:
-      "Personal website and portfolio of Luis Caizapanta, software engineer.",
+      "Personal website and portfolio of Elian Caizapanta, software engineer.",
     url: siteUrl,
-    siteName: "Luis Caizapanta",
+    siteName: "Elian Caizapanta",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Luis Caizapanta — Software Engineer",
+    title: "Elian Caizapanta — Software Engineer",
     description:
-      "Personal website and portfolio of Luis Caizapanta, software engineer.",
+      "Personal website and portfolio of Elian Caizapanta, software engineer.",
   },
 };
 

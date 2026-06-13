@@ -69,7 +69,7 @@ export const dictionaries: Record<Locale, Dictionary> = {
     },
     hero: {
       badge: "Disponible para nuevos proyectos",
-      titleLead: "Hola, soy Luis. Construyo",
+      titleLead: "Hola, soy Elian. Construyo",
       titleHighlight: "software que deja huella",
       subtitle:
         "Ingeniero de software enfocado en crear productos web modernos, escalables y centrados en las personas. Convierto ideas complejas en experiencias digitales elegantes.",
@@ -137,7 +137,7 @@ export const dictionaries: Record<Locale, Dictionary> = {
     },
     hero: {
       badge: "Available for new projects",
-      titleLead: "Hi, I'm Luis. I build",
+      titleLead: "Hi, I'm Elian. I build",
       titleHighlight: "software that makes an impact",
       subtitle:
         "Software engineer focused on building modern, scalable and human-centered web products. I turn complex ideas into elegant digital experiences.",

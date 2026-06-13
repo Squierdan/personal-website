@@ -1,5 +1,6 @@
 "use client";
 
+import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { useLanguage } from "@/components/providers/language-provider";
@@ -27,20 +28,23 @@ export function Navbar() {
   ];
 
   return (
-    <header
+    <motion.header
+      initial={{ y: -18, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
       className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
         scrolled
-          ? "border-b border-border bg-background/80 backdrop-blur-md"
+          ? "border-b border-border bg-background/85 shadow-sm shadow-black/5 backdrop-blur-xl"
           : "border-b border-transparent"
       }`}
     >
       <nav className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-6 md:px-10">
         <a href="#home" className="group flex items-center gap-2 font-bold">
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent text-sm font-black text-white">
-            L
+          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent text-sm font-black text-white transition-transform duration-300 group-hover:rotate-6 group-hover:scale-105">
+            E
           </span>
           <span className="text-lg tracking-tight">
-            Luis<span className="text-accent">.</span>
+            Elian<span className="text-accent">.</span>
           </span>
         </a>
 
@@ -49,9 +53,10 @@ export function Navbar() {
             <li key={link.href}>
               <a
                 href={link.href}
-                className="text-sm font-medium text-muted transition-colors hover:text-accent"
+                className="group relative text-sm font-medium text-muted transition-colors hover:text-accent"
               >
                 {link.label}
+                <span className="absolute -bottom-1 left-0 h-px w-full origin-left scale-x-0 bg-accent transition-transform duration-300 group-hover:scale-x-100" />
               </a>
             </li>
           ))}
@@ -71,23 +76,36 @@ export function Navbar() {
         </div>
       </nav>
 
-      {open ? (
-        <div className="border-t border-border bg-background/95 backdrop-blur-md md:hidden">
-          <ul className="mx-auto flex w-full max-w-6xl flex-col px-6 py-2">
-            {links.map((link) => (
-              <li key={link.href}>
-                <a
-                  href={link.href}
-                  onClick={() => setOpen(false)}
-                  className="block py-3 text-sm font-medium text-muted transition-colors hover:text-accent"
+      <AnimatePresence>
+        {open ? (
+          <motion.div
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.2 }}
+            className="border-t border-border bg-background/95 backdrop-blur-md md:hidden"
+          >
+            <ul className="mx-auto flex w-full max-w-6xl flex-col px-6 py-2">
+              {links.map((link, index) => (
+                <motion.li
+                  key={link.href}
+                  initial={{ opacity: 0, x: -8 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.035 }}
                 >
-                  {link.label}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-      ) : null}
-    </header>
+                  <a
+                    href={link.href}
+                    onClick={() => setOpen(false)}
+                    className="block py-3 text-sm font-medium text-muted transition-colors hover:text-accent"
+                  >
+                    {link.label}
+                  </a>
+                </motion.li>
+              ))}
+            </ul>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
+    </motion.header>
   );
 }

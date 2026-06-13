@@ -53,7 +53,7 @@ All content is centralized so you can make it yours without touching components:
 - **Colors / theme palette:** `src/app/globals.css`
 - **SEO metadata:** `src/app/layout.tsx`
 
-> Note: The name (“Luis Caizapanta”), stats, project entries and social links are
+> Note: The name (“Elian Caizapanta”), stats, project entries and social links are
 > sensible placeholders — update them in the files above with your real details.
 
 ## Project structure

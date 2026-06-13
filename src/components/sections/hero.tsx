@@ -14,9 +14,8 @@ export function Hero() {
       id="home"
       className="relative flex min-h-screen items-center overflow-hidden px-6 pt-16 md:px-10"
     >
-      <div className="bg-grid pointer-events-none absolute inset-0" />
-      <div className="pointer-events-none absolute -left-32 top-24 h-96 w-96 rounded-full bg-accent/20 blur-3xl" />
-      <div className="pointer-events-none absolute -right-24 bottom-12 h-80 w-80 rounded-full bg-secondary/10 blur-3xl" />
+      <div className="bg-grid pointer-events-none absolute inset-0 opacity-80" />
+      <div className="aurora-field pointer-events-none absolute inset-0" />
 
       <div className="relative mx-auto grid w-full max-w-6xl items-center gap-12 py-20 md:grid-cols-[1.2fr_1fr]">
         <div>
@@ -24,7 +23,7 @@ export function Hero() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 rounded-full border border-border bg-background-elevated px-3 py-1 text-xs font-medium text-muted"
+            className="shine-border inline-flex items-center gap-2 rounded-full border border-border bg-background-elevated px-3 py-1 text-xs font-medium text-muted"
           >
             <span className="relative flex h-2 w-2">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-75" />
@@ -60,14 +59,14 @@ export function Hero() {
           >
             <a
               href="#projects"
-              className="group inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-accent/25 transition-all hover:bg-accent-hover hover:shadow-accent/40"
+              className="group inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-accent/25 transition-all hover:-translate-y-0.5 hover:bg-accent-hover hover:shadow-accent/40"
             >
               {t.hero.ctaPrimary}
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </a>
             <a
               href="#contact"
-              className="inline-flex items-center gap-2 rounded-full border border-border bg-background-elevated px-6 py-3 text-sm font-semibold text-foreground transition-colors hover:border-accent hover:text-accent"
+              className="inline-flex items-center gap-2 rounded-full border border-border bg-background-elevated px-6 py-3 text-sm font-semibold text-foreground transition-all hover:-translate-y-0.5 hover:border-accent hover:text-accent"
             >
               {t.hero.ctaSecondary}
             </a>
@@ -77,7 +76,7 @@ export function Hero() {
                 target="_blank"
                 rel="noreferrer"
                 aria-label="GitHub"
-                className="inline-flex h-10 w-10 items-center justify-center rounded-full text-muted transition-colors hover:text-accent"
+                className="inline-flex h-10 w-10 items-center justify-center rounded-full text-muted transition-all hover:-translate-y-0.5 hover:text-accent"
               >
                 <GithubIcon className="h-5 w-5" />
               </a>
@@ -86,14 +85,14 @@ export function Hero() {
                 target="_blank"
                 rel="noreferrer"
                 aria-label="LinkedIn"
-                className="inline-flex h-10 w-10 items-center justify-center rounded-full text-muted transition-colors hover:text-accent"
+                className="inline-flex h-10 w-10 items-center justify-center rounded-full text-muted transition-all hover:-translate-y-0.5 hover:text-accent"
               >
                 <LinkedinIcon className="h-5 w-5" />
               </a>
               <a
                 href={`mailto:${socials.email}`}
                 aria-label="Email"
-                className="inline-flex h-10 w-10 items-center justify-center rounded-full text-muted transition-colors hover:text-accent"
+                className="inline-flex h-10 w-10 items-center justify-center rounded-full text-muted transition-all hover:-translate-y-0.5 hover:text-accent"
               >
                 <Mail className="h-5 w-5" />
               </a>
@@ -121,10 +120,11 @@ export function Hero() {
           initial={{ opacity: 0, scale: 0.92 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.7, delay: 0.2 }}
+          whileHover={{ y: -8, rotate: -1 }}
           className="relative mx-auto hidden aspect-square w-full max-w-sm md:block"
         >
-          <div className="absolute inset-0 rotate-6 rounded-3xl bg-gradient-to-br from-accent to-secondary opacity-20 blur-xl" />
-          <div className="surface relative flex h-full w-full flex-col justify-between overflow-hidden rounded-3xl p-6 shadow-xl">
+          <div className="animated-frame absolute inset-0 rotate-3 rounded-3xl" />
+          <div className="surface code-window relative flex h-full w-full flex-col justify-between overflow-hidden rounded-3xl p-6 shadow-2xl shadow-accent/10">
             <div className="flex items-center gap-1.5">
               <span className="h-3 w-3 rounded-full bg-red-400" />
               <span className="h-3 w-3 rounded-full bg-amber-400" />
@@ -134,7 +134,7 @@ export function Hero() {
               <code>
                 <span className="text-secondary">const</span>{" "}
                 <span className="text-accent">engineer</span> = {"{"}
-                {"\n"} name: <span className="text-accent">&apos;Luis&apos;</span>,
+                {"\n"} name: <span className="text-accent">&apos;Elian&apos;</span>,
                 {"\n"} role:{" "}
                 <span className="text-accent">&apos;Software Eng.&apos;</span>,
                 {"\n"} stack: [<span className="text-accent">&apos;TS&apos;</span>,{" "}

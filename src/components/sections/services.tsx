@@ -38,8 +38,8 @@ export function Services() {
           const Icon = icons[service.icon];
           return (
             <Reveal key={service.title.en} delay={index * 0.06}>
-              <article className="surface group h-full rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1 hover:border-accent hover:shadow-lg hover:shadow-accent/5">
-                <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-accent-soft text-accent transition-colors group-hover:bg-accent group-hover:text-white">
+              <article className="surface lift-card group h-full rounded-2xl p-6 hover:border-accent">
+                <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-accent-soft text-accent transition-all duration-300 group-hover:rotate-3 group-hover:scale-105 group-hover:bg-accent group-hover:text-white">
                   <Icon className="h-6 w-6" />
                 </div>
                 <h3 className="mb-2 text-lg font-semibold">

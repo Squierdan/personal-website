@@ -161,5 +161,5 @@ export const skills: string[] = [
 export const socials = {
   github: "https://github.com/Squierdan",
   linkedin: "https://www.linkedin.com/",
-  email: "luiscaizapanta01@gmail.com",
+  email: "daniel_caiz@hotmail.com",
 };
