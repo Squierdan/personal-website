@@ -6,16 +6,21 @@
 /* ==========================================================================
    SISTEMA DE COLOR — "Engineering Terminal"
    --------------------------------------------------------------------------
-   Construido con colorimetría intencional, no con colores al azar:
+   Construido con colorimetría intencional, no con colores al azar. Dos
+   clichés a evitar explícitamente en un portafolio de seguridad informática:
+   (a) el patrón genérico "IA": fondo casi negro + un único acento verde/lima
+   brillante; (b) el cliché propio del dominio: verde Matrix / "hacker de
+   sudadera". Por eso el acento primario es CIAN-TEAL, no verde.
 
-   · Base neutra fría (hue ~220°, saturación muy baja) → sensación técnica,
-     sobria y sin fatiga visual en lecturas largas.
-   · Acento primario: verde primavera (hue ~155°) — el "fósforo" del terminal,
-     pero desaturado para que se vea profesional y no neón retro.
-   · Split-complementario del acento: ámbar (~38°) y azul eléctrico (~215°).
-     Un esquema split-complementario da contraste sin el choque agresivo del
-     complementario puro, y permite jerarquía: verde = acción, azul = enlace,
-     ámbar = énfasis / dato.
+   · Base neutra cálida casi negra (no azulada) → distingue del "dark mode"
+     frío por defecto de SaaS/IA.
+   · Acento primario: cian-teal (hue ~185°) — el fósforo de los osciloscopios
+     y monitores de captura de paquetes (Wireshark, terminales de red), no el
+     verde de "consola de hacker" que ya usa medio internet.
+   · Split-complementario del teal: ámbar (~35°, énfasis/dato/advertencia) y
+     rosa-baya (~335°, enlaces) en vez del azul eléctrico por defecto de
+     cualquier navegador. Jerarquía: teal = acción, rosa = enlace, ámbar =
+     énfasis / severidad media.
    · El modo claro NO es el oscuro invertido: usa un blanco cálido (papel) para
      compensar la temperatura fría del texto, y acentos más oscuros para
      mantener contraste AA (>= 4.5:1) sobre fondo claro.
@@ -24,45 +29,45 @@
 :root {
   color-scheme: light;
 
-  --bg: #f7f7f5;
+  --bg: #f7f6f2;
   --bg-elevated: #ffffff;
-  --bg-sunken: #eeeeea;
+  --bg-sunken: #edece6;
   --fg: #13171c;
   --fg-muted: #5b6672;
   --fg-subtle: #8a94a0;
   --border: #dfe0da;
   --border-strong: #c6c8c0;
 
-  --accent: #0b8f5f;
+  --accent: #067077;
   --accent-fg: #ffffff;
-  --accent-soft: rgba(11, 143, 95, 0.1);
-  --link: #1a5fd0;
+  --accent-soft: rgba(6, 112, 119, 0.1);
+  --link: #a63866;
   --amber: #a35a06;
 
   --grid-line: rgba(19, 23, 28, 0.055);
-  --glow: rgba(11, 143, 95, 0.18);
+  --glow: rgba(6, 112, 119, 0.18);
 }
 
 .dark {
   color-scheme: dark;
 
-  --bg: #0a0c0f;
-  --bg-elevated: #10141a;
-  --bg-sunken: #06080a;
-  --fg: #e4e8ee;
-  --fg-muted: #8b95a3;
-  --fg-subtle: #5d6674;
-  --border: #1c222b;
-  --border-strong: #2b333f;
+  --bg: #0c0c0b;
+  --bg-elevated: #131311;
+  --bg-sunken: #060605;
+  --fg: #eae7e0;
+  --fg-muted: #948d7f;
+  --fg-subtle: #656058;
+  --border: #201f1b;
+  --border-strong: #32302a;
 
-  --accent: #3ddc97;
-  --accent-fg: #04120c;
-  --accent-soft: rgba(61, 220, 151, 0.12);
-  --link: #6aa9ff;
+  --accent: #2fd0c0;
+  --accent-fg: #04120f;
+  --accent-soft: rgba(47, 208, 192, 0.12);
+  --link: #ec7fa0;
   --amber: #f0a92e;
 
-  --grid-line: rgba(228, 232, 238, 0.045);
-  --glow: rgba(61, 220, 151, 0.22);
+  --grid-line: rgba(234, 231, 224, 0.045);
+  --glow: rgba(47, 208, 192, 0.2);
 }
 
 @theme inline {

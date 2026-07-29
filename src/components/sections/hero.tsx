@@ -1,11 +1,12 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowDown, ArrowUpRight, Download } from "lucide-react";
+import { ArrowDown, ArrowUpRight, Check, Download } from "lucide-react";
 import { useLanguage } from "@/components/providers/language-provider";
 import { useTypewriter } from "@/hooks/use-typewriter";
 import { useMounted } from "@/hooks/use-mounted";
 import { useClock } from "@/hooks/use-clock";
+import { useIntegrityHash } from "@/hooks/use-integrity-hash";
 import { site } from "@/lib/site";
 
 export function Hero() {
@@ -13,6 +14,7 @@ export function Hero() {
   const mounted = useMounted();
   const clock = useClock(site.timezone);
   const role = useTypewriter(site.role, 55, 700);
+  const hash = useIntegrityHash(`${site.name}:${site.role}:${site.handle}`);
 
   const fade = {
     hidden: { opacity: 0, y: 16 },
@@ -166,17 +168,26 @@ export function Hero() {
           className="corner-marks"
         >
           <div className="term scanlines relative overflow-hidden">
-            {/* Barra de título de la ventana */}
+            {/* Barra de título: en vez de los semáforos de macOS, la
+                verificación de integridad real (SHA-256) del bloque de
+                perfil que se ve debajo — la misma primitiva con la que se
+                audita un commit o un paquete. */}
             <div className="flex items-center gap-2 border-b border-border px-3 py-2.5">
-              <span className="flex gap-1.5">
-                <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f57]" />
-                <span className="h-2.5 w-2.5 rounded-full bg-[#febc2e]" />
-                <span className="h-2.5 w-2.5 rounded-full bg-[#28c840]" />
+              <span
+                aria-hidden
+                className="h-1.5 w-1.5 shrink-0 rounded-full bg-accent"
+              />
+              <span className="flex shrink-0 items-center gap-1 font-mono text-[10px] tabular-nums text-fg-subtle">
+                <span className="hidden sm:inline">sha256:</span>
+                {hash || "············"}
+                {hash ? (
+                  <Check aria-hidden className="h-3 w-3 text-accent" />
+                ) : null}
               </span>
-              <span className="ml-2 truncate font-mono text-[11px] text-fg-subtle">
+              <span className="ml-1 min-w-0 truncate font-mono text-[11px] text-fg-subtle">
                 ~/{site.handle}/profile.ts
               </span>
-              <span className="ml-auto font-mono text-[11px] tabular-nums text-fg-subtle">
+              <span className="ml-auto shrink-0 font-mono text-[11px] tabular-nums text-fg-subtle">
                 {clock || "--:--:--"}
               </span>
             </div>

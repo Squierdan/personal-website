@@ -67,7 +67,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   /* El sitio abre siempre en oscuro, así que la barra del navegador móvil
      debe coincidir desde el primer frame y no parpadear en blanco. */
-  themeColor: "#0a0c0f",
+  themeColor: "#0c0c0b",
   colorScheme: "dark light",
 };
 
