@@ -96,7 +96,7 @@ Para detener el servidor: `Ctrl + C` en la terminal.
 |---|---|
 | Nombre, correo, redes, ubicación, URL | `src/lib/site.ts` |
 | Cualquier texto visible (ES y EN) | `src/i18n/dictionary.ts` |
-| Servicios, proyectos, stack | `src/lib/content.ts` |
+| Servicios, experiencia, stack, certificaciones | `src/lib/content.ts` |
 | Colores del tema | `src/app/globals.css` (bloques `:root` y `.dark`) |
 
 Todo lo demás es estructura; no necesitas tocarlo.
@@ -184,6 +184,10 @@ https://personal-website-squierdan.vercel.app
 Ya está en línea y accesible desde cualquier parte del mundo.
 
 ### 3.3 Paso obligatorio después del primer deploy
+
+> **Ya hecho.** `site.url` apunta a
+> `https://personal-website-blush-three-41.vercel.app`.
+> Solo tendrás que repetir esto si cambias de dominio.
 
 Abre `src/lib/site.ts` y pon tu URL real:
 

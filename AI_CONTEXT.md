@@ -10,8 +10,15 @@
 
 ## 1. Qué es este proyecto
 
-Sitio personal + portafolio de un ingeniero de software. Una sola página con
-cinco secciones ancladas, bilingüe (ES/EN), con tema claro/oscuro.
+Sitio personal + portafolio de **Elian Caizapanta** (alias `SquierDan`),
+ingeniero de software especializado en **seguridad de la información**.
+Una sola página con cinco secciones ancladas, bilingüe (ES/EN), tema claro/oscuro.
+
+El contenido es REAL, tomado de su CV: pasantías en MARCSEAL S.A. y Coris del
+Ecuador, rol en Marino Robalino LLC, publicación indexada del protocolo Nested-C
+en Annals of Telecommunications (Springer), y 13 certificaciones. No inventes
+proyectos, métricas, años de experiencia ni tecnologías que no estén en
+`src/lib/content.ts`: este sitio lo leen reclutadores que contrastan con LinkedIn.
 No hay backend, no hay base de datos y no hay CMS: **todo el contenido está en
 archivos TypeScript**. El sitio se prerenderiza como estático.
 
@@ -46,7 +53,7 @@ declaran en `src/app/globals.css` dentro de `@theme inline`. El modo oscuro usa
 |---|---|
 | `src/lib/site.ts` | Datos personales: nombre, handle, rol, email, redes, URL, zona horaria, disponibilidad |
 | `src/i18n/dictionary.ts` | **Todas** las cadenas visibles, en `es` y `en` |
-| `src/lib/content.ts` | Servicios, proyectos (+ categorías) y stack |
+| `src/lib/content.ts` | Servicios, experiencia/investigación (+ categorías), stack y certificaciones |
 
 ### Archivos de diseño — edita con cuidado
 
@@ -64,7 +71,7 @@ components/command-palette.tsx Paleta ⌘K + atajos globales T / L
 components/theme-toggle.tsx    Presentado como bandera --theme=dark
 components/language-toggle.tsx Presentado como bandera --lang=es
 components/providers/          ThemeProvider (next-themes) + LanguageProvider (contexto propio)
-components/sections/*.tsx      hero · about · services · projects · contact
+components/sections/*.tsx      hero · about · services · experience · contact
 components/ui/section.tsx      <Section> y <SectionHeading> (índice + regla + título)
 components/ui/reveal.tsx       Aparición al hacer scroll
 components/ui/icons.tsx        GitHub · LinkedIn · X
@@ -130,9 +137,13 @@ Motion). Los controles necesitan `aria-label`. Mantén el orden de encabezados
 
 ## 5. Recetas frecuentes
 
-**Añadir un proyecto** → nuevo objeto en `projects` de `src/lib/content.ts`.
-Si usas una categoría nueva, añádela a `projectCategories` **y** a
-`categoryLabels`; el filtro se genera solo.
+**Añadir una entrada de experiencia** → nuevo objeto en `work` de
+`src/lib/content.ts`. Si usas una categoría nueva, añádela a `workCategories`
+**y** a `categoryLabels`; el filtro se genera solo. Las entradas se muestran en
+el orden del array (lo más relevante primero, no estrictamente cronológico).
+
+**Añadir una certificación** → nuevo objeto en `certifications`. Se renderiza en
+la sección 01 automáticamente.
 
 **Añadir una sección nueva**
 1. Crear `src/components/sections/mi-seccion.tsx` con `"use client"`.
@@ -141,6 +152,10 @@ Si usas una categoría nueva, añádela a `projectCategories` **y** a
 4. Renderizarla en `src/app/page.tsx`.
 5. Añadir `"mi-seccion"` a `SECTION_IDS` y a `links` en `navbar.tsx`.
 6. Añadir la entrada de navegación en `command-palette.tsx`.
+
+Los ids de sección actuales son: `top`, `about`, `services`, `experience`,
+`contact`. Están duplicados en `navbar.tsx` (`SECTION_IDS` + `links`) y en
+`command-palette.tsx`; si cambias uno, cambia los tres sitios.
 
 **Cambiar la paleta** → edita `--accent` en `:root` y en `.dark` de
 `globals.css`. Mantén el esquema split-complementario: si mueves el acento
@@ -175,20 +190,22 @@ Revisión manual mínima:
 
 ## 7. Estado actual y pendientes conocidos
 
-**Hecho:** rediseño completo con estética terminal, paleta split-complementaria,
-paleta de comandos ⌘K, atajos de teclado, portafolio tabular expandible,
-servicios como lista de comandos, SEO + JSON-LD + sitemap + robots, cabeceras de
-seguridad en `next.config.ts`, fuentes auto-alojadas, lint y build en verde.
+**Hecho:** rediseño con estética terminal, paleta split-complementaria, paleta
+de comandos ⌘K, atajos de teclado, tabla de experiencia expandible, servicios
+como lista de comandos, sección de certificaciones y formación, SEO + JSON-LD
+(`Person` con `alumniOf` y `knowsAbout`) + sitemap + robots, imagen Open Graph
+estática, cabeceras de seguridad, fuentes auto-alojadas, contenido real del CV
+en ES/EN, desplegado en Vercel con `site.url` correcto. Lint, tipos y build en
+verde.
 
 **Pendiente (requiere datos o decisiones del usuario):**
 
-1. **Contenido real.** `site.ts` y `content.ts` son placeholders (marcados con
-   `<-- EDITAR`). Proyectos, métricas del hero y LinkedIn son de ejemplo.
-2. **`site.url`.** Apunta a una URL de Vercel supuesta. Debe actualizarse tras
-   el primer despliegue o el SEO y Open Graph quedarán mal.
-3. **Imagen Open Graph.** No existe `opengraph-image.tsx`. Al compartir el
-   enlace no se ve previsualización. Se puede generar con `next/og`.
-4. **Foto o avatar.** El hero no tiene retrato; es una decisión estética
-   abierta.
-5. **Formulario sin backend.** Ver receta en §5.
-6. **Sin tests.** No hay Vitest ni Playwright configurados.
+1. **Foto o avatar.** El hero no tiene retrato; decisión estética abierta.
+2. **Formulario sin backend.** Compone un `mailto:`. Ver receta en §5.
+3. **Teléfono.** Deliberadamente NO publicado (está en el CV, pero exponerlo en
+   una web pública atrae spam). Añadirlo solo si el usuario lo pide.
+4. **Dominio propio.** Hoy usa el subdominio `.vercel.app`. Si se compra uno,
+   actualizar `site.url` y volver a desplegar.
+5. **Sin tests.** No hay Vitest ni Playwright configurados.
+6. **Imagen OG estática.** Está en `src/app/opengraph-image.png` (PNG generado a
+   mano, 1200×630). Si cambia el nombre o el rol, hay que regenerarla.

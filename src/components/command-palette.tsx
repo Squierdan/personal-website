@@ -57,7 +57,7 @@ export function CommandPalette() {
       { id: "top", label: t.footer.backToTop, hash: "top" },
       { id: "about", label: t.nav.about, hash: "about" },
       { id: "services", label: t.nav.services, hash: "services" },
-      { id: "projects", label: t.nav.projects, hash: "projects" },
+      { id: "experience", label: t.nav.work, hash: "experience" },
       { id: "contact", label: t.nav.contact, hash: "contact" },
     ].map(({ id, label, hash }) => ({
       id,

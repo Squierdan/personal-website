@@ -112,7 +112,7 @@ export function Hero() {
             className="mt-10 flex flex-wrap items-center gap-3"
           >
             <a
-              href="#projects"
+              href="#experience"
               className="group inline-flex h-11 items-center gap-2 bg-accent px-5 font-mono text-sm font-medium text-[var(--accent-fg)] transition-transform duration-300 hover:-translate-y-0.5"
             >
               {t.hero.ctaPrimary}

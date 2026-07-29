@@ -14,7 +14,7 @@ import { Providers } from "@/components/providers";
 import { site } from "@/lib/site";
 
 const description =
-  "Portafolio y sitio personal de un ingeniero de software especializado en productos web modernos con Next.js, TypeScript y arquitecturas escalables.";
+  "Elian Caizapanta — ingeniero de software especializado en seguridad de la información: gestión de vulnerabilidades, ISO/IEC 27001, pentesting y administración de sistemas. Publicado en Annals of Telecommunications.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -27,14 +27,16 @@ export const metadata: Metadata = {
   authors: [{ name: site.name, url: site.url }],
   creator: site.name,
   keywords: [
-    "software engineer",
+    "seguridad informática",
+    "information security",
+    "ciberseguridad",
+    "ISO 27001",
+    "gestión de vulnerabilidades",
+    "pentesting",
     "ingeniero de software",
-    "desarrollador web",
-    "full stack",
-    "Next.js",
-    "React",
-    "TypeScript",
-    "portafolio",
+    "software engineer",
+    "Ecuador",
+    "Quito",
     site.name,
   ],
   alternates: {
@@ -74,11 +76,34 @@ const jsonLd = {
   "@context": "https://schema.org",
   "@type": "Person",
   name: site.name,
+  alternateName: "SquierDan",
   jobTitle: site.role,
+  description,
   url: site.url,
   email: `mailto:${site.email}`,
-  address: { "@type": "PostalAddress", addressLocality: site.location },
-  sameAs: Object.values(site.socials).filter(Boolean),
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Quito",
+    addressCountry: "EC",
+  },
+  alumniOf: {
+    "@type": "CollegeOrUniversity",
+    name: "Escuela Politécnica Nacional",
+  },
+  knowsAbout: [
+    "Information Security",
+    "ISO/IEC 27001",
+    "Vulnerability Management",
+    "Penetration Testing",
+    "Linux",
+    "Software Engineering",
+  ],
+  knowsLanguage: ["es", "en"],
+  sameAs: [
+    site.socials.github,
+    site.socials.linkedin,
+    site.publicationDoi,
+  ].filter(Boolean),
 };
 
 export default function RootLayout({

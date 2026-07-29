@@ -1,8 +1,11 @@
 # personal-website
 
-Sitio personal y portafolio de **Elian Caizapanta**, ingeniero de software.
-Bilingüe (ES/EN), tema claro/oscuro, responsivo y con una interfaz de estética
+Sitio personal y portafolio de **Elian Caizapanta** — ingeniero de software
+especializado en seguridad de la información.
+Bilingüe (ES/EN), tema claro/oscuro, responsivo, con una interfaz de estética
 *engineering terminal*.
+
+**En producción:** <https://personal-website-blush-three-41.vercel.app>
 
 > **Empieza aquí:** [`DEPLOY.md`](./DEPLOY.md) — cómo ejecutarlo en tu computadora
 > y publicarlo gratis en internet, paso a paso.
@@ -47,6 +50,7 @@ src/
 │   ├── page.tsx        Composición de la página (orden de secciones)
 │   ├── globals.css     ★ SISTEMA DE DISEÑO: paleta, tokens, utilidades
 │   ├── sitemap.ts      /sitemap.xml generado
+│   ├── opengraph-image.png  Previsualización al compartir el enlace
 │   └── robots.ts       /robots.txt generado
 ├── components/
 │   ├── navbar.tsx           Barra fija + progreso de scroll + menú móvil
@@ -55,7 +59,7 @@ src/
 │   ├── theme-toggle.tsx     Conmutador claro/oscuro
 │   ├── language-toggle.tsx  Conmutador ES/EN
 │   ├── providers/           ThemeProvider + LanguageProvider
-│   ├── sections/            hero · about · services · projects · contact
+│   ├── sections/            hero · about · services · experience · contact
 │   └── ui/                  section · reveal · icons
 ├── hooks/              use-active-section · use-typewriter · use-clock · use-mounted
 ├── i18n/
@@ -63,7 +67,7 @@ src/
 │   └── dictionary.ts   ★ TODOS LOS TEXTOS (ES + EN)
 └── lib/
     ├── site.ts         ★ TUS DATOS (nombre, email, redes, URL)
-    └── content.ts      ★ SERVICIOS, PROYECTOS Y STACK
+    └── content.ts      ★ SERVICIOS, EXPERIENCIA, STACK Y CERTIFICACIONES
 ```
 
 Los archivos marcados con ★ son los únicos que necesitas tocar para

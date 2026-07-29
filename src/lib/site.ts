@@ -1,54 +1,49 @@
 /**
  * ============================================================================
- *  SITE CONFIG — ÚNICO ARCHIVO QUE NECESITAS EDITAR PARA PERSONALIZAR EL SITIO
+ *  SITE CONFIG — ÚNICO ARCHIVO PARA TUS DATOS PERSONALES
  * ============================================================================
+ *  Cambia estos valores y el sitio entero se actualiza: navbar, hero, SEO,
+ *  metadatos, footer, contacto y JSON-LD para Google.
  *
- *  Todo lo marcado con  <-- EDITAR  es un placeholder.
- *  Cambia estos valores y el sitio entero se actualiza (navbar, hero, SEO,
- *  metadatos, footer, contacto, JSON-LD para Google, etc.).
- *
- *  Los textos largos bilingües (ES/EN) viven en  src/i18n/dictionary.ts
- *  Los proyectos y servicios viven en             src/lib/content.ts
+ *  Textos largos bilingües (ES/EN) → src/i18n/dictionary.ts
+ *  Servicios, experiencia y stack  → src/lib/content.ts
  * ============================================================================
  */
 
 export const site = {
-  /** Nombre corto usado en el prompt de terminal y el logo. */
-  handle: "elian", // <-- EDITAR
+  /** Alias. Se usa en el prompt de terminal y en el logo. */
+  handle: "squierdan",
 
-  /** Nombre completo. Aparece en el hero, SEO y JSON-LD. */
-  name: "Elian Caizapanta", // <-- EDITAR
+  /** Nombre completo. Hero, SEO y datos estructurados. */
+  name: "Elian Caizapanta",
 
-  /** Rol profesional (se muestra en inglés y español desde el diccionario). */
-  role: "Software Engineer", // <-- EDITAR
+  /** Rol principal (aparece en el título de la pestaña y en el hero). */
+  role: "Software Engineer",
 
-  /** Ubicación. Se muestra en la barra de estado inferior. */
-  location: "Quito, Ecuador", // <-- EDITAR
+  /** Ubicación mostrada en la barra de estado. */
+  location: "Quito, Ecuador",
 
-  /** Zona horaria IANA — usada por el reloj en vivo de la barra de estado. */
-  timezone: "America/Guayaquil", // <-- EDITAR
+  /** Zona horaria IANA — alimenta el reloj en vivo del hero. */
+  timezone: "America/Guayaquil",
 
-  /**
-   * URL final del sitio en producción. IMPORTANTE: cámbiala después del primer
-   * deploy en Vercel para que el SEO, sitemap y Open Graph apunten bien.
-   */
-  url: "https://personal-website-blush-three-41.vercel.app", // <-- EDITAR
+  /** URL de producción. Mantenla sincronizada con el dominio de Vercel. */
+  url: "https://personal-website-blush-three-41.vercel.app",
 
   /** Correo de contacto público. */
-  email: "luiscaizapanta01@gmail.com", // <-- EDITAR
+  email: "daniel_caiz@hotmail.com",
 
-  /** Enlaces sociales. Deja el valor vacío ("") para ocultar un enlace. */
+  /** Enlaces sociales. Deja "" para ocultar uno. */
   socials: {
-    github: "https://github.com/Squierdan", // <-- EDITAR
-    linkedin: "https://www.linkedin.com/in/tu-usuario", // <-- EDITAR
-    x: "", // <-- EDITAR (opcional)
+    github: "https://github.com/Squierdan",
+    linkedin: "https://www.linkedin.com/in/elian-caizapanta-b502aa276/",
+    x: "",
   },
 
-  /** ¿Estás disponible para nuevos proyectos? Controla el indicador verde. */
-  available: true, // <-- EDITAR
+  /** DOI de la publicación científica destacada. */
+  publicationDoi: "https://doi.org/10.1007/s12243-025-01104-1",
 
-  /** Año de inicio de carrera — se usa para calcular años de experiencia. */
-  careerStartYear: 2020, // <-- EDITAR
+  /** Controla el indicador verde de disponibilidad. */
+  available: true,
 } as const;
 
 export type Site = typeof site;

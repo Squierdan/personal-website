@@ -2,10 +2,9 @@ import type { Locale } from "@/i18n/config";
 
 /**
  * ============================================================================
- *  CONTENIDO EDITABLE — SERVICIOS, PROYECTOS Y STACK
+ *  CONTENIDO — SERVICIOS, EXPERIENCIA, STACK Y CERTIFICACIONES
  * ============================================================================
- *  Todo lo de este archivo es placeholder. Sustitúyelo por tu información real.
- *  Cada texto es bilingüe: { es: "...", en: "..." }.
+ *  Datos reales tomados del CV. Cada texto es bilingüe: { es: "…", en: "…" }.
  * ============================================================================
  */
 
@@ -16,195 +15,201 @@ export type Localized = Record<Locale, string>;
 /* -------------------------------------------------------------------------- */
 
 export type Service = {
-  /** Comando ficticio que se muestra a la izquierda de la fila. */
+  /** Comando ficticio que encabeza la fila. */
   cmd: string;
   title: Localized;
   description: Localized;
-  /** Palabras clave que se muestran al expandir la fila. */
   keywords: string[];
 };
 
 export const services: Service[] = [
   {
-    cmd: "design",
-    title: { es: "Diseño de producto & UI", en: "Product & UI Design" },
-    description: {
-      es: "Interfaces claras y accesibles, con sistemas de diseño consistentes, jerarquía tipográfica real y paletas construidas con teoría del color.",
-      en: "Clear, accessible interfaces with consistent design systems, real typographic hierarchy and palettes built on colour theory.",
+    cmd: "scan --vuln",
+    title: {
+      es: "Gestión de vulnerabilidades",
+      en: "Vulnerability Management",
     },
-    keywords: ["Design systems", "Figma", "Accesibilidad", "Prototipado"],
+    description: {
+      es: "Escaneo con Nessus, triaje y priorización por riesgo real, seguimiento de remediación e informes ejecutivos y técnicos comprensibles para ambos públicos.",
+      en: "Nessus scanning, triage and prioritisation by real risk, remediation tracking, and executive and technical reports that both audiences can actually read.",
+    },
+    keywords: ["Nessus", "CVSS", "Remediación", "Informes"],
+  },
+  {
+    cmd: "comply --iso27001",
+    title: {
+      es: "Cumplimiento y SGSI",
+      en: "Compliance & ISMS",
+    },
+    description: {
+      es: "Administración de un Sistema de Gestión de Seguridad de la Información bajo ISO/IEC 27001: políticas, controles, evidencias y acompañamiento durante la auditoría de certificación.",
+      en: "Running an Information Security Management System under ISO/IEC 27001: policies, controls, evidence, and support throughout the certification audit.",
+    },
+    keywords: ["ISO 27001", "SGSI", "Políticas", "Auditoría"],
+  },
+  {
+    cmd: "pentest",
+    title: {
+      es: "Pentesting y hacking ético",
+      en: "Pentesting & Ethical Hacking",
+    },
+    description: {
+      es: "Reconocimiento, identificación y explotación controlada de fallos en aplicaciones y redes, con foco en el OWASP Top 10 y evidencia reproducible de cada hallazgo.",
+      en: "Reconnaissance, identification and controlled exploitation of flaws in applications and networks, focused on the OWASP Top 10, with reproducible evidence for every finding.",
+    },
+    keywords: ["OWASP Top 10", "Criptografía", "Redes", "Linux"],
+  },
+  {
+    cmd: "admin --sys",
+    title: {
+      es: "Administración de sistemas y redes",
+      en: "Systems & Network Administration",
+    },
+    description: {
+      es: "Soporte especializado, endurecimiento de servidores Linux y Windows, virtualización, redes on-premise y reestructuración de infraestructura de centro de datos.",
+      en: "Specialised support, Linux and Windows server hardening, virtualisation, on-premise networking, and data centre infrastructure restructuring.",
+    },
+    keywords: ["Linux", "Microsoft Azure", "VirtualBox", "HelpDesk"],
+  },
+  {
+    cmd: "migrate",
+    title: {
+      es: "Migración y automatización",
+      en: "Migration & Automation",
+    },
+    description: {
+      es: "Migración de sistemas empresariales y bases de datos con continuidad de operación, más diseño de flujos internos que eliminan trabajo manual y dan trazabilidad.",
+      en: "Enterprise system and database migrations without breaking operations, plus internal workflow design that removes manual work and adds traceability.",
+    },
+    keywords: ["ERP", "Genexus", "Bases de datos", "Procesos"],
   },
   {
     cmd: "build --web",
-    title: { es: "Desarrollo web moderno", en: "Modern Web Development" },
-    description: {
-      es: "Aplicaciones con React, Next.js y TypeScript: renderizado en servidor, streaming, rutas dinámicas y una base de código que escala con el equipo.",
-      en: "Applications with React, Next.js and TypeScript: server rendering, streaming, dynamic routes and a codebase that scales with the team.",
+    title: {
+      es: "Desarrollo web",
+      en: "Web Development",
     },
-    keywords: ["Next.js", "React", "TypeScript", "Tailwind"],
-  },
-  {
-    cmd: "build --api",
-    title: { es: "Backend, APIs y datos", en: "Backend, APIs & Data" },
     description: {
-      es: "APIs REST y GraphQL bien tipadas, modelado de datos relacional, autenticación, colas de trabajo y seguridad desde el diseño.",
-      en: "Well-typed REST and GraphQL APIs, relational data modelling, authentication, job queues and security by design.",
+      es: "Aplicaciones web con JavaScript, Java y Python, escritas con criterio de seguridad desde el diseño y no como un parche al final del proyecto.",
+      en: "Web applications with JavaScript, Java and Python, written with security in mind from the design stage rather than patched in at the end.",
     },
-    keywords: ["Node.js", "Python", "PostgreSQL", "GraphQL"],
-  },
-  {
-    cmd: "deploy",
-    title: { es: "Infraestructura & DevOps", en: "Infrastructure & DevOps" },
-    description: {
-      es: "Contenedores, pipelines de CI/CD, entornos de previsualización, monitoreo y despliegues sin downtime en nube.",
-      en: "Containers, CI/CD pipelines, preview environments, monitoring and zero-downtime cloud deployments.",
-    },
-    keywords: ["Docker", "GitHub Actions", "Vercel", "AWS"],
-  },
-  {
-    cmd: "optimize",
-    title: { es: "Rendimiento & SEO técnico", en: "Performance & Technical SEO" },
-    description: {
-      es: "Auditorías de Core Web Vitals, reducción de bundle, estrategia de caché e indexación para que el producto cargue rápido y se encuentre.",
-      en: "Core Web Vitals audits, bundle reduction, caching strategy and indexing so the product loads fast and gets found.",
-    },
-    keywords: ["Lighthouse", "Core Web Vitals", "Caching", "Schema.org"],
-  },
-  {
-    cmd: "advise",
-    title: { es: "Consultoría técnica", en: "Technical Consulting" },
-    description: {
-      es: "Revisión de arquitectura, elección de stack, mentoría al equipo y planes de migración realistas para código heredado.",
-      en: "Architecture review, stack selection, team mentoring and realistic migration plans for legacy code.",
-    },
-    keywords: ["Arquitectura", "Code review", "Mentoría", "Migraciones"],
+    keywords: ["JavaScript", "Java", "Python", "Next.js"],
   },
 ];
 
 /* -------------------------------------------------------------------------- */
-/*  PROYECTOS                                                                  */
+/*  EXPERIENCIA E INVESTIGACIÓN                                                */
 /* -------------------------------------------------------------------------- */
 
-/** Categorías usadas por los filtros del portafolio. */
-export const projectCategories = ["web", "mobile", "ai", "oss"] as const;
-export type ProjectCategory = (typeof projectCategories)[number];
+export const workCategories = [
+  "security",
+  "infra",
+  "automation",
+  "research",
+] as const;
+export type WorkCategory = (typeof workCategories)[number];
 
-export const categoryLabels: Record<ProjectCategory, Localized> = {
-  web: { es: "web", en: "web" },
-  mobile: { es: "móvil", en: "mobile" },
-  ai: { es: "ia", en: "ai" },
-  oss: { es: "open source", en: "open source" },
+export const categoryLabels: Record<WorkCategory, Localized> = {
+  security: { es: "seguridad", en: "security" },
+  infra: { es: "infraestructura", en: "infrastructure" },
+  automation: { es: "automatización", en: "automation" },
+  research: { es: "investigación", en: "research" },
 };
 
-export type Project = {
-  title: string;
-  category: ProjectCategory;
-  year: string;
+export type WorkItem = {
+  /** Cargo o título del trabajo. */
+  title: Localized;
+  /** Empresa, institución o editorial. */
+  org: string;
+  category: WorkCategory;
+  /** Periodo mostrado en la columna derecha. */
+  period: Localized;
+  /** Resumen de una línea visible siempre. */
   summary: Localized;
   /** Detalle que aparece al expandir la fila. */
   detail: Localized;
   stack: string[];
-  repoUrl?: string;
-  liveUrl?: string;
-  /** Marca el proyecto como destacado (se resalta en la lista). */
+  link?: string;
+  linkLabel?: Localized;
   featured?: boolean;
 };
 
-export const projects: Project[] = [
+export const work: WorkItem[] = [
   {
-    title: "Nimbus Analytics",
-    category: "web",
-    year: "2025",
+    title: {
+      es: "Protocolo Nested-C · publicación científica",
+      en: "Nested-C protocol · peer-reviewed publication",
+    },
+    org: "Annals of Telecommunications — Springer Nature",
+    category: "research",
+    period: { es: "2025", en: "2025" },
     featured: true,
     summary: {
-      es: "Panel de analítica en tiempo real con visualizaciones interactivas.",
-      en: "Real-time analytics dashboard with interactive visualisations.",
+      es: "Protocolo de consenso diseñado para la arquitectura NestedChain.",
+      en: "Consensus protocol designed for the NestedChain architecture.",
     },
     detail: {
-      es: "Plataforma multi-tenant que procesa eventos en streaming y los presenta en dashboards configurables. Incluye control de acceso por roles, exportación programada de reportes y un motor de consultas con caché por capas.",
-      en: "Multi-tenant platform that processes streaming events and renders them in configurable dashboards. Includes role-based access control, scheduled report exports and a layered-cache query engine.",
+      es: "Artículo revisado por pares y publicado en Annals of Telecommunications (Springer Nature), donde figuro como primer autor. El trabajo propone Nested-C, un protocolo de consenso pensado para la arquitectura NestedChain, e incluye su diseño, formalización y análisis frente a las alternativas existentes. Autores: Caizapanta, E., Maldonado-Ruiz, D., Tufiño, C., Vásconez, G., Castro, E., Pabón, T., Torres, J. y El Madhoun, N.",
+      en: "Peer-reviewed article published in Annals of Telecommunications (Springer Nature), where I appear as first author. The work proposes Nested-C, a consensus protocol designed for the NestedChain architecture, covering its design, formalisation and analysis against existing alternatives. Authors: Caizapanta, E., Maldonado-Ruiz, D., Tufiño, C., Vásconez, G., Castro, E., Pabón, T., Torres, J. and El Madhoun, N.",
     },
-    stack: ["Next.js", "TypeScript", "D3.js", "PostgreSQL", "Redis"],
-    repoUrl: "https://github.com/Squierdan",
-    liveUrl: "https://example.com",
+    stack: ["Blockchain", "Protocolos de consenso", "Investigación"],
+    link: "https://doi.org/10.1007/s12243-025-01104-1",
+    linkLabel: { es: "ver artículo", en: "read paper" },
   },
   {
-    title: "Aurora Commerce",
-    category: "web",
-    year: "2025",
+    title: {
+      es: "Tech & Operations Associate · IT & AI",
+      en: "Tech & Operations Associate · IT & AI",
+    },
+    org: "Marino Robalino LLC",
+    category: "automation",
+    period: { es: "ago — oct 2025", en: "Aug — Oct 2025" },
+    summary: {
+      es: "Diseño de un sistema interno de automatización y gestión documental.",
+      en: "Design of an internal automation and document management system.",
+    },
+    detail: {
+      es: "Participé en la planificación y el diseño esquemático de un sistema interno de automatización orientado a optimizar los flujos de trabajo y la gestión documental de una consultora internacional. Colaboré en la estructuración de procesos operativos con foco en eficiencia y trazabilidad, y formé parte del equipo de gestión de expedientes EB-1A, revisando, organizando y consolidando documentación para clientes internacionales.",
+      en: "I took part in the planning and schematic design of an internal automation system aimed at optimising workflows and document management at an international consultancy. I contributed to structuring operational processes with a focus on efficiency and traceability, and was part of the EB-1A case management team, reviewing, organising and consolidating documentation for international clients.",
+    },
+    stack: ["Automatización", "Gestión documental", "Análisis operativo"],
+  },
+  {
+    title: {
+      es: "Pasante de Seguridad de la Información",
+      en: "Information Security Intern",
+    },
+    org: "Coris del Ecuador",
+    category: "security",
+    period: { es: "dic 2024 — jun 2025", en: "Dec 2024 — Jun 2025" },
     featured: true,
     summary: {
-      es: "Tienda headless con pagos, carrito persistente y panel de administración.",
-      en: "Headless storefront with payments, persistent cart and admin panel.",
+      es: "Gestión de vulnerabilidades y SGSI durante la certificación ISO 27001.",
+      en: "Vulnerability management and ISMS during ISO 27001 certification.",
     },
     detail: {
-      es: "Comercio electrónico desacoplado del CMS, con checkout en Stripe, gestión de inventario en tiempo real e ISR para mantener catálogos de miles de productos rápidos y siempre actualizados.",
-      en: "E-commerce decoupled from the CMS, with Stripe checkout, real-time inventory management and ISR to keep catalogues of thousands of products fast and always fresh.",
+      es: "Gestión de vulnerabilidades con Nessus: escaneo, análisis, informes y seguimiento de remediación. Administré el Sistema de Gestión de Seguridad de la Información y trabajé en el cumplimiento de la norma ISO/IEC 27001, participando directamente en la auditoría de certificación. También apoyé en la reestructuración del DataCenter y en la gestión de equipos.",
+      en: "Vulnerability management with Nessus: scanning, analysis, reporting and remediation follow-up. I administered the Information Security Management System and worked on ISO/IEC 27001 compliance, taking part directly in the certification audit. I also supported the DataCenter restructuring and equipment management.",
     },
-    stack: ["React", "Node.js", "Stripe", "Tailwind"],
-    repoUrl: "https://github.com/Squierdan",
-    liveUrl: "https://example.com",
+    stack: ["Nessus", "ISO 27001", "SGSI", "DataCenter"],
   },
   {
-    title: "Pulse Fitness",
-    category: "mobile",
-    year: "2024",
+    title: {
+      es: "Pasante de Sistemas · TI",
+      en: "Systems Intern · IT",
+    },
+    org: "MARCSEAL S.A.",
+    category: "infra",
+    period: { es: "may — nov 2024", en: "May — Nov 2024" },
     summary: {
-      es: "App de seguimiento de entrenamientos con rutinas adaptativas.",
-      en: "Workout tracking app with adaptive routines.",
+      es: "Soporte técnico y migración del ERP corporativo entre versiones de Genexus.",
+      en: "Technical support and corporate ERP migration across Genexus versions.",
     },
     detail: {
-      es: "Aplicación móvil offline-first que sincroniza sesiones al recuperar conexión y ajusta la carga de entrenamiento según el progreso registrado por el usuario.",
-      en: "Offline-first mobile app that syncs sessions when connectivity returns and adjusts training load based on the user's recorded progress.",
+      es: "Soporte de sistemas en modalidad HelpDesk con gestión de tickets, además de soporte en redes, ofimática e impresoras. Ejecuté la migración y el mantenimiento de la base de datos del ERP CANORUS desde Genexus 16 hacia Genexus 18 WorkWithPlus, y llevé el inventario de compras e insumos electrónicos.",
+      en: "HelpDesk systems support with ticket management, plus support for networks, office software and printers. I carried out the migration and maintenance of the CANORUS ERP database from Genexus 16 to Genexus 18 WorkWithPlus, and managed the purchasing and electronic supplies inventory.",
     },
-    stack: ["React Native", "Expo", "Firebase"],
-    repoUrl: "https://github.com/Squierdan",
-  },
-  {
-    title: "Lexica AI",
-    category: "ai",
-    year: "2024",
-    summary: {
-      es: "Asistente que resume documentos largos y responde preguntas sobre ellos.",
-      en: "Assistant that summarises long documents and answers questions about them.",
-    },
-    detail: {
-      es: "Pipeline RAG con segmentación semántica, búsqueda vectorial y citación de fuentes, expuesto mediante una API en streaming y una interfaz conversacional.",
-      en: "RAG pipeline with semantic chunking, vector search and source citation, exposed through a streaming API and a conversational interface.",
-    },
-    stack: ["Python", "FastAPI", "pgvector", "Next.js"],
-    repoUrl: "https://github.com/Squierdan",
-    liveUrl: "https://example.com",
-  },
-  {
-    title: "Terra Maps",
-    category: "web",
-    year: "2023",
-    summary: {
-      es: "Plataforma de geolocalización con mapas interactivos y datos abiertos.",
-      en: "Geolocation platform with interactive maps and open data.",
-    },
-    detail: {
-      es: "Visualización de conjuntos de datos geoespaciales con teselas vectoriales, agrupamiento en cliente y filtros temporales sobre millones de puntos.",
-      en: "Geospatial dataset visualisation with vector tiles, client-side clustering and time filters over millions of points.",
-    },
-    stack: ["Vue", "Mapbox", "Go", "Redis"],
-    repoUrl: "https://github.com/Squierdan",
-  },
-  {
-    title: "Cadence CLI",
-    category: "oss",
-    year: "2023",
-    summary: {
-      es: "Herramientas de línea de comandos para automatizar flujos de desarrollo.",
-      en: "Command-line toolkit to automate developer workflows.",
-    },
-    detail: {
-      es: "Conjunto de comandos de código abierto para andamiaje de proyectos, generación de changelogs y verificación de convenciones antes de cada commit.",
-      en: "Open-source command set for project scaffolding, changelog generation and convention checks before every commit.",
-    },
-    stack: ["Rust", "CLI", "Open Source"],
-    repoUrl: "https://github.com/Squierdan",
+    stack: ["Genexus", "ERP", "Bases de datos", "HelpDesk"],
   },
 ];
 
@@ -214,19 +219,69 @@ export const projects: Project[] = [
 
 export const stack: { group: Localized; items: string[] }[] = [
   {
+    group: { es: "seguridad", en: "security" },
+    items: ["Nessus", "OWASP Top 10", "Pentesting", "Criptografía", "ISO 27001"],
+  },
+  {
     group: { es: "lenguajes", en: "languages" },
-    items: ["TypeScript", "JavaScript", "Python", "SQL", "Go"],
+    items: ["Python", "Java", "JavaScript", "HTML / CSS", "SQL"],
   },
   {
-    group: { es: "frontend", en: "frontend" },
-    items: ["React", "Next.js", "Tailwind CSS", "Framer Motion", "Vitest"],
+    group: { es: "sistemas", en: "systems" },
+    items: ["Linux", "Windows", "Microsoft Azure", "VirtualBox", "Redes"],
   },
   {
-    group: { es: "backend", en: "backend" },
-    items: ["Node.js", "FastAPI", "PostgreSQL", "Redis", "GraphQL"],
+    group: { es: "herramientas", en: "tooling" },
+    items: ["Genexus", "Git", "Scrum", "Excel avanzado", "Next.js"],
+  },
+];
+
+/* -------------------------------------------------------------------------- */
+/*  CERTIFICACIONES                                                            */
+/* -------------------------------------------------------------------------- */
+
+export type Certification = {
+  name: string;
+  issuer: string;
+  year: string;
+};
+
+export const certifications: Certification[] = [
+  { name: "Foundations of Cybersecurity", issuer: "Google", year: "2025" },
+  {
+    name: "Career Essentials in Cybersecurity",
+    issuer: "Microsoft · LinkedIn",
+    year: "2025",
+  },
+  { name: "Hacking Ético", issuer: "Platzi", year: "2025" },
+  { name: "OWASP Top 10", issuer: "Platzi", year: "2025" },
+  { name: "Fundamentos de Criptografía", issuer: "Platzi", year: "2025" },
+  { name: "Seguridad de Redes On-Premise", issuer: "Platzi", year: "2025" },
+  { name: "Redes de Internet — Profesional", issuer: "Platzi", year: "2025" },
+  {
+    name: "Ciberseguridad y Privacidad para Empresas",
+    issuer: "Platzi",
+    year: "2025",
   },
   {
-    group: { es: "infra", en: "infra" },
-    items: ["Docker", "GitHub Actions", "Vercel", "AWS", "Terraform"],
+    name: "Introduction to Cybersecurity",
+    issuer: "Cisco Networking Academy",
+    year: "2024",
   },
+  {
+    name: "Seguridad Informática y Protección de Datos",
+    issuer: "CEC-EPN",
+    year: "2024",
+  },
+  {
+    name: "NDG Linux Essentials",
+    issuer: "Cisco Networking Academy",
+    year: "2023",
+  },
+  {
+    name: "Scrum Foundation Professional (SFPC)",
+    issuer: "CertiProf",
+    year: "2023",
+  },
+  { name: "Programación con Python", issuer: "CEC-EPN", year: "2020" },
 ];
