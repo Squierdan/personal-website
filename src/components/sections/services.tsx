@@ -7,8 +7,13 @@ import { services } from "@/lib/content";
 
 /**
  * Servicios como lista de comandos, no como rejilla de tarjetas.
- * Cada fila se expande al pasar el cursor (o siempre visible en móvil)
- * usando la transición de `grid-template-rows`, sin JavaScript.
+ *
+ * La descripción está SIEMPRE visible, por dos razones:
+ *  · Legibilidad: un visitante que evalúa contratarte no debería tener que
+ *    descubrir que hay que pasar el cursor para leer qué haces. En móvil, donde
+ *    no existe el hover, ese contenido era directamente invisible.
+ *  · Rendimiento: la versión anterior animaba `grid-template-rows` de 0fr a 1fr,
+ *    lo que obliga a recalcular el layout de la página en cada fotograma.
  */
 export function Services() {
   const { t, locale } = useLanguage();
@@ -22,38 +27,29 @@ export function Services() {
         subtitle={t.services.subtitle}
       />
 
-      <p className="mb-6 hidden font-mono text-[11px] text-fg-subtle md:block">
-        <span className="text-accent">#</span> {t.services.hint}
-      </p>
-
       <ul className="border-t border-border">
         {services.map((service, index) => (
-          <Reveal key={service.cmd} delay={index * 0.04}>
+          <Reveal key={service.cmd} delay={Math.min(index, 3) * 0.05}>
             <li className="group border-b border-border">
-              <div className="row-hover flex cursor-default items-center gap-4 py-6 pr-4">
-                <span className="w-6 shrink-0 font-mono text-[11px] text-fg-subtle">
-                  {String(index + 1).padStart(2, "0")}
-                </span>
-                <span className="hidden w-40 shrink-0 truncate font-mono text-xs text-accent lg:block">
-                  ❯ {service.cmd}
-                </span>
-                <h3 className="flex-1 text-balance text-lg font-medium tracking-tight text-fg transition-colors sm:text-xl">
-                  {service.title[locale]}
-                </h3>
-                <span
-                  aria-hidden
-                  className="shrink-0 font-mono text-lg text-fg-subtle transition-all duration-300 group-hover:translate-x-1 group-hover:text-accent"
-                >
-                  →
-                </span>
-              </div>
+              <div className="row-hover py-7 pr-4">
+                <div className="flex items-baseline gap-4">
+                  <span className="w-6 shrink-0 font-mono text-[11px] text-fg-subtle">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
 
-              <div className="grid grid-rows-[1fr] transition-[grid-template-rows] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] md:grid-rows-[0fr] md:group-hover:grid-rows-[1fr]">
-                <div className="overflow-hidden">
-                  <div className="pb-6 pl-10 pr-4 lg:pl-[13.5rem]">
-                    <p className="max-w-2xl text-pretty text-sm leading-relaxed text-fg-muted">
+                  <div className="min-w-0 flex-1">
+                    <p className="font-mono text-xs text-accent">
+                      ❯ {service.cmd}
+                    </p>
+
+                    <h3 className="mt-2 text-balance text-lg font-medium tracking-tight text-fg sm:text-xl">
+                      {service.title[locale]}
+                    </h3>
+
+                    <p className="mt-3 max-w-2xl text-sm leading-relaxed text-fg-muted">
                       {service.description[locale]}
                     </p>
+
                     <ul className="mt-4 flex flex-wrap gap-2">
                       {service.keywords.map((keyword) => (
                         <li
@@ -65,6 +61,13 @@ export function Services() {
                       ))}
                     </ul>
                   </div>
+
+                  <span
+                    aria-hidden
+                    className="hidden shrink-0 self-center font-mono text-lg text-fg-subtle transition-colors duration-300 group-hover:text-accent sm:block"
+                  >
+                    →
+                  </span>
                 </div>
               </div>
             </li>

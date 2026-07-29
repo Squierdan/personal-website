@@ -19,6 +19,7 @@ type Dictionary = {
     intro: string;
     ctaPrimary: string;
     ctaSecondary: string;
+    ctaCv: string;
     stats: { value: string; label: string }[];
     scrollHint: string;
   };
@@ -40,7 +41,6 @@ type Dictionary = {
     eyebrow: string;
     title: string;
     subtitle: string;
-    hint: string;
   };
   work: {
     index: string;
@@ -69,6 +69,9 @@ type Dictionary = {
     orEmail: string;
     copy: string;
     copied: string;
+    cvTitle: string;
+    cvEs: string;
+    cvEn: string;
   };
   footer: {
     builtWith: string;
@@ -113,6 +116,7 @@ export const dictionaries: Record<Locale, Dictionary> = {
         "Ingeniero de software especializado en seguridad de la información. Gestiono vulnerabilidades, administro sistemas de gestión de seguridad bajo ISO/IEC 27001 y construyo software pensando en la integridad, disponibilidad y confidencialidad de los datos desde el primer commit.",
       ctaPrimary: "Ver experiencia",
       ctaSecondary: "Hablemos",
+      ctaCv: "Descargar CV",
       stats: [
         { value: "+15", label: "certificaciones técnicas" },
         { value: "1", label: "publicación científica indexada" },
@@ -172,7 +176,6 @@ export const dictionaries: Record<Locale, Dictionary> = {
       title: "En qué puedo ayudarte",
       subtitle:
         "Desde una evaluación puntual de vulnerabilidades hasta el acompañamiento completo de un sistema de gestión de seguridad.",
-      hint: "pasa el cursor para ver el detalle",
     },
     work: {
       index: "03",
@@ -203,6 +206,9 @@ export const dictionaries: Record<Locale, Dictionary> = {
       orEmail: "O escríbeme directamente a",
       copy: "copiar",
       copied: "copiado",
+      cvTitle: "Curriculum vitae",
+      cvEs: "Español (PDF)",
+      cvEn: "English (PDF)",
     },
     footer: {
       builtWith: "Construido con",
@@ -246,6 +252,7 @@ export const dictionaries: Record<Locale, Dictionary> = {
         "Software engineer specialising in information security. I manage vulnerabilities, administer security management systems under ISO/IEC 27001, and build software with the integrity, availability and confidentiality of data in mind from the first commit.",
       ctaPrimary: "View experience",
       ctaSecondary: "Get in touch",
+      ctaCv: "Download CV",
       stats: [
         { value: "15+", label: "technical certifications" },
         { value: "1", label: "peer-reviewed publication" },
@@ -306,7 +313,6 @@ export const dictionaries: Record<Locale, Dictionary> = {
       title: "How I can help",
       subtitle:
         "From a focused vulnerability assessment to full support of an information security management system.",
-      hint: "hover a row for details",
     },
     work: {
       index: "03",
@@ -337,6 +343,9 @@ export const dictionaries: Record<Locale, Dictionary> = {
       orEmail: "Or email me directly at",
       copy: "copy",
       copied: "copied",
+      cvTitle: "Curriculum vitae",
+      cvEs: "Español (PDF)",
+      cvEn: "English (PDF)",
     },
     footer: {
       builtWith: "Built with",

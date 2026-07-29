@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowDown, ArrowUpRight } from "lucide-react";
+import { ArrowDown, ArrowUpRight, Download } from "lucide-react";
 import { useLanguage } from "@/components/providers/language-provider";
 import { useTypewriter } from "@/hooks/use-typewriter";
 import { useMounted } from "@/hooks/use-mounted";
@@ -99,7 +99,7 @@ export function Hero() {
             animate="visible"
             variants={fade}
             transition={{ duration: 0.5, delay: 0.34 }}
-            className="mt-8 max-w-xl text-pretty text-base leading-relaxed text-fg-muted sm:text-lg"
+            className="mt-8 max-w-xl text-base leading-relaxed text-fg-muted sm:text-lg"
           >
             {t.hero.intro}
           </motion.p>
@@ -123,6 +123,16 @@ export function Hero() {
               className="inline-flex h-11 items-center gap-2 border border-border-strong px-5 font-mono text-sm text-fg transition-colors hover:border-accent hover:text-accent"
             >
               {t.hero.ctaSecondary}
+            </a>
+            {/* Descarga del CV: un reclutador espera encontrarla en el primer
+                pantallazo. Se sirve el PDF del idioma activo. */}
+            <a
+              href={site.cv[locale]}
+              download
+              className="inline-flex h-11 items-center gap-2 px-2 font-mono text-sm text-fg-muted transition-colors hover:text-accent"
+            >
+              <Download className="h-4 w-4" />
+              <span className="link-underline">{t.hero.ctaCv}</span>
             </a>
           </motion.div>
 

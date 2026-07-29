@@ -147,36 +147,27 @@ body {
   background-size: 72px 72px;
 }
 
-/* Líneas de barrido tipo CRT — muy sutiles, sólo textura. */
+/* Líneas de barrido tipo CRT — muy sutiles, sólo textura.
+   Sin `mix-blend-mode`: el blending obliga al navegador a crear una capa de
+   composición adicional y a releerla en cada repintado. */
 .scanlines::after {
   content: "";
   position: absolute;
   inset: 0;
   pointer-events: none;
+  opacity: 0.5;
   background: repeating-linear-gradient(
     to bottom,
     transparent 0 3px,
-    rgba(0, 0, 0, 0.022) 3px 4px
+    rgba(0, 0, 0, 0.03) 3px 4px
   );
-  mix-blend-mode: multiply;
 }
 .dark .scanlines::after {
   background: repeating-linear-gradient(
     to bottom,
     transparent 0 3px,
-    rgba(255, 255, 255, 0.017) 3px 4px
+    rgba(255, 255, 255, 0.022) 3px 4px
   );
-  mix-blend-mode: screen;
-}
-
-/* Grano fino: evita el aspecto "plano y plástico" de los degradados puros. */
-.noise::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  opacity: 0.035;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 /* Halo del acento, usado detrás del terminal del hero. */
@@ -212,26 +203,29 @@ body {
   }
 }
 
-/* Marco de ventana de terminal. */
+/* Marco de ventana de terminal.
+   Fondo OPACO a propósito: `backdrop-filter: blur()` obliga al compositor a
+   releer y desenfocar todo lo que hay detrás en cada fotograma. */
 .term {
-  background: color-mix(in srgb, var(--bg-elevated) 92%, transparent);
+  background: var(--bg-elevated);
   border: 1px solid var(--border);
-  backdrop-filter: blur(12px);
   box-shadow:
     0 1px 0 0 color-mix(in srgb, var(--fg) 4%, transparent) inset,
     0 24px 60px -30px rgba(0, 0, 0, 0.5);
 }
 
-/* Fila que se "ilumina" al pasar el cursor (listas de servicios/proyectos). */
+/* Fila que se "ilumina" al pasar el cursor.
+   Se anima `transform`, NO `padding`: transform se resuelve en el compositor
+   sin recalcular el layout de la página. Animar padding provocaba un layout
+   completo (~11 ms medidos) en cada fotograma del hover. */
 .row-hover {
   transition:
-    background-color 0.28s ease,
-    color 0.28s ease,
-    padding-left 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+    background-color 0.25s ease,
+    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .row-hover:hover {
   background-color: var(--accent-soft);
-  padding-left: 1.25rem;
+  transform: translateX(0.75rem);
 }
 
 /* Subrayado animado para enlaces en texto. */
@@ -272,9 +266,18 @@ body {
   border-right: 1px solid;
 }
 
-/* Barra de progreso de scroll. */
+/* Barra de progreso de scroll: capa propia para que su animación no obligue
+   a repintar la cabecera entera. */
 .scroll-progress {
   transform-origin: 0% 50%;
+  will-change: transform;
+}
+
+/* Contención de layout: un cambio dentro de una sección (abrir una fila,
+   un hover) no puede obligar a recalcular el layout del resto de la página.
+   Se usa `layout style` y NO `paint` para no recortar los fondos del hero. */
+main > section {
+  contain: layout style;
 }
 
 /* ==========================================================================

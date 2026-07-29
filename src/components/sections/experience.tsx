@@ -89,14 +89,16 @@ export function Experience() {
       </div>
 
       <ul className="border-b border-border">
-        <AnimatePresence initial={false} mode="popLayout">
+        {/* Sin `mode="popLayout"` ni la prop `layout`: ambos obligan a medir
+            la posición de cada hermano en cada fotograma (layout continuo).
+            Basta con animar opacidad y desplazamiento, que van al compositor. */}
+        <AnimatePresence initial={false}>
           {visible.map((item, index) => {
             const key = item.org + item.title.en;
             const isOpen = openId === key;
             return (
               <motion.li
                 key={key}
-                layout
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -6 }}
@@ -164,7 +166,7 @@ export function Experience() {
                       className="overflow-hidden"
                     >
                       <div className="border-l-2 border-accent/40 py-2 pl-6 pr-1 lg:ml-[2.5rem]">
-                        <p className="max-w-3xl text-pretty text-sm leading-relaxed text-fg-muted">
+                        <p className="max-w-3xl text-sm leading-relaxed text-fg-muted">
                           {item.detail[locale]}
                         </p>
 

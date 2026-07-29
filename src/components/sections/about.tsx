@@ -23,7 +23,7 @@ export function About() {
             {t.about.paragraphs.map((paragraph, index) => (
               <p
                 key={index}
-                className="relative mb-6 text-pretty text-base leading-[1.75] text-fg-muted last:mb-0 sm:text-[17px]"
+                className="relative mb-6 text-base leading-[1.75] text-fg-muted last:mb-0 sm:text-[17px]"
               >
                 <span
                   aria-hidden

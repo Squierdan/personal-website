@@ -46,7 +46,7 @@ export function SectionHeading({
         {title}
       </h2>
       {subtitle ? (
-        <p className="mt-5 max-w-2xl text-pretty text-base leading-relaxed text-fg-muted">
+        <p className="mt-5 max-w-2xl text-base leading-relaxed text-fg-muted">
           {subtitle}
         </p>
       ) : null}

@@ -204,7 +204,7 @@ export function CommandPalette() {
             type="button"
             aria-label={t.ui.close}
             onClick={close}
-            className="absolute inset-0 cursor-default bg-bg-sunken/80 backdrop-blur-sm"
+            className="absolute inset-0 cursor-default bg-bg-sunken/90"
           />
 
           <motion.div

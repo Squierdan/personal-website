@@ -39,6 +39,12 @@ export const site = {
     x: "",
   },
 
+  /** CV en PDF. Los archivos viven en /public y se sirven tal cual. */
+  cv: {
+    es: "/Elian-Caizapanta-CV-ES.pdf",
+    en: "/Elian-Caizapanta-CV-EN.pdf",
+  },
+
   /** DOI de la publicación científica destacada. */
   publicationDoi: "https://doi.org/10.1007/s12243-025-01104-1",
 

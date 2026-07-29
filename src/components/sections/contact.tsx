@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Check, Copy } from "lucide-react";
+import { Check, Copy, FileDown } from "lucide-react";
 import { Section, SectionHeading } from "@/components/ui/section";
 import { Reveal } from "@/components/ui/reveal";
 import { useLanguage } from "@/components/providers/language-provider";
@@ -207,6 +207,32 @@ export function Contact() {
                 </dd>
               </div>
             </dl>
+
+            {/* Ambos idiomas disponibles: el visitante puede necesitar el CV en
+                español aunque esté leyendo el sitio en inglés, y viceversa. */}
+            <div className="mt-6 border-t border-border pt-6">
+              <p className="font-mono text-[11px] uppercase tracking-widest text-fg-subtle">
+                {t.contact.cvTitle}
+              </p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                <a
+                  href={site.cv.es}
+                  download
+                  className="inline-flex items-center gap-1.5 border border-border px-3 py-1.5 font-mono text-[11px] text-fg-muted transition-colors hover:border-accent hover:text-accent"
+                >
+                  <FileDown className="h-3.5 w-3.5" />
+                  {t.contact.cvEs}
+                </a>
+                <a
+                  href={site.cv.en}
+                  download
+                  className="inline-flex items-center gap-1.5 border border-border px-3 py-1.5 font-mono text-[11px] text-fg-muted transition-colors hover:border-accent hover:text-accent"
+                >
+                  <FileDown className="h-3.5 w-3.5" />
+                  {t.contact.cvEn}
+                </a>
+              </div>
+            </div>
 
             {socialLinks.length > 0 ? (
               <div className="mt-6 flex gap-2 border-t border-border pt-6">

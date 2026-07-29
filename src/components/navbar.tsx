@@ -40,7 +40,10 @@ export function Navbar() {
         className="scroll-progress h-[2px] bg-accent"
       />
 
-      <div className="border-b border-border bg-bg/80 backdrop-blur-md">
+      {/* Fondo casi opaco en vez de `backdrop-blur`: la barra es visible
+          durante todo el scroll, y desenfocar lo que pasa por detrás obliga al
+          compositor a rehacer ese desenfoque en cada fotograma. */}
+      <div className="border-b border-border bg-bg/95">
         <nav
           aria-label="Principal"
           className="mx-auto flex h-14 w-full max-w-6xl items-center gap-4 px-5 sm:px-8 lg:px-12"
