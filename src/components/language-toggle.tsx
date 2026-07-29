@@ -2,19 +2,20 @@
 
 import { useLanguage } from "@/components/providers/language-provider";
 
+/** Alterna ES/EN, también presentado como bandera de comando. */
 export function LanguageToggle() {
-  const { locale, toggleLocale } = useLanguage();
+  const { locale, toggleLocale, t } = useLanguage();
 
   return (
     <button
       type="button"
       onClick={toggleLocale}
-      aria-label="Toggle language"
-      className="inline-flex h-9 items-center justify-center rounded-full border border-border bg-background-elevated px-3 text-xs font-semibold uppercase tracking-wider text-foreground transition-colors hover:border-accent hover:text-accent"
+      aria-label={t.ui.language}
+      title={t.ui.language}
+      className="group inline-flex h-8 items-center gap-1.5 border border-border px-2.5 font-mono text-[11px] text-fg-muted transition-colors hover:border-accent hover:text-accent"
     >
-      <span className={locale === "es" ? "text-accent" : "text-muted"}>ES</span>
-      <span className="mx-1 text-muted">/</span>
-      <span className={locale === "en" ? "text-accent" : "text-muted"}>EN</span>
+      <span className="text-fg-subtle group-hover:text-accent">--lang=</span>
+      <span className="text-fg">{locale}</span>
     </button>
   );
 }

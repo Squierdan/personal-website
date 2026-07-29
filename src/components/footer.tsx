@@ -1,93 +1,71 @@
 "use client";
 
-import { Mail } from "lucide-react";
-import { GithubIcon, LinkedinIcon } from "@/components/ui/social-icons";
 import { useLanguage } from "@/components/providers/language-provider";
-import { socials } from "@/lib/content";
+import { GithubIcon, LinkedinIcon, XIcon } from "@/components/ui/icons";
+import { site } from "@/lib/site";
 
+/**
+ * Pie de página con forma de barra de estado (tipo vim / tmux):
+ * segmentos separados, monoespaciada y datos técnicos en lugar del típico
+ * bloque de enlaces centrado.
+ */
 export function Footer() {
-  const { t } = useLanguage();
+  const { t, locale } = useLanguage();
   const year = new Date().getFullYear();
 
-  const links = [
-    { href: "#about", label: t.nav.about },
-    { href: "#services", label: t.nav.services },
-    { href: "#projects", label: t.nav.projects },
-    { href: "#contact", label: t.nav.contact },
-  ];
+  const socialLinks = [
+    { key: "github", url: site.socials.github, Icon: GithubIcon },
+    { key: "linkedin", url: site.socials.linkedin, Icon: LinkedinIcon },
+    { key: "x", url: site.socials.x, Icon: XIcon },
+  ].filter((link) => Boolean(link.url));
 
   return (
-    <footer className="border-t border-border bg-background-elevated px-6 py-12 md:px-10">
-      <div className="mx-auto grid w-full max-w-6xl gap-8 sm:grid-cols-2 md:grid-cols-3">
+    <footer className="border-t border-border">
+      <div className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-5 py-10 sm:px-8 lg:flex-row lg:items-center lg:px-12">
         <div>
-          <a href="#home" className="flex items-center gap-2 font-bold">
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent text-sm font-black text-white">
-              E
-            </span>
-            <span className="text-lg tracking-tight">
-              Elian<span className="text-accent">.</span>
-            </span>
+          <p className="font-mono text-sm text-fg">
+            {site.handle}
+            <span className="text-fg-subtle">@web</span>
+            <span className="text-accent">:~$</span>{" "}
+            <span className="text-fg-muted">exit</span>
+          </p>
+          <p className="mt-2 text-xs text-fg-subtle">
+            © {year} {site.name}. {t.footer.rights}
+          </p>
+        </div>
+
+        <div className="flex items-center gap-2 lg:ml-auto">
+          {socialLinks.map(({ key, url, Icon }) => (
+            <a
+              key={key}
+              href={url}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={key}
+              className="inline-flex h-9 w-9 items-center justify-center border border-border text-fg-muted transition-colors hover:border-accent hover:text-accent"
+            >
+              <Icon className="h-4 w-4" />
+            </a>
+          ))}
+          <a
+            href="#top"
+            className="ml-2 inline-flex h-9 items-center border border-border px-3 font-mono text-[11px] text-fg-muted transition-colors hover:border-accent hover:text-accent"
+          >
+            ↑ {t.footer.backToTop}
           </a>
-          <p className="mt-3 max-w-xs text-sm text-muted">{t.footer.tagline}</p>
-        </div>
-
-        <div>
-          <h4 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted">
-            {t.footer.nav}
-          </h4>
-          <ul className="space-y-2">
-            {links.map((link) => (
-              <li key={link.href}>
-                <a
-                  href={link.href}
-                  className="text-sm text-muted transition-colors hover:text-accent"
-                >
-                  {link.label}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <div>
-          <h4 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted">
-            {t.footer.social}
-          </h4>
-          <div className="flex gap-3">
-            <a
-              href={socials.github}
-              target="_blank"
-              rel="noreferrer"
-              aria-label="GitHub"
-              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border text-muted transition-colors hover:border-accent hover:text-accent"
-            >
-              <GithubIcon className="h-5 w-5" />
-            </a>
-            <a
-              href={socials.linkedin}
-              target="_blank"
-              rel="noreferrer"
-              aria-label="LinkedIn"
-              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border text-muted transition-colors hover:border-accent hover:text-accent"
-            >
-              <LinkedinIcon className="h-5 w-5" />
-            </a>
-            <a
-              href={`mailto:${socials.email}`}
-              aria-label="Email"
-              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border text-muted transition-colors hover:border-accent hover:text-accent"
-            >
-              <Mail className="h-5 w-5" />
-            </a>
-          </div>
         </div>
       </div>
 
-      <div className="mx-auto mt-10 flex w-full max-w-6xl flex-col items-center justify-between gap-2 border-t border-border pt-6 text-xs text-muted sm:flex-row">
-        <p>
-          &copy; {year} Elian Caizapanta. {t.footer.rights}
-        </p>
-        <p>{t.footer.builtWith}</p>
+      {/* Barra de estado */}
+      <div className="border-t border-border bg-bg-sunken/60">
+        <div className="mx-auto flex w-full max-w-6xl flex-wrap items-center gap-x-5 gap-y-1 px-5 py-2.5 font-mono text-[10px] uppercase tracking-wider text-fg-subtle sm:px-8 lg:px-12">
+          <span className="text-accent">● {site.location}</span>
+          <span>{locale === "es" ? "es-ec" : "en-us"}</span>
+          <span>utf-8</span>
+          <span className="ml-auto">
+            {t.footer.builtWith} next.js · typescript · tailwind
+          </span>
+        </div>
       </div>
     </footer>
   );

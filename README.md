@@ -1,84 +1,95 @@
-# Personal Website & Portfolio
+# personal-website
 
-A modern, minimalist and dynamic personal website / portfolio for a software
-engineer. Bilingual (Español / English), with light & dark themes, an elegant
-color palette grounded in color theory, smooth animations and a fully responsive
-layout.
+Sitio personal y portafolio de **Elian Caizapanta**, ingeniero de software.
+Bilingüe (ES/EN), tema claro/oscuro, responsivo y con una interfaz de estética
+*engineering terminal*.
 
-## Tech stack
+> **Empieza aquí:** [`DEPLOY.md`](./DEPLOY.md) — cómo ejecutarlo en tu computadora
+> y publicarlo gratis en internet, paso a paso.
+> Si vas a pedirle cambios a una IA, dale [`AI_CONTEXT.md`](./AI_CONTEXT.md).
 
-- **[Next.js 16](https://nextjs.org/)** (App Router) + **React 19**
-- **TypeScript**
-- **[Tailwind CSS v4](https://tailwindcss.com/)** (CSS-first config)
-- **[next-themes](https://github.com/pacocoursey/next-themes)** — light/dark mode
-- **[Framer Motion](https://www.framer.com/motion/)** — animations
-- **[lucide-react](https://lucide.dev/)** — icons
-- **ESLint** — linting
+---
 
-## Features
+## Stack
 
-- 🌗 **Light / dark mode** toggle (persisted, no flash on load)
-- 🌍 **Bilingual ES / EN** with an instant language switcher (persisted)
-- 🎨 Elegant palette: a neutral slate base + a single teal accent and a
-  complementary amber highlight (see `src/app/globals.css`)
-- ✨ Dynamic, animated UI (hero, scroll reveals, filterable project grid)
-- 📱 Fully responsive, mobile-first layout
-- ♿ Accessible: semantic markup, ARIA labels, `prefers-reduced-motion` support
-- 🔎 SEO-ready metadata (Open Graph, Twitter cards)
+| Capa | Tecnología | Por qué |
+|---|---|---|
+| Framework | **Next.js 16** (App Router) | Estándar de facto en React; render estático, rutas de metadatos, optimización automática |
+| Lenguaje | **TypeScript 5** | Errores detectados antes de ejecutar; el diccionario ES/EN está tipado y no puede desincronizarse |
+| Estilos | **Tailwind CSS v4** | Sin CSS muerto, tokens de diseño en variables CSS nativas |
+| Animación | **Framer Motion 12** | Animaciones declarativas con soporte de `prefers-reduced-motion` |
+| Tema | **next-themes** | Claro/oscuro sin parpadeo en la carga inicial |
+| Iconos | **lucide-react** | SVG tree-shakeable, sin fuentes de iconos |
+| Tipografía | **Fontsource** (Inter + JetBrains Mono) | Auto-alojada: cero peticiones a Google, cero CLS, builds offline |
 
-## Getting started
+## Ejecutar localmente
 
 ```bash
 npm install
-npm run dev
+npm run dev      # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Otros comandos:
 
-### Scripts
+```bash
+npm run build    # build de producción
+npm run start    # sirve el build de producción
+npm run lint     # ESLint
+npx tsc --noEmit # comprobación de tipos
+```
 
-| Command         | Description                       |
-| --------------- | --------------------------------- |
-| `npm run dev`   | Start the development server      |
-| `npm run build` | Production build                  |
-| `npm run start` | Run the production build          |
-| `npm run lint`  | Run ESLint                        |
-
-## Customizing the content
-
-All content is centralized so you can make it yours without touching components:
-
-- **Text / translations:** `src/i18n/dictionary.ts` (ES + EN strings)
-- **Services, projects, skills, social links:** `src/lib/content.ts`
-- **Colors / theme palette:** `src/app/globals.css`
-- **SEO metadata:** `src/app/layout.tsx`
-
-> Note: The name (“Elian Caizapanta”), stats, project entries and social links are
-> sensible placeholders — update them in the files above with your real details.
-
-## Project structure
+## Estructura
 
 ```
 src/
-├─ app/
-│  ├─ layout.tsx        # Root layout, fonts, metadata, providers
-│  ├─ page.tsx          # Page composition
-│  └─ globals.css       # Tailwind + theme tokens (palette, dark mode)
-├─ components/
-│  ├─ providers/        # Theme + language context
-│  ├─ sections/         # Hero, About, Services, Projects, Contact
-│  ├─ ui/               # Reusable bits (Section, Reveal, icons)
-│  ├─ navbar.tsx
-│  ├─ footer.tsx
-│  ├─ theme-toggle.tsx
-│  └─ language-toggle.tsx
-├─ i18n/                # Locale config + dictionaries
-└─ lib/                 # Content data
+├── app/
+│   ├── layout.tsx      Fuentes, metadatos SEO, JSON-LD, providers
+│   ├── page.tsx        Composición de la página (orden de secciones)
+│   ├── globals.css     ★ SISTEMA DE DISEÑO: paleta, tokens, utilidades
+│   ├── sitemap.ts      /sitemap.xml generado
+│   └── robots.ts       /robots.txt generado
+├── components/
+│   ├── navbar.tsx           Barra fija + progreso de scroll + menú móvil
+│   ├── footer.tsx           Pie con barra de estado tipo vim
+│   ├── command-palette.tsx  Paleta de comandos ⌘K
+│   ├── theme-toggle.tsx     Conmutador claro/oscuro
+│   ├── language-toggle.tsx  Conmutador ES/EN
+│   ├── providers/           ThemeProvider + LanguageProvider
+│   ├── sections/            hero · about · services · projects · contact
+│   └── ui/                  section · reveal · icons
+├── hooks/              use-active-section · use-typewriter · use-clock · use-mounted
+├── i18n/
+│   ├── config.ts       Idiomas soportados
+│   └── dictionary.ts   ★ TODOS LOS TEXTOS (ES + EN)
+└── lib/
+    ├── site.ts         ★ TUS DATOS (nombre, email, redes, URL)
+    └── content.ts      ★ SERVICIOS, PROYECTOS Y STACK
 ```
 
-## Contact form
+Los archivos marcados con ★ son los únicos que necesitas tocar para
+personalizar el sitio. Ver [`AI_CONTEXT.md`](./AI_CONTEXT.md) para el detalle.
 
-The contact form currently simulates submission on the client. To deliver
-messages, wire `handleSubmit` in `src/components/sections/contact.tsx` to an API
-route or a service such as [Resend](https://resend.com/) or
-[Formspree](https://formspree.io/).
+## Decisiones de diseño
+
+**Paleta (colorimetría).** Base neutra fría (matiz ~220°, saturación mínima)
+para lecturas largas sin fatiga. Acento primario verde primavera (~155°) —
+el "fósforo" del terminal, desaturado para que se lea profesional y no retro.
+Los secundarios son el **split-complementario** del acento: ámbar (~38°) y
+azul eléctrico (~215°). El esquema split-complementario da contraste sin el
+choque agresivo del complementario puro y permite jerarquía semántica:
+verde = acción, azul = enlace, ámbar = dato / énfasis.
+El modo claro **no** es el oscuro invertido: usa blanco cálido tipo papel para
+compensar la temperatura fría del texto, y acentos más oscuros para mantener
+contraste AA (≥ 4.5:1).
+
+**Interacción.** Paleta de comandos (⌘K / Ctrl+K), atajos `T` (tema) y `L`
+(idioma), seguimiento de sección activa con `IntersectionObserver`,
+portafolio como índice tabular expandible en lugar de rejilla de tarjetas.
+
+**Accesibilidad.** HTML semántico, enlace "skip to content", foco visible,
+`aria-*` en controles interactivos, contraste AA y respeto total a
+`prefers-reduced-motion`.
+
+## Licencia
+
+Código bajo MIT. El contenido (textos, proyectos, imágenes) es propiedad del autor.

@@ -1,58 +1,76 @@
 "use client";
 
-import {
-  Code2,
-  Gauge,
-  LayoutDashboard,
-  Server,
-  Smartphone,
-  Workflow,
-  type LucideIcon,
-} from "lucide-react";
-import { useLanguage } from "@/components/providers/language-provider";
 import { Section, SectionHeading } from "@/components/ui/section";
 import { Reveal } from "@/components/ui/reveal";
-import { services, type Service } from "@/lib/content";
+import { useLanguage } from "@/components/providers/language-provider";
+import { services } from "@/lib/content";
 
-const icons: Record<Service["icon"], LucideIcon> = {
-  code: Code2,
-  layout: LayoutDashboard,
-  server: Server,
-  smartphone: Smartphone,
-  gauge: Gauge,
-  workflow: Workflow,
-};
-
+/**
+ * Servicios como lista de comandos, no como rejilla de tarjetas.
+ * Cada fila se expande al pasar el cursor (o siempre visible en móvil)
+ * usando la transición de `grid-template-rows`, sin JavaScript.
+ */
 export function Services() {
   const { t, locale } = useLanguage();
 
   return (
     <Section id="services">
       <SectionHeading
+        index={t.services.index}
         eyebrow={t.services.eyebrow}
         title={t.services.title}
         subtitle={t.services.subtitle}
       />
-      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {services.map((service, index) => {
-          const Icon = icons[service.icon];
-          return (
-            <Reveal key={service.title.en} delay={index * 0.06}>
-              <article className="surface lift-card group h-full rounded-2xl p-6 hover:border-accent">
-                <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-accent-soft text-accent transition-all duration-300 group-hover:rotate-3 group-hover:scale-105 group-hover:bg-accent group-hover:text-white">
-                  <Icon className="h-6 w-6" />
-                </div>
-                <h3 className="mb-2 text-lg font-semibold">
+
+      <p className="mb-6 hidden font-mono text-[11px] text-fg-subtle md:block">
+        <span className="text-accent">#</span> {t.services.hint}
+      </p>
+
+      <ul className="border-t border-border">
+        {services.map((service, index) => (
+          <Reveal key={service.cmd} delay={index * 0.04}>
+            <li className="group border-b border-border">
+              <div className="row-hover flex cursor-default items-center gap-4 py-6 pr-4">
+                <span className="w-6 shrink-0 font-mono text-[11px] text-fg-subtle">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <span className="hidden w-40 shrink-0 truncate font-mono text-xs text-accent lg:block">
+                  ❯ {service.cmd}
+                </span>
+                <h3 className="flex-1 text-balance text-lg font-medium tracking-tight text-fg transition-colors sm:text-xl">
                   {service.title[locale]}
                 </h3>
-                <p className="text-sm leading-relaxed text-muted">
-                  {service.description[locale]}
-                </p>
-              </article>
-            </Reveal>
-          );
-        })}
-      </div>
+                <span
+                  aria-hidden
+                  className="shrink-0 font-mono text-lg text-fg-subtle transition-all duration-300 group-hover:translate-x-1 group-hover:text-accent"
+                >
+                  →
+                </span>
+              </div>
+
+              <div className="grid grid-rows-[1fr] transition-[grid-template-rows] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] md:grid-rows-[0fr] md:group-hover:grid-rows-[1fr]">
+                <div className="overflow-hidden">
+                  <div className="pb-6 pl-10 pr-4 lg:pl-[13.5rem]">
+                    <p className="max-w-2xl text-pretty text-sm leading-relaxed text-fg-muted">
+                      {service.description[locale]}
+                    </p>
+                    <ul className="mt-4 flex flex-wrap gap-2">
+                      {service.keywords.map((keyword) => (
+                        <li
+                          key={keyword}
+                          className="border border-border px-2 py-0.5 font-mono text-[11px] text-fg-subtle"
+                        >
+                          {keyword}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </li>
+          </Reveal>
+        ))}
+      </ul>
     </Section>
   );
 }

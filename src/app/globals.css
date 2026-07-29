@@ -1,243 +1,295 @@
 @import "tailwindcss";
 
-/* Enable class-based dark mode (toggle) instead of OS preference only */
+/* Dark mode se activa por clase (.dark) para poder alternarlo manualmente. */
 @custom-variant dark (&:where(.dark, .dark *));
 
-/*
-  Elegant palette built on color theory:
-  - Neutral slate base (analogous, low-saturation) for calm, professional feel.
-  - A single teal accent (the "lead" hue) for cohesion + a complementary amber
-    used sparingly as a secondary highlight.
-*/
+/* ==========================================================================
+   SISTEMA DE COLOR — "Engineering Terminal"
+   --------------------------------------------------------------------------
+   Construido con colorimetría intencional, no con colores al azar:
+
+   · Base neutra fría (hue ~220°, saturación muy baja) → sensación técnica,
+     sobria y sin fatiga visual en lecturas largas.
+   · Acento primario: verde primavera (hue ~155°) — el "fósforo" del terminal,
+     pero desaturado para que se vea profesional y no neón retro.
+   · Split-complementario del acento: ámbar (~38°) y azul eléctrico (~215°).
+     Un esquema split-complementario da contraste sin el choque agresivo del
+     complementario puro, y permite jerarquía: verde = acción, azul = enlace,
+     ámbar = énfasis / dato.
+   · El modo claro NO es el oscuro invertido: usa un blanco cálido (papel) para
+     compensar la temperatura fría del texto, y acentos más oscuros para
+     mantener contraste AA (>= 4.5:1) sobre fondo claro.
+   ========================================================================== */
+
 :root {
-  --background: #f8fafc;
-  --background-elevated: #ffffff;
-  --foreground: #0f172a;
-  --muted: #475569;
-  --border: #e2e8f0;
-  --card: #ffffff;
+  color-scheme: light;
 
-  --accent: #0d9488;
-  --accent-hover: #0f766e;
-  --accent-soft: #ccfbf1;
-  --secondary: #d97706;
+  --bg: #f7f7f5;
+  --bg-elevated: #ffffff;
+  --bg-sunken: #eeeeea;
+  --fg: #13171c;
+  --fg-muted: #5b6672;
+  --fg-subtle: #8a94a0;
+  --border: #dfe0da;
+  --border-strong: #c6c8c0;
 
-  --grid: rgba(15, 23, 42, 0.04);
+  --accent: #0b8f5f;
+  --accent-fg: #ffffff;
+  --accent-soft: rgba(11, 143, 95, 0.1);
+  --link: #1a5fd0;
+  --amber: #a35a06;
+
+  --grid-line: rgba(19, 23, 28, 0.055);
+  --glow: rgba(11, 143, 95, 0.18);
 }
 
 .dark {
-  --background: #0b1120;
-  --background-elevated: #0f172a;
-  --foreground: #e2e8f0;
-  --muted: #94a3b8;
-  --border: #1e293b;
-  --card: #0f172a;
+  color-scheme: dark;
 
-  --accent: #2dd4bf;
-  --accent-hover: #5eead4;
-  --accent-soft: rgba(45, 212, 191, 0.12);
-  --secondary: #fbbf24;
+  --bg: #0a0c0f;
+  --bg-elevated: #10141a;
+  --bg-sunken: #06080a;
+  --fg: #e4e8ee;
+  --fg-muted: #8b95a3;
+  --fg-subtle: #5d6674;
+  --border: #1c222b;
+  --border-strong: #2b333f;
 
-  --grid: rgba(226, 232, 240, 0.04);
+  --accent: #3ddc97;
+  --accent-fg: #04120c;
+  --accent-soft: rgba(61, 220, 151, 0.12);
+  --link: #6aa9ff;
+  --amber: #f0a92e;
+
+  --grid-line: rgba(228, 232, 238, 0.045);
+  --glow: rgba(61, 220, 151, 0.22);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-background-elevated: var(--background-elevated);
-  --color-foreground: var(--foreground);
-  --color-muted: var(--muted);
+  --color-bg: var(--bg);
+  --color-bg-elevated: var(--bg-elevated);
+  --color-bg-sunken: var(--bg-sunken);
+  --color-fg: var(--fg);
+  --color-fg-muted: var(--fg-muted);
+  --color-fg-subtle: var(--fg-subtle);
   --color-border: var(--border);
-  --color-card: var(--card);
+  --color-border-strong: var(--border-strong);
   --color-accent: var(--accent);
-  --color-accent-hover: var(--accent-hover);
+  --color-accent-fg: var(--accent-fg);
   --color-accent-soft: var(--accent-soft);
-  --color-secondary: var(--secondary);
+  --color-link: var(--link);
+  --color-amber: var(--amber);
 
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-mono:
+    "JetBrains Mono Variable", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-sans:
+    "Inter Variable", ui-sans-serif, system-ui, -apple-system, sans-serif;
 }
 
 * {
   border-color: var(--border);
+  min-width: 0;
 }
 
 html {
   scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-sans), system-ui, sans-serif;
+  background-color: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-feature-settings: "cv05", "ss01";
   -webkit-font-smoothing: antialiased;
-  transition: background-color 0.4s ease, color 0.4s ease;
-}
-
-/* Decorative dotted grid used in the hero background */
-.bg-grid {
-  background-image: radial-gradient(var(--grid) 1px, transparent 1px);
-  background-size: 22px 22px;
-  animation: grid-drift 18s linear infinite;
-}
-
-.aurora-field {
-  background:
-    linear-gradient(115deg, transparent 0 18%, color-mix(in srgb, var(--accent) 20%, transparent) 35%, transparent 54%),
-    linear-gradient(62deg, transparent 18%, color-mix(in srgb, var(--secondary) 14%, transparent) 48%, transparent 72%);
-  filter: blur(18px);
-  opacity: 0.72;
-  transform: translate3d(0, 0, 0);
-  animation: aurora-shift 14s ease-in-out infinite alternate;
-}
-
-.shine-border {
-  position: relative;
-  isolation: isolate;
-  overflow: hidden;
-}
-
-.shine-border::after {
-  content: "";
-  position: absolute;
-  inset: -1px;
-  z-index: -1;
-  background: linear-gradient(
-    110deg,
-    transparent 25%,
-    color-mix(in srgb, var(--accent) 46%, transparent) 45%,
-    color-mix(in srgb, var(--secondary) 32%, transparent) 52%,
-    transparent 72%
-  );
-  transform: translateX(-115%);
-  animation: badge-sheen 4.8s ease-in-out infinite;
-}
-
-.animated-frame {
-  background: conic-gradient(
-    from 180deg,
-    color-mix(in srgb, var(--accent) 12%, transparent),
-    color-mix(in srgb, var(--secondary) 30%, transparent),
-    color-mix(in srgb, var(--accent) 34%, transparent),
-    color-mix(in srgb, var(--accent) 12%, transparent)
-  );
-  filter: blur(14px);
-  opacity: 0.72;
-  animation: frame-turn 10s linear infinite;
-}
-
-.code-window::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: linear-gradient(
-    120deg,
-    transparent 0 35%,
-    color-mix(in srgb, #ffffff 20%, transparent) 48%,
-    transparent 62% 100%
-  );
-  transform: translateX(-130%);
-  animation: window-sheen 7s ease-in-out infinite;
-}
-
-.lift-card {
-  transform: translateZ(0);
-  transition:
-    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
-    border-color 0.35s ease,
-    box-shadow 0.35s ease,
-    background-color 0.35s ease;
-}
-
-.lift-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 18px 45px color-mix(in srgb, var(--accent) 12%, transparent);
-}
-
-.focus-glow:focus {
-  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 18%, transparent);
-}
-
-/* Animated gradient text for headings */
-.text-gradient {
-  background: linear-gradient(120deg, var(--accent), var(--secondary));
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-/* Subtle reusable card surface */
-.surface {
-  background: var(--card);
-  border: 1px solid var(--border);
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
 }
 
 ::selection {
   background: var(--accent);
-  color: #ffffff;
+  color: var(--accent-fg);
 }
 
-@keyframes grid-drift {
-  from {
-    background-position: 0 0;
-  }
-  to {
-    background-position: 44px 44px;
-  }
+/* Foco visible y coherente en todo el sitio (accesibilidad). */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 2px;
 }
 
-@keyframes aurora-shift {
-  from {
-    transform: translate3d(-2%, -1%, 0) scale(1);
-  }
-  to {
-    transform: translate3d(2%, 1.5%, 0) scale(1.04);
-  }
+/* Scrollbar discreta, en línea con la estética de editor de código. */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-sunken);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border: 2px solid var(--bg-sunken);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--fg-subtle);
 }
 
-@keyframes badge-sheen {
+/* ==========================================================================
+   UTILIDADES DE TEXTURA
+   ========================================================================== */
+
+/* Retícula técnica de fondo (plano de ingeniería). */
+.grid-lines {
+  background-image:
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+  background-size: 72px 72px;
+}
+
+/* Líneas de barrido tipo CRT — muy sutiles, sólo textura. */
+.scanlines::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0 3px,
+    rgba(0, 0, 0, 0.022) 3px 4px
+  );
+  mix-blend-mode: multiply;
+}
+.dark .scanlines::after {
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0 3px,
+    rgba(255, 255, 255, 0.017) 3px 4px
+  );
+  mix-blend-mode: screen;
+}
+
+/* Grano fino: evita el aspecto "plano y plástico" de los degradados puros. */
+.noise::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Halo del acento, usado detrás del terminal del hero. */
+.accent-glow {
+  background: radial-gradient(
+    50% 50% at 50% 50%,
+    var(--glow) 0%,
+    transparent 70%
+  );
+}
+
+/* ==========================================================================
+   COMPONENTES DE TERMINAL
+   ========================================================================== */
+
+.caret {
+  display: inline-block;
+  width: 0.58em;
+  height: 1.05em;
+  translate: 0 0.16em;
+  background: var(--accent);
+  animation: caret-blink 1.05s steps(1) infinite;
+}
+
+@keyframes caret-blink {
   0%,
-  55% {
-    transform: translateX(-115%);
+  49% {
+    opacity: 1;
   }
-  82%,
+  50%,
   100% {
-    transform: translateX(115%);
+    opacity: 0;
   }
 }
 
-@keyframes frame-turn {
-  to {
-    transform: rotate(360deg);
-  }
+/* Marco de ventana de terminal. */
+.term {
+  background: color-mix(in srgb, var(--bg-elevated) 92%, transparent);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(12px);
+  box-shadow:
+    0 1px 0 0 color-mix(in srgb, var(--fg) 4%, transparent) inset,
+    0 24px 60px -30px rgba(0, 0, 0, 0.5);
 }
 
-@keyframes window-sheen {
-  0%,
-  54% {
-    transform: translateX(-130%);
-  }
-  82%,
-  100% {
-    transform: translateX(130%);
-  }
+/* Fila que se "ilumina" al pasar el cursor (listas de servicios/proyectos). */
+.row-hover {
+  transition:
+    background-color 0.28s ease,
+    color 0.28s ease,
+    padding-left 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.row-hover:hover {
+  background-color: var(--accent-soft);
+  padding-left: 1.25rem;
 }
 
-/* Respect users who prefer reduced motion */
+/* Subrayado animado para enlaces en texto. */
+.link-underline {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.link-underline:hover {
+  background-size: 100% 1px;
+}
+
+/* Marca de esquina tipo "crop mark" de plano técnico. */
+.corner-marks {
+  position: relative;
+}
+.corner-marks::before,
+.corner-marks::after {
+  content: "";
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  border-color: var(--accent);
+  opacity: 0.65;
+}
+.corner-marks::before {
+  top: -1px;
+  left: -1px;
+  border-top: 1px solid;
+  border-left: 1px solid;
+}
+.corner-marks::after {
+  bottom: -1px;
+  right: -1px;
+  border-bottom: 1px solid;
+  border-right: 1px solid;
+}
+
+/* Barra de progreso de scroll. */
+.scroll-progress {
+  transform-origin: 0% 50%;
+}
+
+/* ==========================================================================
+   PREFERENCIA DE MOVIMIENTO REDUCIDO (accesibilidad)
+   ========================================================================== */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
   *::after {
     animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
   }
-
-  .bg-grid,
-  .aurora-field,
-  .animated-frame,
-  .shine-border::after,
-  .code-window::before {
-    animation: none !important;
+  .caret {
+    opacity: 1;
   }
 }

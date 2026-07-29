@@ -1,22 +1,14 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
 import { useTheme } from "next-themes";
-import { Moon, Sun } from "lucide-react";
 import { useLanguage } from "@/components/providers/language-provider";
+import { useMounted } from "@/hooks/use-mounted";
 
-const emptySubscribe = () => () => {};
-
-// Hydration-safe mount flag: false on the server, true on the client.
-function useMounted() {
-  return useSyncExternalStore(
-    emptySubscribe,
-    () => true,
-    () => false,
-  );
-}
-
-export function ThemeToggle() {
+/**
+ * Alterna claro/oscuro. Se presenta como una bandera de línea de comandos
+ * (`--theme=dark`) en lugar del típico icono de sol/luna.
+ */
+export function ThemeToggle({ compact = false }: { compact?: boolean }) {
   const { theme, setTheme, resolvedTheme } = useTheme();
   const { t } = useLanguage();
   const mounted = useMounted();
@@ -27,18 +19,21 @@ export function ThemeToggle() {
   return (
     <button
       type="button"
-      aria-label={isDark ? t.themeToggle.light : t.themeToggle.dark}
       onClick={() => setTheme(isDark ? "light" : "dark")}
-      className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-border bg-background-elevated text-foreground transition-colors hover:border-accent hover:text-accent"
+      aria-label={isDark ? t.ui.themeLight : t.ui.themeDark}
+      title={isDark ? t.ui.themeLight : t.ui.themeDark}
+      className="group inline-flex h-8 items-center gap-1.5 border border-border px-2.5 font-mono text-[11px] text-fg-muted transition-colors hover:border-accent hover:text-accent"
     >
-      {mounted ? (
-        isDark ? (
-          <Sun className="h-[18px] w-[18px]" />
-        ) : (
-          <Moon className="h-[18px] w-[18px]" />
-        )
-      ) : (
-        <span className="h-[18px] w-[18px]" />
+      <span className="text-fg-subtle group-hover:text-accent">--theme=</span>
+      <span className="min-w-[34px] text-left text-fg">
+        {mounted ? (isDark ? "dark" : "light") : " "}
+      </span>
+      {compact ? null : (
+        <span
+          aria-hidden
+          className="h-2 w-2 border border-current"
+          style={{ background: isDark ? "transparent" : "currentColor" }}
+        />
       )}
     </button>
   );

@@ -1,111 +1,174 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
-import { useEffect, useState } from "react";
-import { Menu, X } from "lucide-react";
+import { useState } from "react";
+import { AnimatePresence, motion, useScroll, useSpring } from "framer-motion";
+import { Menu, Search, X } from "lucide-react";
 import { useLanguage } from "@/components/providers/language-provider";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { LanguageToggle } from "@/components/language-toggle";
+import { openCommandPalette } from "@/components/command-palette";
+import { useActiveSection } from "@/hooks/use-active-section";
+import { site } from "@/lib/site";
+
+const SECTION_IDS = ["about", "services", "projects", "contact"];
 
 export function Navbar() {
   const { t } = useLanguage();
-  const [scrolled, setScrolled] = useState(false);
-  const [open, setOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const active = useActiveSection(SECTION_IDS);
 
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 12);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  const { scrollYProgress } = useScroll();
+  const progress = useSpring(scrollYProgress, {
+    stiffness: 180,
+    damping: 30,
+    restDelta: 0.001,
+  });
 
   const links = [
-    { href: "#home", label: t.nav.home },
-    { href: "#about", label: t.nav.about },
-    { href: "#services", label: t.nav.services },
-    { href: "#projects", label: t.nav.projects },
-    { href: "#contact", label: t.nav.contact },
+    { id: "about", label: t.nav.about },
+    { id: "services", label: t.nav.services },
+    { id: "projects", label: t.nav.projects },
+    { id: "contact", label: t.nav.contact },
   ];
 
   return (
-    <motion.header
-      initial={{ y: -18, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? "border-b border-border bg-background/85 shadow-sm shadow-black/5 backdrop-blur-xl"
-          : "border-b border-transparent"
-      }`}
-    >
-      <nav className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-6 md:px-10">
-        <a href="#home" className="group flex items-center gap-2 font-bold">
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent text-sm font-black text-white transition-transform duration-300 group-hover:rotate-6 group-hover:scale-105">
-            E
-          </span>
-          <span className="text-lg tracking-tight">
-            Elian<span className="text-accent">.</span>
-          </span>
-        </a>
+    <header className="fixed inset-x-0 top-0 z-50">
+      {/* Indicador de progreso de lectura */}
+      <motion.div
+        aria-hidden
+        style={{ scaleX: progress }}
+        className="scroll-progress h-[2px] bg-accent"
+      />
 
-        <ul className="hidden items-center gap-8 md:flex">
-          {links.map((link) => (
-            <li key={link.href}>
-              <a
-                href={link.href}
-                className="group relative text-sm font-medium text-muted transition-colors hover:text-accent"
-              >
-                {link.label}
-                <span className="absolute -bottom-1 left-0 h-px w-full origin-left scale-x-0 bg-accent transition-transform duration-300 group-hover:scale-x-100" />
-              </a>
-            </li>
-          ))}
-        </ul>
-
-        <div className="flex items-center gap-2">
-          <LanguageToggle />
-          <ThemeToggle />
-          <button
-            type="button"
-            aria-label="Menu"
-            onClick={() => setOpen((value) => !value)}
-            className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-border bg-background-elevated text-foreground md:hidden"
+      <div className="border-b border-border bg-bg/80 backdrop-blur-md">
+        <nav
+          aria-label="Principal"
+          className="mx-auto flex h-14 w-full max-w-6xl items-center gap-4 px-5 sm:px-8 lg:px-12"
+        >
+          {/* Marca: prompt de terminal en lugar de un logotipo genérico */}
+          <a
+            href="#top"
+            className="group flex shrink-0 items-center gap-2 font-mono text-sm"
           >
-            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </button>
-        </div>
-      </nav>
+            <span
+              aria-hidden
+              className="grid h-6 w-6 place-items-center border border-accent text-[11px] font-bold text-accent transition-colors group-hover:bg-accent group-hover:text-[var(--accent-fg)]"
+            >
+              {site.handle.charAt(0).toUpperCase()}
+            </span>
+            <span className="hidden text-fg-muted sm:inline">
+              {site.handle}
+              <span className="text-fg-subtle">@web</span>
+              <span className="text-accent">:~$</span>
+            </span>
+          </a>
 
-      <AnimatePresence>
-        {open ? (
-          <motion.div
-            initial={{ opacity: 0, y: -8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.2 }}
-            className="border-t border-border bg-background/95 backdrop-blur-md md:hidden"
-          >
-            <ul className="mx-auto flex w-full max-w-6xl flex-col px-6 py-2">
-              {links.map((link, index) => (
-                <motion.li
-                  key={link.href}
-                  initial={{ opacity: 0, x: -8 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.035 }}
-                >
+          {/* Enlaces de escritorio */}
+          <ul className="ml-auto hidden items-center gap-1 md:flex">
+            {links.map((link, index) => {
+              const isActive = active === link.id;
+              return (
+                <li key={link.id}>
                   <a
-                    href={link.href}
-                    onClick={() => setOpen(false)}
-                    className="block py-3 text-sm font-medium text-muted transition-colors hover:text-accent"
+                    href={`#${link.id}`}
+                    aria-current={isActive ? "true" : undefined}
+                    className={`group relative flex items-center gap-1.5 px-3 py-2 font-mono text-xs transition-colors ${
+                      isActive ? "text-accent" : "text-fg-muted hover:text-fg"
+                    }`}
                   >
+                    <span className="text-[10px] text-fg-subtle">
+                      0{index + 1}
+                    </span>
+                    {link.label}
+                    {isActive ? (
+                      <motion.span
+                        layoutId="nav-active"
+                        className="absolute inset-x-2 -bottom-px h-px bg-accent"
+                        transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                      />
+                    ) : null}
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+
+          <div className="ml-auto flex items-center gap-2 md:ml-2">
+            {/* Disparador de la paleta de comandos */}
+            <button
+              type="button"
+              onClick={openCommandPalette}
+              aria-label={t.ui.openPalette}
+              className="hidden h-8 items-center gap-2 border border-border px-2.5 font-mono text-[11px] text-fg-muted transition-colors hover:border-accent hover:text-accent sm:flex"
+            >
+              <Search className="h-3.5 w-3.5" />
+              <kbd className="text-fg-subtle">⌘K</kbd>
+            </button>
+
+            <div className="hidden items-center gap-2 sm:flex">
+              <LanguageToggle />
+              <ThemeToggle />
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setMenuOpen(true)}
+              aria-label={t.ui.menu}
+              className="inline-flex h-8 w-8 items-center justify-center border border-border text-fg-muted transition-colors hover:border-accent hover:text-accent md:hidden"
+            >
+              <Menu className="h-4 w-4" />
+            </button>
+          </div>
+        </nav>
+      </div>
+
+      {/* Menú móvil a pantalla completa */}
+      <AnimatePresence>
+        {menuOpen ? (
+          <motion.div
+            className="fixed inset-0 z-50 bg-bg md:hidden"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <div className="flex h-14 items-center justify-between border-b border-border px-5">
+              <span className="font-mono text-sm text-fg-muted">
+                {site.handle}
+                <span className="text-accent">:~$</span> menu
+              </span>
+              <button
+                type="button"
+                onClick={() => setMenuOpen(false)}
+                aria-label={t.ui.close}
+                className="inline-flex h-8 w-8 items-center justify-center border border-border text-fg-muted"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+
+            <ul className="px-5 py-4">
+              {links.map((link, index) => (
+                <li key={link.id} className="border-b border-border">
+                  <a
+                    href={`#${link.id}`}
+                    onClick={() => setMenuOpen(false)}
+                    className="flex items-baseline gap-3 py-5 font-mono text-2xl text-fg"
+                  >
+                    <span className="text-xs text-accent">0{index + 1}</span>
                     {link.label}
                   </a>
-                </motion.li>
+                </li>
               ))}
             </ul>
+
+            <div className="flex items-center gap-2 px-5">
+              <LanguageToggle />
+              <ThemeToggle />
+            </div>
           </motion.div>
         ) : null}
       </AnimatePresence>
-    </motion.header>
+    </header>
   );
 }

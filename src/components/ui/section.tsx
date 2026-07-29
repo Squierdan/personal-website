@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { Reveal } from "./reveal";
 
 type SectionProps = {
   id: string;
@@ -10,7 +11,7 @@ export function Section({ id, children, className = "" }: SectionProps) {
   return (
     <section
       id={id}
-      className={`scroll-mt-20 px-6 py-20 sm:py-28 md:px-10 ${className}`}
+      className={`scroll-mt-24 border-t border-border px-5 py-20 sm:px-8 sm:py-28 lg:px-12 ${className}`}
     >
       <div className="mx-auto w-full max-w-6xl">{children}</div>
     </section>
@@ -18,25 +19,37 @@ export function Section({ id, children, className = "" }: SectionProps) {
 }
 
 type SectionHeadingProps = {
+  index: string;
   eyebrow: string;
   title: string;
   subtitle?: string;
 };
 
+/**
+ * Encabezado de sección con estética de documento técnico:
+ * índice numérico, regla horizontal y etiqueta en monoespaciada.
+ */
 export function SectionHeading({
+  index,
   eyebrow,
   title,
   subtitle,
 }: SectionHeadingProps) {
   return (
-    <div className="mx-auto mb-12 max-w-2xl text-center">
-      <span className="mb-3 inline-block text-sm font-semibold uppercase tracking-widest text-accent">
-        {eyebrow}
-      </span>
-      <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">{title}</h2>
+    <Reveal className="mb-12 sm:mb-16">
+      <div className="flex items-baseline gap-4 font-mono text-xs tracking-widest text-fg-subtle">
+        <span className="text-accent">{index}</span>
+        <span className="uppercase">{eyebrow}</span>
+        <span aria-hidden className="h-px flex-1 bg-border" />
+      </div>
+      <h2 className="mt-5 max-w-3xl text-balance text-3xl font-semibold leading-[1.1] tracking-tight sm:text-4xl lg:text-5xl">
+        {title}
+      </h2>
       {subtitle ? (
-        <p className="mt-4 text-base leading-relaxed text-muted">{subtitle}</p>
+        <p className="mt-5 max-w-2xl text-pretty text-base leading-relaxed text-fg-muted">
+          {subtitle}
+        </p>
       ) : null}
-    </div>
+    </Reveal>
   );
 }
