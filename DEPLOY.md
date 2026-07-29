@@ -186,7 +186,7 @@ Ya está en línea y accesible desde cualquier parte del mundo.
 ### 3.3 Paso obligatorio después del primer deploy
 
 > **Ya hecho.** `site.url` apunta a
-> `https://personal-website-blush-three-41.vercel.app`.
+> `https://squierdan.vercel.app`.
 > Solo tendrás que repetir esto si cambias de dominio.
 
 Abre `src/lib/site.ts` y pon tu URL real:

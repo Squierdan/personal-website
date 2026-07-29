@@ -5,7 +5,7 @@ especializado en seguridad de la información.
 Bilingüe (ES/EN), tema claro/oscuro, responsivo, con una interfaz de estética
 *engineering terminal*.
 
-**En producción:** <https://personal-website-blush-three-41.vercel.app>
+**En producción:** <https://squierdan.vercel.app>
 
 > **Empieza aquí:** [`DEPLOY.md`](./DEPLOY.md) — cómo ejecutarlo en tu computadora
 > y publicarlo gratis en internet, paso a paso.

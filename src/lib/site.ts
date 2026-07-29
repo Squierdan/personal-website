@@ -27,7 +27,7 @@ export const site = {
   timezone: "America/Guayaquil",
 
   /** URL de producción. Mantenla sincronizada con el dominio de Vercel. */
-  url: "https://personal-website-blush-three-41.vercel.app",
+  url: "https://squierdan.vercel.app",
 
   /** Correo de contacto público. */
   email: "daniel_caiz@hotmail.com",
