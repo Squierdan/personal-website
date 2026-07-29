@@ -4,34 +4,68 @@ import { useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { Section, SectionHeading } from "@/components/ui/section";
-import { Reveal } from "@/components/ui/reveal";
+import { Reveal, RevealGroup, RevealItem } from "@/components/ui/reveal";
 import { useLanguage } from "@/components/providers/language-provider";
+import { DUR, EASE_OUT } from "@/lib/motion";
 import {
   categoryLabels,
   work,
   workCategories,
+  type WorkItem,
   type WorkCategory,
 } from "@/lib/content";
 
 type Filter = WorkCategory | "all";
 
 /**
- * Trayectoria presentada como índice tabular expandible en lugar de la típica
- * rejilla de tarjetas: se lee más rápido, escala a decenas de entradas y
- * permite mostrar el detalle sin salir de la página.
+ * ============================================================================
+ *  TRAYECTORIA
+ * ============================================================================
+ *  Dos bloques con jerarquía distinta, y eso es deliberado:
+ *
+ *  1. **Investigación publicada**, arriba y con su propio tratamiento. Antes
+ *     era la fila 01 de la tabla con un ★ al lado: un artículo revisado por
+ *     pares en Springer Nature, como primer autor, es la credencial que
+ *     distingue este perfil, y un reclutador que hojea la tabla se la perdía.
+ *     Va en ámbar, el color de énfasis del sistema.
+ *  2. **Roles profesionales**, como índice tabular expandible: se lee más
+ *     rápido que una rejilla de tarjetas y escala a decenas de entradas.
+ *
+ *  El reparto se deriva de `category === "research"`, no de una lista fija:
+ *  añadir otro artículo a `content.ts` lo coloca solo en el bloque de arriba, y
+ *  los filtros sólo ofrecen las categorías que de verdad existen entre los
+ *  roles.
+ * ============================================================================
  */
 export function Experience() {
   const { t, locale } = useLanguage();
   const [filter, setFilter] = useState<Filter>("all");
   const [openId, setOpenId] = useState<string | null>(null);
 
-  const visible = useMemo(
-    () =>
-      filter === "all" ? work : work.filter((item) => item.category === filter),
-    [filter],
+  const publications = useMemo(
+    () => work.filter((item) => item.category === "research"),
+    [],
+  );
+  const roles = useMemo(
+    () => work.filter((item) => item.category !== "research"),
+    [],
   );
 
-  const filters: Filter[] = ["all", ...workCategories];
+  const visible = useMemo(
+    () =>
+      filter === "all"
+        ? roles
+        : roles.filter((item) => item.category === filter),
+    [filter, roles],
+  );
+
+  /** Sólo las categorías presentes entre los roles: sin filtros que no filtran. */
+  const filters: Filter[] = [
+    "all",
+    ...workCategories.filter((category) =>
+      roles.some((item) => item.category === category),
+    ),
+  ];
 
   return (
     <Section id="experience">
@@ -42,12 +76,36 @@ export function Experience() {
         subtitle={t.work.subtitle}
       />
 
+      {/* ------------------------------------------- Investigación publicada */}
+      {publications.length > 0 ? (
+        <RevealGroup className="mb-16 sm:mb-20">
+          <RevealItem>
+            <h3 className="font-mono text-[11px] uppercase tracking-widest text-fg-subtle">
+              {t.work.publicationsTitle}
+            </h3>
+          </RevealItem>
+
+          {publications.map((item) => (
+            <RevealItem key={item.org}>
+              <Publication item={item} locale={locale} label={t.work.firstAuthor} />
+            </RevealItem>
+          ))}
+        </RevealGroup>
+      ) : null}
+
+      {/* ------------------------------------------------ Roles profesionales */}
+      <Reveal>
+        <h3 className="font-mono text-[11px] uppercase tracking-widest text-fg-subtle">
+          {t.work.rolesTitle}
+        </h3>
+      </Reveal>
+
       {/* Filtros presentados como banderas de comando */}
       <Reveal>
         <div
           role="tablist"
-          aria-label={t.work.eyebrow}
-          className="mb-8 flex flex-wrap items-center gap-2"
+          aria-label={t.work.rolesTitle}
+          className="mb-8 mt-5 flex flex-wrap items-center gap-2"
         >
           {filters.map((value) => {
             const isActive = filter === value;
@@ -62,7 +120,7 @@ export function Experience() {
                   setFilter(value);
                   setOpenId(null);
                 }}
-                className={`border px-3 py-1.5 font-mono text-[11px] transition-colors ${
+                className={`inline-flex h-9 items-center border px-3 font-mono text-[11px] transition-colors duration-[var(--dur-micro)] ${
                   isActive
                     ? "border-accent bg-accent-soft text-accent"
                     : "border-border text-fg-muted hover:border-border-strong hover:text-fg"
@@ -72,9 +130,9 @@ export function Experience() {
               </button>
             );
           })}
-          <span className="ml-auto font-mono text-[11px] text-fg-subtle">
+          <span className="ml-auto font-mono text-[11px] tabular-nums text-fg-subtle">
             {String(visible.length).padStart(2, "0")} /{" "}
-            {String(work.length).padStart(2, "0")}
+            {String(roles.length).padStart(2, "0")}
           </span>
         </div>
       </Reveal>
@@ -99,40 +157,42 @@ export function Experience() {
             return (
               <motion.li
                 key={key}
+                // `data-reveal`: red de seguridad de movimiento reducido, ver
+                // la nota en `ui/reveal.tsx` y en globals.css.
+                data-reveal
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -6 }}
-                transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ duration: DUR.base, ease: EASE_OUT }}
                 className="border-t border-border lg:first:border-t-0"
               >
                 <button
                   type="button"
                   onClick={() => setOpenId(isOpen ? null : key)}
                   aria-expanded={isOpen}
-                  className="row-hover grid w-full grid-cols-[2.5rem_1fr_2rem] items-center gap-4 px-1 py-5 text-left lg:grid-cols-[2.5rem_1fr_11rem_9rem_2rem]"
+                  className="scan-row grid w-full grid-cols-[2.5rem_1fr_2rem] items-center gap-4 px-1 py-5 text-left lg:grid-cols-[2.5rem_1fr_11rem_9rem_2rem]"
                 >
-                  <span className="font-mono text-[11px] text-fg-subtle">
+                  <span className="pl-3 font-mono text-[11px] tabular-nums text-fg-subtle">
                     {String(index + 1).padStart(2, "0")}
                   </span>
 
                   <span className="min-w-0">
-                    <span className="flex items-center gap-2">
-                      <span className="truncate text-base font-medium tracking-tight text-fg sm:text-lg">
-                        {item.title[locale]}
-                      </span>
-                      {item.featured ? (
-                        <span
-                          aria-hidden
-                          className="shrink-0 border border-accent/40 px-1.5 py-px font-mono text-[9px] text-accent"
-                        >
-                          ★
-                        </span>
-                      ) : null}
+                    {/* Sin `truncate`: los cargos y las organizaciones son
+                        largos, y en 375 px se cortaban a media palabra.
+                        Envolver es preferible a truncar cuando el texto es la
+                        información, no una etiqueta. */}
+                    <span className="block text-base font-medium leading-snug tracking-tight text-fg sm:text-lg">
+                      {item.title[locale]}
                     </span>
-                    <span className="mt-1 block truncate font-mono text-[11px] text-accent">
+                    <span className="mt-1 block font-mono text-[11px] text-accent">
                       {item.org}
                     </span>
-                    <span className="mt-1 block truncate text-sm text-fg-muted lg:hidden">
+                    {/* El resumen de una línea: la tabla tiene que decir algo
+                        antes de que el visitante despliegue nada. */}
+                    <span className="mt-1.5 block text-sm leading-snug text-fg-muted">
+                      {item.summary[locale]}
+                    </span>
+                    <span className="mt-1 block truncate font-mono text-[11px] text-fg-subtle lg:hidden">
                       {item.period[locale]}
                     </span>
                   </span>
@@ -147,8 +207,8 @@ export function Experience() {
 
                   <span
                     aria-hidden
-                    className={`justify-self-end font-mono text-sm text-fg-subtle transition-transform duration-300 ${
-                      isOpen ? "rotate-45 text-accent" : ""
+                    className={`justify-self-end font-mono text-sm transition-transform duration-[var(--dur-base)] ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                      isOpen ? "rotate-45 text-accent" : "text-fg-subtle"
                     }`}
                   >
                     +
@@ -162,7 +222,7 @@ export function Experience() {
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                      transition={{ duration: DUR.slow, ease: EASE_OUT }}
                       className="overflow-hidden"
                     >
                       <div className="border-l-2 border-accent/40 py-2 pl-6 pr-1 lg:ml-[2.5rem]">
@@ -212,5 +272,78 @@ export function Experience() {
         </p>
       ) : null}
     </Section>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Bloque de publicación. Sin plegar: el detalle completo, la revista, el rol de
+ * autoría y el DOI están a la vista, porque es exactamente la información que
+ * alguien va a querer contrastar.
+ */
+function Publication({
+  item,
+  locale,
+  label,
+}: {
+  item: WorkItem;
+  locale: "es" | "en";
+  label: string;
+}) {
+  return (
+    <article className="corner-marks mt-5 border border-border bg-bg-elevated/50 p-6 sm:p-8">
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-2 font-mono text-[11px]">
+        <span className="border border-amber/40 bg-amber/10 px-2 py-0.5 text-[var(--amber)]">
+          {label}
+        </span>
+        <span className="tabular-nums text-fg-subtle">
+          {item.period[locale]}
+        </span>
+        <span className="text-fg-subtle sm:ml-auto">
+          {categoryLabels[item.category][locale]}
+        </span>
+      </div>
+
+      <h4 className="mt-5 max-w-3xl text-balance text-2xl font-semibold leading-[1.12] tracking-[-0.02em] sm:text-[2rem]">
+        {item.title[locale]}
+      </h4>
+
+      <p className="mt-3 font-mono text-sm text-[var(--amber)]">{item.org}</p>
+
+      <p className="mt-6 max-w-3xl text-[15px] leading-relaxed text-fg-muted">
+        {item.detail[locale]}
+      </p>
+
+      <ul className="mt-6 flex flex-wrap gap-2">
+        {item.stack.map((tag) => (
+          <li
+            key={tag}
+            className="border border-border px-2 py-0.5 font-mono text-[11px] text-fg-subtle"
+          >
+            {tag}
+          </li>
+        ))}
+      </ul>
+
+      {item.link ? (
+        <div className="mt-7 flex flex-wrap items-center gap-x-5 gap-y-3 border-t border-border pt-6">
+          <a
+            href={item.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group inline-flex h-10 items-center gap-2 border border-[var(--amber)] px-4 font-mono text-xs text-[var(--amber)] transition-colors hover:bg-amber/10"
+          >
+            {item.linkLabel?.[locale] ?? item.link}
+            <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-[var(--dur-base)] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          </a>
+          {/* El DOI, escrito: es el identificador con el que se verifica la
+              publicación en cualquier índice, no sólo el destino del enlace. */}
+          <p className="break-all font-mono text-[11px] text-fg-subtle">
+            {item.link.replace(/^https?:\/\/(www\.)?/, "")}
+          </p>
+        </div>
+      ) : null}
+    </article>
   );
 }

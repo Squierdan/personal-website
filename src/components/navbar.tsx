@@ -51,7 +51,7 @@ export function Navbar() {
           {/* Marca: prompt de terminal en lugar de un logotipo genérico */}
           <a
             href="#top"
-            className="group flex shrink-0 items-center gap-2 font-mono text-sm"
+            className="group -my-2 flex shrink-0 items-center gap-2 py-2 font-mono text-sm"
           >
             <span
               aria-hidden
@@ -102,7 +102,7 @@ export function Navbar() {
               type="button"
               onClick={openCommandPalette}
               aria-label={t.ui.openPalette}
-              className="hidden h-8 items-center gap-2 border border-border px-2.5 font-mono text-[11px] text-fg-muted transition-colors hover:border-accent hover:text-accent sm:flex"
+              className="hidden h-8 items-center gap-2 border border-border-strong px-2.5 font-mono text-[11px] text-fg-muted transition-colors hover:border-accent hover:text-accent sm:flex"
             >
               <Search className="h-3.5 w-3.5" />
               <kbd className="text-fg-subtle">⌘K</kbd>
@@ -117,7 +117,7 @@ export function Navbar() {
               type="button"
               onClick={() => setMenuOpen(true)}
               aria-label={t.ui.menu}
-              className="inline-flex h-8 w-8 items-center justify-center border border-border text-fg-muted transition-colors hover:border-accent hover:text-accent md:hidden"
+              className="inline-flex h-11 w-11 items-center justify-center border border-border-strong text-fg-muted transition-colors hover:border-accent hover:text-accent md:hidden"
             >
               <Menu className="h-4 w-4" />
             </button>
@@ -130,6 +130,10 @@ export function Navbar() {
         {menuOpen ? (
           <motion.div
             className="fixed inset-0 z-50 bg-bg md:hidden"
+            // `data-reveal` engancha la red de seguridad de movimiento
+            // reducido de globals.css: sin ella el menú se quedaría en
+            // `opacity: 0` y no se podría navegar en móvil.
+            data-reveal
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
@@ -144,7 +148,7 @@ export function Navbar() {
                 type="button"
                 onClick={() => setMenuOpen(false)}
                 aria-label={t.ui.close}
-                className="inline-flex h-8 w-8 items-center justify-center border border-border text-fg-muted"
+                className="inline-flex h-11 w-11 items-center justify-center border border-border-strong text-fg-muted"
               >
                 <X className="h-4 w-4" />
               </button>

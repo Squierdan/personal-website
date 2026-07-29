@@ -33,10 +33,19 @@
   --bg-elevated: #ffffff;
   --bg-sunken: #edece6;
   --fg: #13171c;
-  --fg-muted: #5b6672;
-  --fg-subtle: #8a94a0;
+  /* Contraste medido sobre --bg (#f7f6f2): muted 7.04:1, subtle 4.74:1.
+     Los valores anteriores (#5b6672 / #8a94a0) daban 5.41:1 y 2.85:1 — el
+     segundo incumplía el mínimo AA de 4.5:1 que exige la regla §4.2 del
+     AI_CONTEXT, y --fg-subtle es el color de casi todo el texto pequeño del
+     sitio: cintillos de sección, cabeceras de tabla, emisores de certificación,
+     barra de estado. Se conserva el gris frío del tema claro. */
+  --fg-muted: #4a5462;
+  --fg-subtle: #666f79;
   --border: #dfe0da;
-  --border-strong: #c6c8c0;
+  /* 3.12:1 — mínimo de WCAG 1.4.11 para el contorno de un control. Es el borde
+     del CTA secundario y de los campos del formulario, donde el borde es la
+     única señal de que hay algo con lo que interactuar. Antes: #c6c8c0. */
+  --border-strong: #8b8d85;
 
   --accent: #067077;
   --accent-fg: #ffffff;
@@ -48,6 +57,28 @@
   --glow: rgba(6, 112, 119, 0.18);
 }
 
+/* ==========================================================================
+   MOVIMIENTO Y ESCALA TIPOGRÁFICA
+   --------------------------------------------------------------------------
+   Duración y curva viven aquí y en `src/lib/motion.ts`, en los mismos valores,
+   para que CSS y Framer Motion compartan el pulso. Tres duraciones y ni una
+   más: en cuanto hay siete, la página pierde ritmo común.
+
+   La escala tipográfica usa `clamp()` en vez de saltos por breakpoint: el
+   titular crece de forma continua con el viewport y no da tirones en 640 px.
+   Tracking negativo creciente — cuanto mayor el cuerpo, más cerrado el
+   interletraje, que es como se compone tipografía de verdad.
+   ========================================================================== */
+:root {
+  --dur-micro: 160ms;
+  --dur-base: 280ms;
+  --dur-slow: 440ms;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --step-display: clamp(2.6rem, 7.2vw, 5.25rem);
+  --step-h2: clamp(1.85rem, 4vw, 3rem);
+}
+
 .dark {
   color-scheme: dark;
 
@@ -55,10 +86,14 @@
   --bg-elevated: #131311;
   --bg-sunken: #060605;
   --fg: #eae7e0;
-  --fg-muted: #948d7f;
-  --fg-subtle: #656058;
+  /* Contraste medido sobre --bg (#0c0c0b): muted 6.52:1, subtle 4.73:1.
+     Antes: 5.94:1 y 3.14:1 — el segundo por debajo de AA. Se conserva el gris
+     cálido del tema oscuro (ver la nota de colorimetría de arriba). */
+  --fg-muted: #9c9486;
+  --fg-subtle: #837c6f;
   --border: #201f1b;
-  --border-strong: #32302a;
+  /* 3.47:1 — contorno de control, WCAG 1.4.11. Antes: #32302a (1.48:1). */
+  --border-strong: #6b675e;
 
   --accent: #2fd0c0;
   --accent-fg: #04120f;
@@ -91,9 +126,23 @@
     "Inter Variable", ui-sans-serif, system-ui, -apple-system, sans-serif;
 }
 
-* {
-  border-color: var(--border);
-  min-width: 0;
+/* Color de borde por defecto y `min-width: 0` para que nada desborde su rejilla.
+   ------------------------------------------------------------------------- */
+/* DENTRO de `@layer base`, y esto es imprescindible: en la cascada de capas de
+   CSS, lo que está fuera de toda capa gana a lo que está dentro de una,
+   independientemente de la especificidad. Con este bloque sin capa, un `*` de
+   especificidad 0 pisaba TODAS las utilidades de color de borde de Tailwind
+   —`border-accent`, `border-border-strong`, `border-amber/40`— porque viven en
+   `@layer utilities`. Efecto medido: cada borde del sitio se pintaba en
+   `--border`, y el acento del logo, el del CTA secundario y el del filtro
+   activo no aparecían nunca. En `base` (que Tailwind declara antes de
+   `utilities`) sigue funcionando como valor por defecto y las utilidades
+   vuelven a poder sobrescribirlo. */
+@layer base {
+  * {
+    border-color: var(--border);
+    min-width: 0;
+  }
 }
 
 html {
@@ -152,30 +201,7 @@ body {
   background-size: 72px 72px;
 }
 
-/* Líneas de barrido tipo CRT — muy sutiles, sólo textura.
-   Sin `mix-blend-mode`: el blending obliga al navegador a crear una capa de
-   composición adicional y a releerla en cada repintado. */
-.scanlines::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  opacity: 0.5;
-  background: repeating-linear-gradient(
-    to bottom,
-    transparent 0 3px,
-    rgba(0, 0, 0, 0.03) 3px 4px
-  );
-}
-.dark .scanlines::after {
-  background: repeating-linear-gradient(
-    to bottom,
-    transparent 0 3px,
-    rgba(255, 255, 255, 0.022) 3px 4px
-  );
-}
-
-/* Halo del acento, usado detrás del terminal del hero. */
+/* Halo del acento, usado detrás de la placa de identidad del hero. */
 .accent-glow {
   background: radial-gradient(
     50% 50% at 50% 50%,
@@ -219,18 +245,83 @@ body {
     0 24px 60px -30px rgba(0, 0, 0, 0.5);
 }
 
-/* Fila que se "ilumina" al pasar el cursor.
-   Se anima `transform`, NO `padding`: transform se resuelve en el compositor
-   sin recalcular el layout de la página. Animar padding provocaba un layout
-   completo (~11 ms medidos) en cada fotograma del hover. */
-.row-hover {
-  transition:
-    background-color 0.25s ease,
-    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+/* Fila bajo el escáner.
+   -------------------------------------------------------------------------
+   Sustituye al antiguo `.row-hover`, que empujaba la fila 0,75 rem a la
+   derecha: un desplazamiento arbitrario, que no significaba nada y que movía
+   el texto que el visitante estaba leyendo.
+
+   El gesto nuevo es del oficio: una banda de luz recorre la fila de arriba
+   abajo, una sola vez, como el barrido de un escáner sobre su objetivo, y
+   queda una marca de 1 px en el borde izquierdo señalando la fila activa.
+
+   Ambas animaciones son de compositor (`transform` y `opacity`) y el texto no
+   se mueve ni un píxel: `::after` tiene `inset: 0`, así que `translateY(100%)`
+   equivale exactamente a la altura de la fila, sea la que sea. */
+.scan-row {
+  position: relative;
+  isolation: isolate;
+  transition: background-color var(--dur-base) ease;
 }
-.row-hover:hover {
+.scan-row:hover {
   background-color: var(--accent-soft);
-  transform: translateX(0.75rem);
+}
+
+/* Marca de fila activa: se despliega desde el centro. */
+.scan-row::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 1px;
+  background: var(--accent);
+  transform: scaleY(0);
+  transition: transform var(--dur-base) var(--ease-out);
+}
+.scan-row:hover::before,
+.scan-row:focus-visible::before {
+  transform: scaleY(1);
+}
+
+/* El barrido. `-1` en z para no taparle el foco a nada. */
+.scan-row::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    var(--glow) 50%,
+    transparent 100%
+  );
+}
+.scan-row:hover::after,
+.scan-row:focus-visible::after {
+  animation: scan-sweep 760ms var(--ease-out);
+}
+
+@keyframes scan-sweep {
+  from {
+    opacity: 1;
+    transform: translateY(-100%);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+}
+
+/* Numeral de plancha: el índice de sección impreso como en un plano, en
+   contorno y no en relleno, para que ocupe sitio sin robar jerarquía al
+   titular que tiene al lado. */
+.stencil {
+  color: transparent;
+  -webkit-text-stroke: 1px var(--border-strong);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.04em;
+  user-select: none;
 }
 
 /* Subrayado animado para enlaces en texto. */
@@ -314,5 +405,38 @@ main > section:not(:first-of-type) {
   }
   .caret {
     opacity: 1;
+  }
+  /* El barrido se retira por completo en vez de acelerarse: una animación de
+     0,001 ms no es una animación suave, es un destello. La fila sigue
+     respondiendo al cursor con el tinte de fondo y la marca lateral. */
+  .scan-row::after {
+    display: none;
+  }
+
+  /* ----------------------------------------------------------------------
+     RED DE SEGURIDAD PARA FRAMER MOTION — no la quites.
+
+     Framer Motion no usa animaciones de CSS: interpola en JavaScript y escribe
+     `opacity` y `transform` como estilos inline. Cuando detecta esta
+     preferencia, suprime la animación y **deja el elemento en su estado
+     `initial`**, que en todas nuestras apariciones es `opacity: 0`. Resultado
+     medido en un navegador con «reducir movimiento» activado: el hero entero y
+     todas las filas de servicios quedaban invisibles.
+
+     Condicionar la prop `initial` en React no lo arregla: `initial` se lee una
+     única vez al montar, y en el render de hidratación el hook de la
+     preferencia todavía devuelve `false` (usa el snapshot de servidor), así que
+     Framer fija `hidden` y nunca lo revisa.
+
+     Por eso la garantía va aquí y es declarativa. Un `!important` de hoja de
+     estilos gana a un estilo inline sin `!important`, así que esto se impone a
+     lo que escriba Framer, hoy y en cualquier versión futura.
+
+     Sólo afecta a lo marcado con `data-reveal`: la barra de progreso de scroll
+     y la placa del hero animan `scaleX`/`scale` legítimamente y NO llevan esa
+     marca. */
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
   }
 }

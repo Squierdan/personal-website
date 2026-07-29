@@ -131,7 +131,6 @@ export type WorkItem = {
   stack: string[];
   link?: string;
   linkLabel?: Localized;
-  featured?: boolean;
 };
 
 export const work: WorkItem[] = [
@@ -143,7 +142,6 @@ export const work: WorkItem[] = [
     org: "Annals of Telecommunications — Springer Nature",
     category: "research",
     period: { es: "2025", en: "2025" },
-    featured: true,
     summary: {
       es: "Protocolo de consenso diseñado para la arquitectura NestedChain.",
       en: "Consensus protocol designed for the NestedChain architecture.",
@@ -182,7 +180,6 @@ export const work: WorkItem[] = [
     org: "Coris del Ecuador",
     category: "security",
     period: { es: "dic 2024 — jun 2025", en: "Dec 2024 — Jun 2025" },
-    featured: true,
     summary: {
       es: "Gestión de vulnerabilidades y SGSI durante la certificación ISO 27001.",
       en: "Vulnerability management and ISMS during ISO 27001 certification.",

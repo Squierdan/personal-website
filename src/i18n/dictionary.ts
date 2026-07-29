@@ -21,7 +21,12 @@ type Dictionary = {
     ctaSecondary: string;
     ctaCv: string;
     stats: { value: string; label: string }[];
-    scrollHint: string;
+    /** Etiquetas de la placa de identidad SHA-256 del hero. */
+    hashLabel: string;
+    hashVerify: string;
+    hashVerified: string;
+    hashComputing: string;
+    hashLegend: string;
   };
   about: {
     index: string;
@@ -52,6 +57,9 @@ type Dictionary = {
     colStack: string;
     colYear: string;
     empty: string;
+    publicationsTitle: string;
+    rolesTitle: string;
+    firstAuthor: string;
   };
   contact: {
     index: string;
@@ -122,7 +130,12 @@ export const dictionaries: Record<Locale, Dictionary> = {
         { value: "1", label: "publicación científica indexada" },
         { value: "3", label: "roles en TI y seguridad" },
       ],
-      scrollHint: "desplázate",
+      hashLabel: "sha-256 · identidad",
+      hashVerify: "Volver a calcular la huella",
+      hashVerified: "verificado",
+      hashComputing: "avalancha",
+      hashLegend:
+        "Rejilla de 64 celdas. Cada celda es uno de los 64 dígitos hexadecimales del SHA-256 de esta identidad, y su intensidad representa el valor del dígito. El digest completo está escrito debajo de la rejilla.",
     },
     about: {
       index: "01",
@@ -188,6 +201,9 @@ export const dictionaries: Record<Locale, Dictionary> = {
       colStack: "áreas",
       colYear: "periodo",
       empty: "No hay resultados en esta categoría.",
+      publicationsTitle: "Investigación publicada",
+      rolesTitle: "Roles profesionales",
+      firstAuthor: "primer autor",
     },
     contact: {
       index: "04",
@@ -258,7 +274,12 @@ export const dictionaries: Record<Locale, Dictionary> = {
         { value: "1", label: "peer-reviewed publication" },
         { value: "3", label: "roles in IT and security" },
       ],
-      scrollHint: "scroll",
+      hashLabel: "sha-256 · identity",
+      hashVerify: "Recompute the fingerprint",
+      hashVerified: "verified",
+      hashComputing: "avalanche",
+      hashLegend:
+        "A grid of 64 cells. Each cell is one of the 64 hexadecimal digits of the SHA-256 digest of this identity, and its intensity represents that digit's value. The full digest is written below the grid.",
     },
     about: {
       index: "01",
@@ -325,6 +346,9 @@ export const dictionaries: Record<Locale, Dictionary> = {
       colStack: "areas",
       colYear: "period",
       empty: "No results in this category.",
+      publicationsTitle: "Published research",
+      rolesTitle: "Professional roles",
+      firstAuthor: "first author",
     },
     contact: {
       index: "04",

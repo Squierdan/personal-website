@@ -42,14 +42,14 @@ export function Footer() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label={key}
-              className="inline-flex h-9 w-9 items-center justify-center border border-border text-fg-muted transition-colors hover:border-accent hover:text-accent"
+              className="inline-flex h-9 w-9 items-center justify-center border border-border-strong text-fg-muted transition-colors hover:border-accent hover:text-accent"
             >
               <Icon className="h-4 w-4" />
             </a>
           ))}
           <a
             href="#top"
-            className="ml-2 inline-flex h-9 items-center border border-border px-3 font-mono text-[11px] text-fg-muted transition-colors hover:border-accent hover:text-accent"
+            className="ml-2 inline-flex h-9 items-center border border-border-strong px-3 font-mono text-[11px] text-fg-muted transition-colors hover:border-accent hover:text-accent"
           >
             ↑ {t.footer.backToTop}
           </a>

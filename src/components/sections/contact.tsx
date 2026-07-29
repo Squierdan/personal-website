@@ -62,9 +62,12 @@ export function Contact() {
     { key: "x", url: site.socials.x, Icon: XIcon },
   ].filter((link) => Boolean(link.url));
 
+  // `border-border-strong` y no `border-border`: en un campo de formulario el
+  // borde es la única señal de que ahí se puede escribir, así que necesita 3:1
+  // de contraste (WCAG 1.4.11), no el gris de una regla decorativa.
   const fieldClass = (invalid?: boolean) =>
-    `w-full border bg-bg-elevated/50 px-3 py-2.5 font-mono text-sm text-fg outline-none transition-colors placeholder:text-fg-subtle focus:border-accent ${
-      invalid ? "border-[var(--amber)]" : "border-border"
+    `w-full border bg-bg-elevated/50 px-3 py-2.5 font-mono text-sm text-fg outline-none transition-colors duration-[var(--dur-micro)] placeholder:text-fg-subtle focus:border-accent ${
+      invalid ? "border-[var(--amber)]" : "border-border-strong"
     }`;
 
   return (
@@ -143,7 +146,7 @@ export function Contact() {
             <div className="flex flex-wrap items-center gap-4">
               <button
                 type="submit"
-                className="inline-flex h-11 items-center gap-2 bg-accent px-5 font-mono text-sm font-medium text-[var(--accent-fg)] transition-transform duration-300 hover:-translate-y-0.5"
+                className="inline-flex h-11 items-center gap-2 bg-accent px-5 font-mono text-sm font-medium text-[var(--accent-fg)] transition-[filter] duration-[var(--dur-micro)] hover:brightness-110"
               >
                 ./send.sh
               </button>
@@ -181,7 +184,7 @@ export function Contact() {
                 type="button"
                 onClick={copyEmail}
                 aria-label={t.contact.copy}
-                className="inline-flex h-7 w-7 shrink-0 items-center justify-center border border-border text-fg-subtle transition-colors hover:border-accent hover:text-accent"
+                className="inline-flex h-9 w-9 shrink-0 items-center justify-center border border-border-strong text-fg-subtle transition-colors hover:border-accent hover:text-accent"
               >
                 {copied ? (
                   <Check className="h-3.5 w-3.5" />
@@ -218,7 +221,7 @@ export function Contact() {
                 <a
                   href={site.cv.es}
                   download
-                  className="inline-flex items-center gap-1.5 border border-border px-3 py-1.5 font-mono text-[11px] text-fg-muted transition-colors hover:border-accent hover:text-accent"
+                  className="inline-flex h-9 items-center gap-1.5 border border-border-strong px-3 font-mono text-[11px] text-fg-muted transition-colors hover:border-accent hover:text-accent"
                 >
                   <FileDown className="h-3.5 w-3.5" />
                   {t.contact.cvEs}
@@ -226,7 +229,7 @@ export function Contact() {
                 <a
                   href={site.cv.en}
                   download
-                  className="inline-flex items-center gap-1.5 border border-border px-3 py-1.5 font-mono text-[11px] text-fg-muted transition-colors hover:border-accent hover:text-accent"
+                  className="inline-flex h-9 items-center gap-1.5 border border-border-strong px-3 font-mono text-[11px] text-fg-muted transition-colors hover:border-accent hover:text-accent"
                 >
                   <FileDown className="h-3.5 w-3.5" />
                   {t.contact.cvEn}
@@ -243,7 +246,7 @@ export function Contact() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={key}
-                    className="inline-flex h-9 w-9 items-center justify-center border border-border text-fg-muted transition-colors hover:border-accent hover:text-accent"
+                    className="inline-flex h-9 w-9 items-center justify-center border border-border-strong text-fg-muted transition-colors hover:border-accent hover:text-accent"
                   >
                     <Icon className="h-4 w-4" />
                   </a>

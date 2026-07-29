@@ -1,91 +1,100 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowDown, ArrowUpRight, Check, Download } from "lucide-react";
+import { ArrowUpRight, Download } from "lucide-react";
 import { useLanguage } from "@/components/providers/language-provider";
+import { HashPortrait } from "@/components/ui/hash-portrait";
 import { useTypewriter } from "@/hooks/use-typewriter";
 import { useMounted } from "@/hooks/use-mounted";
 import { useClock } from "@/hooks/use-clock";
-import { useIntegrityHash } from "@/hooks/use-integrity-hash";
+import { bootItem, bootStep } from "@/lib/motion";
 import { site } from "@/lib/site";
 
+/**
+ * ============================================================================
+ *  HERO
+ * ============================================================================
+ *  Es el único sitio de la página con una secuencia de retardos explícita: un
+ *  momento coreografiado —el arranque de un sistema— en vez de veinte efectos
+ *  dispersos. El orden no es estético, es de lectura: estado → nombre → rol →
+ *  qué hace → qué puedes hacer tú → cifras.
+ *
+ *  La placa de identidad entra en el paso 2 y no al final, a propósito: su
+ *  avalancha dura ~0,6 s y tiene que verse ocurriendo. Se fija justo cuando el
+ *  rol empieza a teclearse, así que el relevo se lee como una consecuencia —
+ *  identidad verificada, entonces el rol.
+ * ============================================================================
+ */
 export function Hero() {
   const { t, locale } = useLanguage();
   const mounted = useMounted();
   const clock = useClock(site.timezone);
   const role = useTypewriter(site.role, 55, 700);
-  const hash = useIntegrityHash(`${site.name}:${site.role}:${site.handle}`);
 
-  const fade = {
-    hidden: { opacity: 0, y: 16 },
-    visible: { opacity: 1, y: 0 },
-  };
+  /** Cadena de la que se deriva la huella. Cambia si cambia la identidad. */
+  const identity = `${site.name}:${site.role}:${site.handle}:${site.location}`;
 
   return (
     <section
       id="top"
       className="relative isolate overflow-hidden px-5 pb-20 pt-28 sm:px-8 sm:pb-28 sm:pt-36 lg:px-12"
     >
-      {/* Capas de fondo: retícula técnica + halo del acento + grano */}
+      {/* Capas de fondo: retícula técnica + halo del acento */}
       <div aria-hidden className="grid-lines absolute inset-0 -z-10" />
       <div
         aria-hidden
         className="accent-glow absolute left-1/2 top-0 -z-10 h-[520px] w-[820px] -translate-x-1/2"
-      />
-      <div
-        aria-hidden
-        className="noise pointer-events-none absolute inset-0 -z-10"
       />
 
       <div className="mx-auto grid w-full max-w-6xl gap-14 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
         {/* ------------------------------------------------------ Columna 1 */}
         <div>
           <motion.div
+            data-reveal
             initial="hidden"
             animate="visible"
-            variants={fade}
-            transition={{ duration: 0.5 }}
+            variants={bootItem}
+            transition={bootStep(0)}
             className="inline-flex items-center gap-2 border border-border bg-bg-elevated/60 px-3 py-1.5 font-mono text-[11px] text-fg-muted"
           >
-            <span className="relative flex h-2 w-2">
-              {site.available ? (
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-60" />
-              ) : null}
-              <span
-                className="relative inline-flex h-2 w-2 rounded-full"
-                style={{
-                  background: site.available ? "var(--accent)" : "var(--amber)",
-                }}
-              />
-            </span>
+            <span
+              aria-hidden
+              className="h-1.5 w-1.5 shrink-0 rounded-full"
+              style={{
+                background: site.available ? "var(--accent)" : "var(--amber)",
+              }}
+            />
             {site.available ? t.hero.status.available : t.hero.status.busy}
           </motion.div>
 
           <motion.p
+            data-reveal
             initial="hidden"
             animate="visible"
-            variants={fade}
-            transition={{ duration: 0.5, delay: 0.08 }}
+            variants={bootItem}
+            transition={bootStep(1)}
             className="mt-8 font-mono text-sm text-fg-subtle"
           >
             <span className="text-accent">❯</span> {t.hero.cmdWhoami}
           </motion.p>
 
           <motion.h1
+            data-reveal
             initial="hidden"
             animate="visible"
-            variants={fade}
-            transition={{ duration: 0.6, delay: 0.14 }}
-            className="mt-2 text-balance font-mono text-[2.6rem] font-bold leading-[0.95] tracking-tighter sm:text-6xl lg:text-7xl"
+            variants={bootItem}
+            transition={bootStep(2)}
+            className="mt-2 text-balance font-mono font-bold leading-[0.92] tracking-[-0.045em] text-[length:var(--step-display)]"
           >
             {site.name}
           </motion.h1>
 
           <motion.p
+            data-reveal
             initial="hidden"
             animate="visible"
-            variants={fade}
-            transition={{ duration: 0.5, delay: 0.22 }}
+            variants={bootItem}
+            transition={bootStep(3)}
             className="mt-6 font-mono text-sm text-fg-subtle"
           >
             <span className="text-accent">❯</span> {t.hero.cmdRole}
@@ -97,28 +106,30 @@ export function Hero() {
           </p>
 
           <motion.p
+            data-reveal
             initial="hidden"
             animate="visible"
-            variants={fade}
-            transition={{ duration: 0.5, delay: 0.34 }}
+            variants={bootItem}
+            transition={bootStep(5)}
             className="mt-8 max-w-xl text-base leading-relaxed text-fg-muted sm:text-lg"
           >
             {t.hero.intro}
           </motion.p>
 
           <motion.div
+            data-reveal
             initial="hidden"
             animate="visible"
-            variants={fade}
-            transition={{ duration: 0.5, delay: 0.42 }}
+            variants={bootItem}
+            transition={bootStep(6)}
             className="mt-10 flex flex-wrap items-center gap-3"
           >
             <a
               href="#experience"
-              className="group inline-flex h-11 items-center gap-2 bg-accent px-5 font-mono text-sm font-medium text-[var(--accent-fg)] transition-transform duration-300 hover:-translate-y-0.5"
+              className="group inline-flex h-11 items-center gap-2 bg-accent px-5 font-mono text-sm font-medium text-[var(--accent-fg)]"
             >
               {t.hero.ctaPrimary}
-              <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              <ArrowUpRight className="h-4 w-4 transition-transform duration-[var(--dur-base)] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1 group-hover:-translate-y-1" />
             </a>
             <a
               href="#contact"
@@ -138,18 +149,25 @@ export function Hero() {
             </a>
           </motion.div>
 
-          {/* Métricas */}
+          {/* Métricas. La publicación indexada va en ámbar: es la credencial
+              que distingue este perfil del de cualquier otro junior, y el
+              ámbar es el color de énfasis del sistema. */}
           <motion.dl
+            data-reveal
             initial="hidden"
             animate="visible"
-            variants={fade}
-            transition={{ duration: 0.5, delay: 0.5 }}
+            variants={bootItem}
+            transition={bootStep(7)}
             className="mt-14 grid max-w-lg grid-cols-3 divide-x divide-border border-y border-border"
           >
-            {t.hero.stats.map((stat) => (
+            {t.hero.stats.map((stat, index) => (
               <div key={stat.label} className="px-4 py-4 first:pl-0">
                 <dt className="sr-only">{stat.label}</dt>
-                <dd className="font-mono text-2xl font-bold text-fg sm:text-3xl">
+                <dd
+                  className={`font-mono text-2xl font-bold tabular-nums sm:text-3xl ${
+                    index === 1 ? "text-[var(--amber)]" : "text-fg"
+                  }`}
+                >
                   {stat.value}
                 </dd>
                 <dd className="mt-1 text-xs leading-snug text-fg-subtle">
@@ -162,120 +180,34 @@ export function Hero() {
 
         {/* ------------------------------------------------------ Columna 2 */}
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-          className="corner-marks"
+          data-reveal
+          initial="hidden"
+          animate="visible"
+          variants={bootItem}
+          transition={bootStep(2)}
         >
-          <div className="term scanlines relative overflow-hidden">
-            {/* Barra de título: en vez de los semáforos de macOS, la
-                verificación de integridad real (SHA-256) del bloque de
-                perfil que se ve debajo — la misma primitiva con la que se
-                audita un commit o un paquete. */}
-            <div className="flex items-center gap-2 border-b border-border px-3 py-2.5">
-              <span
-                aria-hidden
-                className="h-1.5 w-1.5 shrink-0 rounded-full bg-accent"
-              />
-              <span className="flex shrink-0 items-center gap-1 font-mono text-[10px] tabular-nums text-fg-subtle">
-                <span className="hidden sm:inline">sha256:</span>
-                {hash || "············"}
-                {hash ? (
-                  <Check aria-hidden className="h-3 w-3 text-accent" />
-                ) : null}
-              </span>
-              <span className="ml-1 min-w-0 truncate font-mono text-[11px] text-fg-subtle">
-                ~/{site.handle}/profile.ts
-              </span>
-              <span className="ml-auto shrink-0 font-mono text-[11px] tabular-nums text-fg-subtle">
-                {clock || "--:--:--"}
-              </span>
-            </div>
+          <HashPortrait
+            input={identity}
+            label={t.hero.hashLabel}
+            verifyLabel={t.hero.hashVerify}
+            verifiedLabel={t.hero.hashVerified}
+            computingLabel={t.hero.hashComputing}
+            legend={t.hero.hashLegend}
+          />
 
-            {/* Bloque de código con numeración de líneas */}
-            <pre className="overflow-x-auto px-3 py-4 font-mono text-[12.5px] leading-6 sm:text-[13px]">
-              <code>
-                {[
-                  [
-                    <span key="a" className="text-[var(--link)]">
-                      export const
-                    </span>,
-                    " engineer = {",
-                  ],
-                  ["  name: ", <Str key="b">{site.name}</Str>, ","],
-                  ["  role: ", <Str key="c">{site.role}</Str>, ","],
-                  ["  based: ", <Str key="d">{site.location}</Str>, ","],
-                  [
-                    "  focus: [",
-                    <Str key="e">security</Str>,
-                    ", ",
-                    <Str key="f">systems</Str>,
-                    ", ",
-                    <Str key="g">software</Str>,
-                    "],",
-                  ],
-                  [
-                    "  languages: [",
-                    <Str key="h">es</Str>,
-                    ", ",
-                    <Str key="i">en</Str>,
-                    "],",
-                  ],
-                  [
-                    "  available: ",
-                    <span key="j" className="text-[var(--amber)]">
-                      {String(site.available)}
-                    </span>,
-                    ",",
-                  ],
-                  ["};"],
-                ].map((line, index) => (
-                  <span key={index} className="grid grid-cols-[2ch_1fr] gap-3">
-                    <span className="select-none text-right text-fg-subtle/60">
-                      {index + 1}
-                    </span>
-                    <span className="text-fg-muted">{line}</span>
-                  </span>
-                ))}
-                <span className="grid grid-cols-[2ch_1fr] gap-3">
-                  <span className="select-none text-right text-fg-subtle/60">
-                    9
-                  </span>
-                  <span>
-                    <span className="text-accent">❯</span>{" "}
-                    <span className="caret" />
-                  </span>
-                </span>
-              </code>
-            </pre>
-
-            {/* Pie de la ventana */}
-            <div className="flex items-center justify-between border-t border-border px-3 py-2 font-mono text-[10px] uppercase tracking-wider text-fg-subtle">
-              <span>utf-8 · typescript</span>
-              <span>{locale === "es" ? "es-EC" : "en-US"}</span>
-            </div>
+          {/* Franja de instrumento: los datos que antes vivían en la barra de
+              título de la ventana de terminal. */}
+          <div className="mx-auto mt-3 flex w-full max-w-[420px] flex-wrap items-center gap-x-4 gap-y-1 font-mono text-[10px] uppercase tracking-wider text-fg-subtle lg:mx-0 lg:max-w-none">
+            <span>{site.location}</span>
+            <span aria-hidden>·</span>
+            <span>{site.timezone.split("/")[1]}</span>
+            <span aria-hidden>·</span>
+            <span className="tabular-nums">{clock || "--:--:--"}</span>
+            <span aria-hidden>·</span>
+            <span>{locale === "es" ? "es-ec" : "en-us"}</span>
           </div>
         </motion.div>
       </div>
-
-      {/* Indicación de scroll */}
-      <motion.a
-        href="#about"
-        aria-hidden
-        tabIndex={-1}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.1 }}
-        className="mx-auto mt-16 hidden w-fit items-center gap-2 font-mono text-[11px] uppercase tracking-widest text-fg-subtle lg:flex"
-      >
-        <ArrowDown className="h-3 w-3 animate-bounce" />
-        {t.hero.scrollHint}
-      </motion.a>
     </section>
   );
-}
-
-/** Literal de cadena coloreado dentro del bloque de código. */
-function Str({ children }: { children: React.ReactNode }) {
-  return <span className="text-accent">&quot;{children}&quot;</span>;
 }
