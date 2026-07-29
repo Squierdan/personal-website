@@ -32,7 +32,7 @@ export const site = {
    * URL final del sitio en producción. IMPORTANTE: cámbiala después del primer
    * deploy en Vercel para que el SEO, sitemap y Open Graph apunten bien.
    */
-  url: "https://personal-website-squierdan.vercel.app", // <-- EDITAR
+  url: "https://personal-website-blush-three-41.vercel.app", // <-- EDITAR
 
   /** Correo de contacto público. */
   email: "luiscaizapanta01@gmail.com", // <-- EDITAR
