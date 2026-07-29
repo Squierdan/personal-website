@@ -186,11 +186,11 @@ export function Hero() {
                   ["  based: ", <Str key="d">{site.location}</Str>, ","],
                   [
                     "  focus: [",
-                    <Str key="e">web</Str>,
+                    <Str key="e">security</Str>,
                     ", ",
-                    <Str key="f">apis</Str>,
+                    <Str key="f">systems</Str>,
                     ", ",
-                    <Str key="g">infra</Str>,
+                    <Str key="g">software</Str>,
                     "],",
                   ],
                   [
