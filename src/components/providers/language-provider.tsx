@@ -30,18 +30,16 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [locale, setLocaleState] = useState<Locale>(defaultLocale);
 
   useEffect(() => {
-    // Initialize from client-only sources (localStorage / browser language)
-    // after mount, since these are unavailable during server rendering.
+    /*
+     * El sitio SIEMPRE abre en `defaultLocale` (inglés), sin importar el idioma
+     * del navegador: así el enlace se ve igual para todo el mundo.
+     * Solo se respeta la elección explícita que el visitante haya hecho antes
+     * con el conmutador --lang, guardada en localStorage.
+     */
     const stored = localStorage.getItem(STORAGE_KEY);
-    const browser = navigator.language.slice(0, 2);
-    const next = isLocale(stored)
-      ? stored
-      : isLocale(browser)
-        ? browser
-        : null;
-    if (next && next !== defaultLocale) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time client init
-      setLocaleState(next);
+    if (isLocale(stored) && stored !== defaultLocale) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- init única en cliente
+      setLocaleState(stored);
     }
   }, []);
 

@@ -14,7 +14,7 @@ import { Providers } from "@/components/providers";
 import { site } from "@/lib/site";
 
 const description =
-  "Elian Caizapanta — ingeniero de software especializado en seguridad de la información: gestión de vulnerabilidades, ISO/IEC 27001, pentesting y administración de sistemas. Publicado en Annals of Telecommunications.";
+  "Elian Caizapanta — software engineer specialising in information security: vulnerability management, ISO/IEC 27001, pentesting and systems administration. Published in Annals of Telecommunications.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -41,12 +41,12 @@ export const metadata: Metadata = {
   ],
   alternates: {
     canonical: site.url,
-    languages: { es: site.url, en: site.url },
+    languages: { en: site.url, es: site.url, "x-default": site.url },
   },
   openGraph: {
     type: "website",
-    locale: "es_ES",
-    alternateLocale: ["en_US"],
+    locale: "en_US",
+    alternateLocale: ["es_ES"],
     url: site.url,
     siteName: site.name,
     title: `${site.name} — ${site.role}`,
@@ -65,10 +65,10 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f7f7f5" },
-    { media: "(prefers-color-scheme: dark)", color: "#0a0c0f" },
-  ],
+  /* El sitio abre siempre en oscuro, así que la barra del navegador móvil
+     debe coincidir desde el primer frame y no parpadear en blanco. */
+  themeColor: "#0a0c0f",
+  colorScheme: "dark light",
 };
 
 /** Datos estructurados para que Google entienda de quién es el sitio. */
@@ -111,7 +111,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html
-      lang="es"
+      lang="en"
       suppressHydrationWarning
       className="h-full"
     >
