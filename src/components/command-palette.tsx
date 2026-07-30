@@ -232,7 +232,7 @@ export function CommandPalette() {
                 placeholder={t.ui.palettePlaceholder}
                 className="w-full bg-transparent font-mono text-sm text-fg outline-none placeholder:text-fg-subtle"
               />
-              <kbd className="hidden border border-border px-1.5 py-0.5 font-mono text-[10px] text-fg-subtle sm:block">
+              <kbd className="hidden border border-border px-1.5 py-0.5 font-mono text-data text-fg-subtle sm:block">
                 ESC
               </kbd>
             </div>
@@ -249,7 +249,7 @@ export function CommandPalette() {
                   return (
                     <div key={command.id}>
                       {showGroup ? (
-                        <p className="px-4 pb-1 pt-3 font-mono text-[10px] uppercase tracking-widest text-fg-subtle">
+                        <p className="px-4 pb-1 pt-3 label">
                           {command.group}
                         </p>
                       ) : null}
@@ -267,7 +267,7 @@ export function CommandPalette() {
                         }`}
                       >
                         <span className="truncate">{command.label}</span>
-                        <span className="shrink-0 text-[10px] text-fg-subtle">
+                        <span className="shrink-0 text-data text-fg-subtle">
                           {command.id === "copy-email" && copied
                             ? t.contact.copied
                             : command.hint}
@@ -279,7 +279,7 @@ export function CommandPalette() {
               )}
             </div>
 
-            <div className="flex items-center gap-4 border-t border-border px-4 py-2 font-mono text-[10px] text-fg-subtle">
+            <div className="flex items-center gap-4 border-t border-border px-4 py-2 font-mono text-data text-fg-subtle">
               <span>↑↓ {t.ui.paletteNav.toLowerCase()}</span>
               <span>↵ enter</span>
               <span className="ml-auto">⌘K</span>

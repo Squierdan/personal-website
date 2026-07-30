@@ -1,9 +1,16 @@
 import type { Locale } from "./config";
+import { counts } from "@/lib/content";
 
 /**
  * Diccionario bilingüe. Toda cadena visible del sitio vive aquí.
  * El tipo `Dictionary` obliga a que ES y EN estén siempre sincronizados:
  * si añades una clave en `es`, TypeScript la exigirá también en `en`.
+ *
+ * Las cifras del hero son la excepción a «todo aquí es literal»: se leen de
+ * `counts` (ver `src/lib/content.ts`), que las cuenta desde los propios datos.
+ * Escritas a mano se separaban de la realidad —el hero anunciaba quince
+ * certificaciones y la sección 01 listaba trece— y en este sitio esa clase de
+ * desajuste cuesta credibilidad.
  */
 type Dictionary = {
   nav: {
@@ -126,9 +133,15 @@ export const dictionaries: Record<Locale, Dictionary> = {
       ctaSecondary: "Hablemos",
       ctaCv: "Descargar CV",
       stats: [
-        { value: "+15", label: "certificaciones técnicas" },
-        { value: "1", label: "publicación científica indexada" },
-        { value: "3", label: "roles en TI y seguridad" },
+        {
+          value: String(counts.certifications),
+          label: "certificaciones técnicas",
+        },
+        {
+          value: String(counts.publications),
+          label: "publicación científica indexada",
+        },
+        { value: String(counts.roles), label: "roles en TI y seguridad" },
       ],
       hashLabel: "sha-256 · identidad",
       hashVerify: "Volver a calcular la huella",
@@ -270,9 +283,15 @@ export const dictionaries: Record<Locale, Dictionary> = {
       ctaSecondary: "Get in touch",
       ctaCv: "Download CV",
       stats: [
-        { value: "15+", label: "technical certifications" },
-        { value: "1", label: "peer-reviewed publication" },
-        { value: "3", label: "roles in IT and security" },
+        {
+          value: String(counts.certifications),
+          label: "technical certifications",
+        },
+        {
+          value: String(counts.publications),
+          label: "peer-reviewed publication",
+        },
+        { value: String(counts.roles), label: "roles in IT and security" },
       ],
       hashLabel: "sha-256 · identity",
       hashVerify: "Recompute the fingerprint",

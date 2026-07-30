@@ -87,7 +87,7 @@ export function Contact() {
               <div>
                 <label
                   htmlFor="name"
-                  className="mb-2 block font-mono text-[11px] text-fg-subtle"
+                  className="mb-2 block font-mono text-data text-fg-subtle"
                 >
                   <span className="text-accent">❯</span> {t.contact.nameLabel}
                 </label>
@@ -106,7 +106,7 @@ export function Contact() {
               <div>
                 <label
                   htmlFor="email"
-                  className="mb-2 block font-mono text-[11px] text-fg-subtle"
+                  className="mb-2 block font-mono text-data text-fg-subtle"
                 >
                   <span className="text-accent">❯</span> {t.contact.emailLabel}
                 </label>
@@ -127,7 +127,7 @@ export function Contact() {
             <div>
               <label
                 htmlFor="message"
-                className="mb-2 block font-mono text-[11px] text-fg-subtle"
+                className="mb-2 block font-mono text-data text-fg-subtle"
               >
                 <span className="text-accent">❯</span> {t.contact.messageLabel}
               </label>
@@ -169,7 +169,7 @@ export function Contact() {
         {/* Tarjeta de contacto directo */}
         <Reveal delay={0.1}>
           <div className="term p-6">
-            <p className="font-mono text-[11px] uppercase tracking-widest text-fg-subtle">
+            <p className="label">
               {t.contact.orEmail}
             </p>
 
@@ -214,14 +214,14 @@ export function Contact() {
             {/* Ambos idiomas disponibles: el visitante puede necesitar el CV en
                 español aunque esté leyendo el sitio en inglés, y viceversa. */}
             <div className="mt-6 border-t border-border pt-6">
-              <p className="font-mono text-[11px] uppercase tracking-widest text-fg-subtle">
+              <p className="label">
                 {t.contact.cvTitle}
               </p>
               <div className="mt-3 flex flex-wrap gap-2">
                 <a
                   href={site.cv.es}
                   download
-                  className="inline-flex h-9 items-center gap-1.5 border border-border-strong px-3 font-mono text-[11px] text-fg-muted transition-colors hover:border-accent hover:text-accent"
+                  className="inline-flex h-9 items-center gap-1.5 border border-border-strong px-3 font-mono text-data text-fg-muted transition-colors hover:border-accent hover:text-accent"
                 >
                   <FileDown className="h-3.5 w-3.5" />
                   {t.contact.cvEs}
@@ -229,7 +229,7 @@ export function Contact() {
                 <a
                   href={site.cv.en}
                   download
-                  className="inline-flex h-9 items-center gap-1.5 border border-border-strong px-3 font-mono text-[11px] text-fg-muted transition-colors hover:border-accent hover:text-accent"
+                  className="inline-flex h-9 items-center gap-1.5 border border-border-strong px-3 font-mono text-data text-fg-muted transition-colors hover:border-accent hover:text-accent"
                 >
                   <FileDown className="h-3.5 w-3.5" />
                   {t.contact.cvEn}

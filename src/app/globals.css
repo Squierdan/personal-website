@@ -58,25 +58,65 @@
 }
 
 /* ==========================================================================
-   MOVIMIENTO Y ESCALA TIPOGRÁFICA
+   MOVIMIENTO
    --------------------------------------------------------------------------
    Duración y curva viven aquí y en `src/lib/motion.ts`, en los mismos valores,
    para que CSS y Framer Motion compartan el pulso. Tres duraciones y ni una
    más: en cuanto hay siete, la página pierde ritmo común.
-
-   La escala tipográfica usa `clamp()` en vez de saltos por breakpoint: el
-   titular crece de forma continua con el viewport y no da tirones en 640 px.
-   Tracking negativo creciente — cuanto mayor el cuerpo, más cerrado el
-   interletraje, que es como se compone tipografía de verdad.
    ========================================================================== */
 :root {
   --dur-micro: 160ms;
   --dur-base: 280ms;
   --dur-slow: 440ms;
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}
 
-  --step-display: clamp(2.6rem, 7.2vw, 5.25rem);
+/* ==========================================================================
+   ESCALA TIPOGRÁFICA
+   --------------------------------------------------------------------------
+   Antes había trece tamaños en uso (10, 11, 12, 13, 14, 15, 16, 17, 18, 20,
+   24, 30, 32 px) elegidos uno por uno en cada componente, y tres de ellos
+   —10, 11 y 12 px— hacían exactamente el mismo trabajo: etiquetar un dato.
+   Eso no es una escala, es una acumulación.
+
+   Cinco pasos, cada uno con un trabajo declarado. Los tres primeros son fijos
+   porque son interfaz y la interfaz no debe crecer con el viewport; los dos
+   titulares usan `clamp()` para crecer de forma continua y no dar tirones en
+   640 px. Tracking negativo creciente: cuanto mayor el cuerpo, más cerrado el
+   interletraje, que es como se compone tipografía de verdad.
+   ========================================================================== */
+:root {
+  /** Dato: toda etiqueta, chip, lectura, cabecera de tabla. Siempre mono. */
+  --fs-data: 0.6875rem; /* 11px */
+  /** Prosa secundaria: nombres de certificación, items de stack, resúmenes. */
+  --fs-meta: 0.8125rem; /* 13px */
+  /** Interfaz: botones, enlaces de navegación, campos de formulario. */
+  --fs-ui: 0.9375rem; /* 15px */
+  /** Lectura: los párrafos que alguien se va a sentar a leer. */
+  --fs-body: 1.0625rem; /* 17px */
+
+  --step-h3: clamp(1.0625rem, 1.1vw + 0.85rem, 1.3rem);
   --step-h2: clamp(1.85rem, 4vw, 3rem);
+  --step-display: clamp(2.6rem, 7.2vw, 5.25rem);
+}
+
+/* ==========================================================================
+   RITMO VERTICAL
+   --------------------------------------------------------------------------
+   Tres distancias, no dieciséis `mt-*` elegidos a ojo. Cada una corresponde a
+   un nivel de la jerarquía, así que la separación entre dos cosas dice cuán
+   relacionadas están.
+   ========================================================================== */
+:root {
+  /** Entre un titular de sección y su contenido, o entre dos bloques mayores. */
+  --space-block: 4rem;
+  /** Entre un subtítulo de bloque y su lista. */
+  --space-stack: 1.25rem;
+}
+@media (min-width: 640px) {
+  :root {
+    --space-block: 5rem;
+  }
 }
 
 .dark {
@@ -120,10 +160,23 @@
   --color-link: var(--link);
   --color-amber: var(--amber);
 
+  /* Escala tipográfica expuesta como utilidades: `text-data`, `text-meta`,
+     `text-ui`, `text-body`. El segundo valor de cada par es la altura de línea,
+     porque un tamaño sin su interlineado no es un paso de escala. */
+  --text-data: var(--fs-data);
+  --text-data--line-height: 1.45;
+  --text-data--letter-spacing: 0.01em;
+  --text-meta: var(--fs-meta);
+  --text-meta--line-height: 1.5;
+  --text-ui: var(--fs-ui);
+  --text-ui--line-height: 1.5;
+  --text-body: var(--fs-body);
+  --text-body--line-height: 1.72;
+
   --font-mono:
     "JetBrains Mono Variable", ui-monospace, SFMono-Regular, Menlo, monospace;
   --font-sans:
-    "Inter Variable", ui-sans-serif, system-ui, -apple-system, sans-serif;
+    "IBM Plex Sans Variable", ui-sans-serif, system-ui, -apple-system, sans-serif;
 }
 
 /* Color de borde por defecto y `min-width: 0` para que nada desborde su rejilla.
@@ -154,7 +207,10 @@ body {
   background-color: var(--bg);
   color: var(--fg);
   font-family: var(--font-sans);
-  font-feature-settings: "cv05", "ss01";
+  /* Sin `font-feature-settings`: los `cv05`/`ss01` que había aquí eran sets
+     estilísticos de Inter y en IBM Plex Sans no existen, así que el navegador
+     los ignoraba en silencio. Plex ya trae kerning y ligaduras estándar
+     activados por defecto, que es todo lo que esta página necesita. */
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   overflow-x: hidden;
@@ -213,6 +269,34 @@ body {
 /* ==========================================================================
    COMPONENTES DE TERMINAL
    ========================================================================== */
+
+/* Etiqueta de instrumento.
+   -------------------------------------------------------------------------
+   La cadena `font-mono text-[11px] uppercase tracking-widest text-fg-subtle`
+   estaba escrita a mano veintitantas veces, y no siempre igual: unas con
+   `tracking-widest`, otras con `tracking-wider`, otras sin `uppercase`, y con
+   el tamaño repartido entre 10, 11 y 12 px. Es el mismo elemento —el rótulo
+   grabado junto a una lectura— así que ahora es una sola declaración y sale
+   idéntico en toda la página.
+
+   DENTRO de `@layer components`, y por la misma razón que el bloque `*` de
+   arriba está en `@layer base`: en la cascada de capas, lo que está fuera de
+   toda capa gana a lo que está dentro sin importar la especificidad. Suelta,
+   esta clase pisaría `text-accent`, `text-fg` o `text-sm` en cualquier
+   elemento que las combinara —repitiendo el mismo bug que anuló todos los
+   bordes de color del sitio—. En `components` (que Tailwind declara antes de
+   `utilities`) hace de valor por defecto y las utilidades pueden ganarle, que
+   es lo que se espera de ella. */
+@layer components {
+  .label {
+    font-family: var(--font-mono);
+    font-size: var(--fs-data);
+    line-height: 1.45;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--fg-subtle);
+  }
+}
 
 .caret {
   display: inline-block;

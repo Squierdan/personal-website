@@ -37,7 +37,7 @@ Tailwind CSS v4     configuración en CSS (@theme inline), NO tailwind.config.js
 Framer Motion 12
 next-themes 0.4     tema por clase (.dark)
 lucide-react        iconos
-Fontsource          Inter Variable + JetBrains Mono Variable (auto-alojadas)
+Fontsource          IBM Plex Sans Variable + JetBrains Mono Variable (auto-alojadas)
 ESLint 9            eslint-config-next (flat config en eslint.config.mjs)
 ```
 
@@ -59,7 +59,7 @@ declaran en `src/app/globals.css` dentro de `@theme inline`. El modo oscuro usa
 
 | Archivo | Contiene |
 |---|---|
-| `src/app/globals.css` | Paleta, tokens de Tailwind, tokens de movimiento, utilidades (`.term`, `.caret`, `.grid-lines`, `.accent-glow`, `.scan-row`, `.stencil`, `.corner-marks`, `.link-underline`) |
+| `src/app/globals.css` | Paleta, escala tipográfica, ritmo vertical, tokens de Tailwind y de movimiento, utilidades (`.label`, `.term`, `.caret`, `.grid-lines`, `.accent-glow`, `.scan-row`, `.stencil`, `.corner-marks`, `.link-underline`) |
 | `src/lib/motion.ts` | **Vocabulario de movimiento**: duraciones, curvas y variantes de Framer Motion. Todo el movimiento del sitio sale de aquí |
 | `src/app/layout.tsx` | Fuentes, metadatos SEO, JSON-LD, skip link |
 
@@ -153,7 +153,65 @@ No llames a `setState` de forma síncrona en el cuerpo de un `useEffect`.
 Envuélvelo en un `setTimeout`/`setInterval`, o usa `useSyncExternalStore`
 (ver `hooks/use-clock.ts` como referencia).
 
-### 4.6 Accesibilidad
+### 4.6 Tipografía — dos voces, y cada una tiene un trabajo
+
+El sitio tiene **exactamente dos familias**, y la elección entre ellas no es
+estética: dice qué clase de cosa estás escribiendo.
+
+| Familia | Rol | Dónde |
+|---|---|---|
+| **JetBrains Mono** (`font-mono`) | La voz del instrumento | Etiquetas, comandos, cifras, lecturas de estado, cabeceras de tabla, chips, numerales, el nombre del hero |
+| **IBM Plex Sans** (por defecto en `body`) | La voz humana | Titulares de sección y prosa. **Nada más** |
+
+Si dudas de cuál usar, pregúntate si lo que escribes es *un dato que la máquina
+reporta* (mono) o *una frase que una persona redactó* (sans).
+
+> Por qué Plex y no Inter: Plex se encargó como tipografía de la documentación de
+> sistemas técnicos y empresariales de IBM, que es el registro de esta página.
+> Convive con el esqueleto mecánico de JetBrains Mono sin que ninguna finja ser
+> la otra, y la base neutra **cálida** de la paleta (`#0c0c0b`, no un azulado
+> `#0a0a0f`) le sienta mejor que la neutralidad de Inter. Inter es además el
+> valor por defecto de todo portafolio de desarrollador que existe: era la única
+> pieza genérica que quedaba en un diseño construido a propósito para no
+> parecerse a los demás.
+
+#### Escala tipográfica — no escribas tamaños a mano
+
+Había trece tamaños en uso (10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 24, 30,
+32 px) elegidos uno por uno en cada componente, y tres de ellos —10, 11 y 12 px—
+hacían el mismo trabajo: etiquetar un dato. Eso no es una escala.
+
+Ahora hay cuatro utilidades para interfaz y texto, declaradas en `globals.css`:
+
+```
+text-data   11px   toda etiqueta, chip, lectura, cabecera de tabla · SIEMPRE mono
+text-meta   13px   prosa secundaria: certificaciones, stack, resúmenes
+text-ui     15px   botones, navegación, campos de formulario, subtítulos
+text-body   17px   los párrafos que alguien se va a sentar a leer
+```
+
+más tres pasos de titular con `clamp()`, que se consumen como
+`text-[length:var(--step-h3)]`, `--step-h2` y `--step-display`.
+
+**No añadas `text-[13px]` ni `text-sm` nuevos.** Si un tamaño no encaja en la
+escala, el problema es casi siempre la jerarquía y no el tamaño.
+
+Para el rótulo de instrumento existe la utilidad **`.label`**, que empaqueta
+mono + 11 px + versalitas + tracking + `--fg-subtle`. Esa cadena estaba escrita
+a mano veintitantas veces y no siempre igual. Úsala en vez de repetirla.
+
+> ⚠️ `.label` vive dentro de `@layer components`, y tiene que seguir ahí. Es la
+> misma trampa de capas que el bloque `*` de §4.2: suelta, pisaría `text-accent`,
+> `text-fg` o cualquier utilidad de color de Tailwind en todo elemento que las
+> combinara.
+
+#### Ritmo vertical
+
+`--space-block` (4 / 5 rem) entre bloques mayores y `--space-stack` (1,25 rem)
+entre un subtítulo y su lista. Se consumen como `mt-[var(--space-block)]`. Antes
+eran dieciséis `mt-*` elegidos a ojo.
+
+### 4.7 Accesibilidad
 Los controles necesitan `aria-label`. Mantén el orden de encabezados (`h1` solo
 en el hero, sin saltar niveles).
 
@@ -198,7 +256,7 @@ Aparte, `useDigest` consulta la preferencia con `usePrefersReducedMotion` porque
 tiene que decidir *si* ejecuta la avalancha, no sólo a qué velocidad: con la
 preferencia activa devuelve el digest final directamente.
 
-### 4.7 Movimiento
+### 4.8 Movimiento
 
 **No escribas duraciones ni curvas a mano.** Salen de `src/lib/motion.ts` (JS) y
 de las variables `--dur-micro` / `--dur-base` / `--dur-slow` / `--ease-out`
@@ -323,13 +381,36 @@ barrido de escáner en las filas, contraste AA verificado en ambos temas,
 `border-strong` a 3:1 en controles, objetivos táctiles ampliados, y corrección
 del bug de capas CSS que anulaba todos los bordes de color.
 
+**Hecho en el rediseño tipográfico y de ritmo:** contrato de dos voces con
+IBM Plex Sans en lugar de Inter (ver §4.6), escala tipográfica de cuatro pasos
+que sustituye a trece tamaños ad-hoc, utilidad `.label` en `@layer components`,
+tokens de ritmo vertical, servicios reconvertidos de pila de seis bloques a
+matriz de capacidades de dos columnas, certificaciones alineadas en registro con
+filetes que cruzan las columnas (y sin los trece checks redundantes), lecturas
+del hero integradas dentro de la placa como pie del instrumento, y cifras del
+hero derivadas de `counts` en `content.ts`.
+
 **Pendiente (requiere datos o decisiones del usuario):**
 
-1. **Formulario sin backend.** Compone un `mailto:`. Ver receta en §5.
-3. **Teléfono.** Deliberadamente NO publicado (está en el CV, pero exponerlo en
+1. **No hay sección de proyectos, y es el hueco más grande que queda.** Un
+   portafolio de ingeniería sin trabajo mostrable se apoya entero en el CV. Se
+   revisó `github.com/Squierdan` para construirla con datos reales y no hay
+   repositorios presentables (`ParaDianita`, `CEC-Pyhton`, un fork y el propio
+   sitio). **No inventes proyectos para rellenarla** (§1): hace falta que el
+   usuario aporte 2–4 trabajos reales —título, problema, qué hizo, stack, enlace
+   o captura—. Con eso, la sección natural es un índice numerado como el de la
+   tabla de roles, insertado como `03` y desplazando trayectoria y contacto.
+2. **Las cifras del hero dicen 13 certificaciones porque `certifications` tiene
+   trece.** El texto anterior decía «+15». Si el CV tiene quince, faltan dos por
+   añadir al array; la cifra se recalcula sola.
+3. **Correo de contacto en Hotmail.** `site.email` es `daniel_caiz@hotmail.com`.
+   Para un perfil de seguridad de la información un dominio propio o Gmail
+   proyecta mejor; decisión del usuario.
+4. **Formulario sin backend.** Compone un `mailto:`. Ver receta en §5.
+5. **Teléfono.** Deliberadamente NO publicado (está en el CV, pero exponerlo en
    una web pública atrae spam). Añadirlo solo si el usuario lo pide.
-4. **Dominio propio.** Hoy usa el subdominio `.vercel.app`. Si se compra uno,
+6. **Dominio propio.** Hoy usa el subdominio `.vercel.app`. Si se compra uno,
    actualizar `site.url` y volver a desplegar.
-5. **Sin tests.** No hay Vitest ni Playwright configurados.
-6. **Imagen OG estática.** Está en `src/app/opengraph-image.png` (PNG generado a
+7. **Sin tests.** No hay Vitest ni Playwright configurados.
+8. **Imagen OG estática.** Está en `src/app/opengraph-image.png` (PNG generado a
    mano, 1200×630). Si cambia el nombre o el rol, hay que regenerarla.

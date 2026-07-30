@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Check, RotateCw } from "lucide-react";
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { useDigest } from "@/hooks/use-digest";
 import { DUR, EASE_OUT } from "@/lib/motion";
 
@@ -21,6 +21,13 @@ type HashPortraitProps = {
   verifiedLabel: string;
   computingLabel: string;
   legend: string;
+  /**
+   * Pie del instrumento. Se dibuja DENTRO del marco, bajo el digest y separado
+   * por un filete. Existe para que la placa sea **un solo aparato** —cabecera
+   * de estado, rejilla, digest y lecturas— en vez de una placa con una tira de
+   * datos flotando debajo. La placa no sabe ni le importa qué se le pasa.
+   */
+  footer?: ReactNode;
 };
 
 /**
@@ -55,6 +62,7 @@ export function HashPortrait({
   verifiedLabel,
   computingLabel,
   legend,
+  footer,
 }: HashPortraitProps) {
   const [runId, setRunId] = useState(0);
   const { hex, locked } = useDigest(input, runId);
@@ -68,12 +76,10 @@ export function HashPortrait({
       <div className="term relative">
         {/* ------------------------------------------------ Cabecera de placa */}
         <div className="flex items-center gap-2 border-b border-border px-3 py-2.5">
-          <span className="font-mono text-[10px] uppercase tracking-wider text-fg-subtle">
-            {label}
-          </span>
+          <span className="label">{label}</span>
 
           <span
-            className="ml-auto flex items-center gap-1.5 font-mono text-[10px] tabular-nums"
+            className="ml-auto flex items-center gap-1.5 font-mono text-data tabular-nums"
             role="status"
             aria-live="polite"
           >
@@ -148,10 +154,14 @@ export function HashPortrait({
 
         {/* ------------------------------------------------ El digest, en texto */}
         <div className="border-t border-border px-3 py-2.5">
-          <p className="break-all font-mono text-[10px] leading-[1.7] text-fg-subtle">
+          <p className="break-all font-mono text-data leading-[1.7] text-fg-subtle">
             {hex || "·".repeat(CELLS)}
           </p>
         </div>
+
+        {footer ? (
+          <div className="border-t border-border">{footer}</div>
+        ) : null}
       </div>
     </div>
   );

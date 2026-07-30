@@ -21,7 +21,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
        * no resuelve el problema de `prefers-reduced-motion` con Framer Motion
        * (los elementos se quedaban igualmente en `opacity: 0`). La solución
        * está en `globals.css`, en la regla `[data-reveal]` dentro del bloque
-       * `@media (prefers-reduced-motion: reduce)`. Ver AI_CONTEXT.md §4.6.
+       * `@media (prefers-reduced-motion: reduce)`. Ver AI_CONTEXT.md §4.7.
        */}
       <LanguageProvider>{children}</LanguageProvider>
     </ThemeProvider>

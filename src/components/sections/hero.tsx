@@ -55,7 +55,7 @@ export function Hero() {
             animate="visible"
             variants={bootItem}
             transition={bootStep(0)}
-            className="inline-flex items-center gap-2 border border-border bg-bg-elevated/60 px-3 py-1.5 font-mono text-[11px] text-fg-muted"
+            className="inline-flex items-center gap-2 border border-border bg-bg-elevated/60 px-3 py-1.5 font-mono text-data text-fg-muted"
           >
             <span
               aria-hidden
@@ -73,7 +73,7 @@ export function Hero() {
             animate="visible"
             variants={bootItem}
             transition={bootStep(1)}
-            className="mt-8 font-mono text-sm text-fg-subtle"
+            className="mt-8 font-mono text-meta text-fg-subtle"
           >
             <span className="text-accent">❯</span> {t.hero.cmdWhoami}
           </motion.p>
@@ -95,7 +95,7 @@ export function Hero() {
             animate="visible"
             variants={bootItem}
             transition={bootStep(3)}
-            className="mt-6 font-mono text-sm text-fg-subtle"
+            className="mt-6 font-mono text-meta text-fg-subtle"
           >
             <span className="text-accent">❯</span> {t.hero.cmdRole}
           </motion.p>
@@ -111,7 +111,7 @@ export function Hero() {
             animate="visible"
             variants={bootItem}
             transition={bootStep(5)}
-            className="mt-8 max-w-xl text-base leading-relaxed text-fg-muted sm:text-lg"
+            className="mt-8 max-w-xl text-body text-fg-muted"
           >
             {t.hero.intro}
           </motion.p>
@@ -126,14 +126,14 @@ export function Hero() {
           >
             <a
               href="#experience"
-              className="group inline-flex h-11 items-center gap-2 bg-accent px-5 font-mono text-sm font-medium text-[var(--accent-fg)]"
+              className="group inline-flex h-11 items-center gap-2 bg-accent px-5 font-mono text-ui font-medium text-[var(--accent-fg)]"
             >
               {t.hero.ctaPrimary}
               <ArrowUpRight className="h-4 w-4 transition-transform duration-[var(--dur-base)] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1 group-hover:-translate-y-1" />
             </a>
             <a
               href="#contact"
-              className="inline-flex h-11 items-center gap-2 border border-border-strong px-5 font-mono text-sm text-fg transition-colors hover:border-accent hover:text-accent"
+              className="inline-flex h-11 items-center gap-2 border border-border-strong px-5 font-mono text-ui text-fg transition-colors hover:border-accent hover:text-accent"
             >
               {t.hero.ctaSecondary}
             </a>
@@ -142,7 +142,7 @@ export function Hero() {
             <a
               href={site.cv[locale]}
               download
-              className="inline-flex h-11 items-center gap-2 px-2 font-mono text-sm text-fg-muted transition-colors hover:text-accent"
+              className="inline-flex h-11 items-center gap-2 px-2 font-mono text-ui text-fg-muted transition-colors hover:text-accent"
             >
               <Download className="h-4 w-4" />
               <span className="link-underline">{t.hero.ctaCv}</span>
@@ -170,7 +170,7 @@ export function Hero() {
                 >
                   {stat.value}
                 </dd>
-                <dd className="mt-1 text-xs leading-snug text-fg-subtle">
+                <dd className="mt-1 text-meta leading-snug text-fg-subtle">
                   {stat.label}
                 </dd>
               </div>
@@ -193,19 +193,48 @@ export function Hero() {
             verifiedLabel={t.hero.hashVerified}
             computingLabel={t.hero.hashComputing}
             legend={t.hero.hashLegend}
-          />
+            /* Lecturas del instrumento.
+               Antes esto era una tira suelta flotando bajo la placa, con los
+               cuatro datos seguidos y separados por `·`, en versalitas y sin
+               rótulo: había que adivinar que `Guayaquil` era la zona horaria y
+               no una segunda ciudad. Ahora va DENTRO del marco, como el pie del
+               aparato, y cada valor lleva grabado su rótulo. La placa pasa a ser
+               un solo objeto —estado, rejilla, digest, lecturas— en vez de dos
+               cosas apiladas.
 
-          {/* Franja de instrumento: los datos que antes vivían en la barra de
-              título de la ventana de terminal. */}
-          <div className="mx-auto mt-3 flex w-full max-w-[420px] flex-wrap items-center gap-x-4 gap-y-1 font-mono text-[10px] uppercase tracking-wider text-fg-subtle lg:mx-0 lg:max-w-none">
-            <span>{site.location}</span>
-            <span aria-hidden>·</span>
-            <span>{site.timezone.split("/")[1]}</span>
-            <span aria-hidden>·</span>
-            <span className="tabular-nums">{clock || "--:--:--"}</span>
-            <span aria-hidden>·</span>
-            <span>{locale === "es" ? "es-ec" : "en-us"}</span>
-          </div>
+               Los rótulos (`loc`, `tz`, `local`, `lang`) se quedan literales y
+               no van al diccionario: son identificadores de campo de línea de
+               comandos, idénticos en los dos idiomas, y es lo que ya hace la
+               tarjeta de contacto con `location` / `timezone` / `status`. */
+            footer={
+              <dl className="grid grid-cols-2 gap-px bg-border">
+                {[
+                  { label: "loc", value: site.location },
+                  { label: "tz", value: site.timezone },
+                  {
+                    label: "local",
+                    value: clock || "--:--:--",
+                    numeric: true,
+                  },
+                  { label: "lang", value: locale === "es" ? "es-ec" : "en-us" },
+                ].map((readout) => (
+                  <div
+                    key={readout.label}
+                    className="bg-bg-elevated px-3 py-2"
+                  >
+                    <dt className="label">{readout.label}</dt>
+                    <dd
+                      className={`mt-0.5 truncate font-mono text-data text-fg-muted ${
+                        readout.numeric ? "tabular-nums" : ""
+                      }`}
+                    >
+                      {readout.value}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            }
+          />
         </motion.div>
       </div>
     </section>

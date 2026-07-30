@@ -4,10 +4,21 @@ import type { Metadata, Viewport } from "next";
  * Fuentes auto-alojadas con Fontsource (no se hace ninguna petición a Google
  * Fonts en build ni en runtime): mejor privacidad, cero CLS y builds que
  * funcionan sin acceso a internet.
- *   · Inter          → texto de lectura
- *   · JetBrains Mono → voz principal de la marca (interfaz "terminal")
+ *
+ * DOS VOCES, Y CADA UNA TIENE UN TRABAJO (ver §4.6 de AI_CONTEXT.md):
+ *   · JetBrains Mono → la voz del instrumento: etiquetas, comandos, cifras,
+ *     lecturas de estado, cabeceras de tabla, el nombre del hero.
+ *   · IBM Plex Sans  → la voz humana: titulares de sección y prosa. NADA más.
+ *
+ * Por qué Plex y no Inter: Plex se encargó como tipografía de la documentación
+ * de sistemas técnicos y empresariales de IBM, que es exactamente el registro
+ * de esta página. Sus astas acampanadas y sus curvas escuadradas conviven con
+ * el esqueleto mecánico de JetBrains Mono sin que ninguna de las dos finja ser
+ * la otra, y la base neutra cálida de la paleta (#0c0c0b, no un azulado
+ * #0a0a0f) le sienta mejor que la neutralidad de Inter. Inter es además el
+ * valor por defecto de todo portafolio de desarrollador que existe.
  */
-import "@fontsource-variable/inter";
+import "@fontsource-variable/ibm-plex-sans";
 import "@fontsource-variable/jetbrains-mono";
 import "./globals.css";
 import { Providers } from "@/components/providers";

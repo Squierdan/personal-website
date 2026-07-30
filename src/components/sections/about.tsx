@@ -1,6 +1,5 @@
 "use client";
 
-import { Check } from "lucide-react";
 import { Section, SectionHeading } from "@/components/ui/section";
 import { Reveal, RevealGroup, RevealItem } from "@/components/ui/reveal";
 import { useLanguage } from "@/components/providers/language-provider";
@@ -24,48 +23,43 @@ export function About() {
               abajo, que es el orden en que se lee. */}
           <RevealGroup className="border-l border-border pl-5 sm:pl-7">
             {t.about.paragraphs.map((paragraph, index) => (
-              <RevealItem
-                key={index}
-                className="relative mb-6 last:mb-0 sm:text-[17px]"
-              >
+              <RevealItem key={index} className="relative mb-6 last:mb-0">
                 <span
                   aria-hidden
-                  className="absolute -left-5 top-1 select-none font-mono text-[11px] tabular-nums text-fg-subtle/70 sm:-left-7"
+                  className="absolute -left-5 top-1 select-none font-mono text-data tabular-nums text-fg-subtle/70 sm:-left-7"
                 >
                   {String(index + 1).padStart(2, "0")}
                 </span>
-                <p className="text-base leading-[1.75] text-fg-muted sm:text-[17px]">
-                  {paragraph}
-                </p>
+                <p className="text-body text-fg-muted">{paragraph}</p>
               </RevealItem>
             ))}
           </RevealGroup>
 
           {/* Formación académica */}
           <Reveal>
-            <h3 className="mt-10 font-mono text-[11px] uppercase tracking-widest text-fg-subtle">
+            <h3 className="label mt-[var(--space-block)]">
               {t.about.educationTitle}
             </h3>
           </Reveal>
           <RevealGroup
             as="ul"
-            className="mt-4 divide-y divide-border border-y border-border"
+            className="mt-[var(--space-stack)] divide-y divide-border border-y border-border"
           >
             {t.about.education.map((item) => (
               <RevealItem
                 as="li"
                 key={item.degree}
-                className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 py-3"
+                className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 py-3.5"
               >
                 <span>
-                  <span className="block text-sm font-medium text-fg">
+                  <span className="block text-ui font-medium text-fg">
                     {item.degree}
                   </span>
-                  <span className="block font-mono text-[11px] text-accent">
+                  <span className="mt-0.5 block font-mono text-data text-accent">
                     {item.school}
                   </span>
                 </span>
-                <span className="font-mono text-[11px] tabular-nums text-fg-subtle">
+                <span className="font-mono text-data tabular-nums text-fg-subtle">
                   {item.period}
                 </span>
               </RevealItem>
@@ -76,25 +70,23 @@ export function About() {
         {/* Principios de trabajo */}
         <div>
           <Reveal>
-            <h3 className="font-mono text-[11px] uppercase tracking-widest text-fg-subtle">
-              {t.about.principlesTitle}
-            </h3>
+            <h3 className="label">{t.about.principlesTitle}</h3>
           </Reveal>
           <RevealGroup
             as="ul"
-            className="mt-5 divide-y divide-border border-y border-border"
+            className="mt-[var(--space-stack)] divide-y divide-border border-y border-border"
           >
             {t.about.principles.map((principle, index) => (
               <RevealItem as="li" key={principle.title} className="py-4">
                 <div className="flex items-baseline gap-3">
-                  <span className="font-mono text-[11px] tabular-nums text-accent">
+                  <span className="font-mono text-data tabular-nums text-accent">
                     {String(index + 1).padStart(2, "0")}
                   </span>
                   <div>
-                    <h4 className="font-mono text-sm font-medium text-fg">
+                    <h4 className="text-ui font-medium text-fg">
                       {principle.title}
                     </h4>
-                    <p className="mt-1 text-sm leading-relaxed text-fg-muted">
+                    <p className="mt-1 text-meta text-fg-muted">
                       {principle.body}
                     </p>
                   </div>
@@ -107,21 +99,19 @@ export function About() {
 
       {/* Stack agrupado por dominio */}
       <Reveal>
-        <h3 className="mt-16 font-mono text-[11px] uppercase tracking-widest text-fg-subtle">
-          {t.about.skillsTitle}
-        </h3>
+        <h3 className="label mt-[var(--space-block)]">{t.about.skillsTitle}</h3>
       </Reveal>
-      <RevealGroup className="mt-5 grid gap-px border border-border bg-border sm:grid-cols-2 lg:grid-cols-4">
+      <RevealGroup className="mt-[var(--space-stack)] grid gap-px border border-border bg-border sm:grid-cols-2 lg:grid-cols-4">
         {stack.map((group) => (
           <RevealItem key={group.group.en} className="bg-bg p-5">
-            <p className="font-mono text-[11px] text-accent">
+            <p className="font-mono text-data text-accent">
               {group.group[locale]}/
             </p>
             <ul className="mt-3 space-y-1.5">
               {group.items.map((item) => (
                 <li
                   key={item}
-                  className="font-mono text-[13px] text-fg-muted transition-colors duration-[var(--dur-micro)] hover:text-fg"
+                  className="font-mono text-meta text-fg-muted transition-colors duration-[var(--dur-micro)] hover:text-fg"
                 >
                   <span aria-hidden className="mr-2 text-fg-subtle/60">
                     ·
@@ -134,43 +124,70 @@ export function About() {
         ))}
       </RevealGroup>
 
-      {/* Certificaciones — muro de credenciales denso, en línea con la estética.
-          Tres columnas en pantalla grande: trece entradas en dos columnas
-          dejaban una fila huérfana y ocupaban media pantalla de alto. */}
+      {/* ------------------------------------------------- Certificaciones
+          Registro alineado, no un muro de tarjetas.
+
+          Antes era una rejilla de tres columnas donde cada item se dibujaba su
+          propio borde inferior. Como los nombres tienen largos distintos, las
+          alturas de fila diferían y las reglas de las tres columnas no
+          coincidían nunca: trece filetes a trece alturas distintas. En una
+          estética de instrumento la alineación **es** el argumento, así que
+          ahora los filetes son el hueco de la rejilla (`gap-px`) y cruzan las
+          dos columnas a la misma altura.
+
+          También se han quitado los trece iconos de check. Estar en la lista ya
+          era la afirmación: el check la repetía trece veces y gastaba el color
+          de acento en confirmar algo que nadie había puesto en duda. El acento
+          se reserva ahora para el año, que es el dato que de verdad se compara.
+
+          El año va a la derecha, en cifras tabulares: los ocho «2025»
+          consecutivos se apilan en una columna recta y la ráfaga de formación
+          reciente se lee de un vistazo, sin necesidad de agruparlos ni de
+          escribirlo. */}
       <Reveal>
-        <div className="mt-16 flex flex-wrap items-baseline gap-x-4 gap-y-1">
-          <h3 className="font-mono text-[11px] uppercase tracking-widest text-fg-subtle">
-            {t.about.certificationsTitle}
-          </h3>
-          <p className="font-mono text-[11px] text-fg-subtle/80">
+        <div className="mt-[var(--space-block)] flex flex-wrap items-baseline gap-x-4 gap-y-1">
+          <h3 className="label">{t.about.certificationsTitle}</h3>
+          <span className="font-mono text-data tabular-nums text-accent">
+            {String(certifications.length).padStart(2, "0")}
+          </span>
+          <p className="text-meta text-fg-subtle">
             {t.about.certificationsNote}
           </p>
         </div>
       </Reveal>
       <RevealGroup
         as="ul"
-        className="mt-5 grid gap-x-8 border-t border-border sm:grid-cols-2 lg:grid-cols-3"
+        className="mt-[var(--space-stack)] grid gap-px border border-border bg-border lg:grid-cols-2"
       >
         {certifications.map((cert) => (
           <RevealItem
             as="li"
             key={cert.name}
-            className="flex items-start gap-3 border-b border-border py-2.5"
+            className="grid grid-cols-[1fr_auto] items-baseline gap-x-4 bg-bg px-4 py-3"
           >
-            <Check aria-hidden className="mt-[5px] h-3 w-3 shrink-0 text-accent" />
-            <span className="min-w-0 flex-1">
-              <span className="block text-[13px] leading-snug text-fg">
+            <span className="min-w-0">
+              <span className="block text-meta leading-snug text-fg">
                 {cert.name}
               </span>
-              <span className="block font-mono text-[10px] text-fg-subtle">
+              <span className="mt-0.5 block font-mono text-data text-fg-subtle">
                 {cert.issuer}
               </span>
             </span>
-            <span className="font-mono text-[10px] tabular-nums text-fg-subtle">
+            <span className="font-mono text-data tabular-nums text-accent">
               {cert.year}
             </span>
           </RevealItem>
         ))}
+
+        {/* Celda de relleno cuando el número de certificaciones es impar.
+            Sin ella, el hueco que deja la última fila en la segunda columna
+            no lo tapa ninguna celda `bg-bg` y se ve el `bg-border` del
+            contenedor: un rectángulo sólido del color del filete, del alto de
+            una fila. Con trece entradas ocurría; con catorce no, así que
+            depende del contenido y tiene que resolverse solo. */}
+        {certifications.length % 2 === 1 ? (
+          <li aria-hidden className="hidden bg-bg lg:block" />
+        ) : null}
       </RevealGroup>
     </Section>
   );

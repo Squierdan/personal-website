@@ -55,7 +55,7 @@ export function Navbar() {
           >
             <span
               aria-hidden
-              className="grid h-6 w-6 place-items-center border border-accent text-[11px] font-bold text-accent transition-colors group-hover:bg-accent group-hover:text-[var(--accent-fg)]"
+              className="grid h-6 w-6 place-items-center border border-accent text-data font-bold text-accent transition-colors group-hover:bg-accent group-hover:text-[var(--accent-fg)]"
             >
               {site.handle.charAt(0).toUpperCase()}
             </span>
@@ -79,7 +79,7 @@ export function Navbar() {
                       isActive ? "text-accent" : "text-fg-muted hover:text-fg"
                     }`}
                   >
-                    <span className="text-[10px] text-fg-subtle">
+                    <span className="text-data text-fg-subtle">
                       0{index + 1}
                     </span>
                     {link.label}
@@ -102,7 +102,7 @@ export function Navbar() {
               type="button"
               onClick={openCommandPalette}
               aria-label={t.ui.openPalette}
-              className="hidden h-8 items-center gap-2 border border-border-strong px-2.5 font-mono text-[11px] text-fg-muted transition-colors hover:border-accent hover:text-accent sm:flex"
+              className="hidden h-8 items-center gap-2 border border-border-strong px-2.5 font-mono text-data text-fg-muted transition-colors hover:border-accent hover:text-accent sm:flex"
             >
               <Search className="h-3.5 w-3.5" />
               <kbd className="text-fg-subtle">⌘K</kbd>

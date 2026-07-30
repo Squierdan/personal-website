@@ -53,18 +53,21 @@ export function SectionHeading({
         </span>
 
         <div className="min-w-0">
-          <div className="flex items-baseline gap-4 font-mono text-xs tracking-widest text-fg-subtle">
+          <div className="label flex items-baseline gap-4">
             <span className="text-accent sm:hidden">{index}</span>
-            <span className="uppercase">{eyebrow}</span>
+            <span>{eyebrow}</span>
             <RevealRule />
           </div>
 
-          <h2 className="mt-4 max-w-3xl text-balance font-semibold leading-[1.04] tracking-[-0.03em] text-[length:var(--step-h2)]">
+          {/* `tracking-[-0.025em]` y no `-0.03em`: IBM Plex Sans se dibuja algo
+              más ancho que Inter en el mismo cuerpo, así que el interletraje
+              que antes ajustaba el titular ahora lo apretaba de más. */}
+          <h2 className="mt-4 max-w-3xl text-balance font-semibold leading-[1.06] tracking-[-0.025em] text-[length:var(--step-h2)]">
             {title}
           </h2>
 
           {subtitle ? (
-            <p className="mt-5 max-w-2xl text-base leading-relaxed text-fg-muted">
+            <p className="mt-5 max-w-2xl text-ui leading-relaxed text-fg-muted">
               {subtitle}
             </p>
           ) : null}

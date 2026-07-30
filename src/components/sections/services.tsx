@@ -6,19 +6,31 @@ import { useLanguage } from "@/components/providers/language-provider";
 import { services } from "@/lib/content";
 
 /**
- * Servicios como lista de comandos, no como rejilla de tarjetas.
+ * ============================================================================
+ *  SERVICIOS — MATRIZ DE CAPACIDADES
+ * ============================================================================
+ *  Antes esto era una pila de seis bloques idénticos: comando, titular, tres
+ *  líneas de prosa y cuatro chips, seis veces, ~1.300 px de la misma forma. Era
+ *  el tramo más plano de la página, y en una lista vertical de seis elementos
+ *  con el mismo peso el visitante no compara: hojea y se salta cinco.
  *
- * La descripción está SIEMPRE visible, por dos razones:
- *  · Legibilidad: un visitante que evalúa contratarte no debería tener que
- *    descubrir que hay que pasar el cursor para leer qué haces. En móvil, donde
- *    no existe el hover, ese contenido era directamente invisible.
- *  · Rendimiento: la versión anterior animaba `grid-template-rows` de 0fr a 1fr,
- *    lo que obliga a recalcular el layout de la página en cada fotograma.
+ *  Ahora es una rejilla de dos columnas separada por filetes de 1 px —el mismo
+ *  recurso `gap-px` sobre fondo de borde que ya usa la rejilla de stack de la
+ *  sección 01—, así que las seis capacidades se leen **a la vez** y en paralelo,
+ *  que es cómo se lee una matriz. Ocupa la mitad de alto y le da a la página un
+ *  cambio de densidad entre la 01 y la 03, donde antes las cuatro secciones
+ *  tenían exactamente el mismo pulso.
  *
- * Aquí no hay barrido de escáner ni flecha de "→": estas filas no llevan a
- * ningún sitio, y una flecha que no navega es una promesa falsa. El movimiento
- * es sólo la entrada escalonada; el peso visual de la página se gasta en el
- * hero y en la publicación, no repartido por todas partes.
+ *  SIN NUMERALES. Los tenía (01…06) y se han quitado: numerar sirve cuando el
+ *  orden es información —un proceso, una cronología— y esto es un conjunto sin
+ *  orden. En una rejilla el número deja de leerse como índice y pasa a ser
+ *  adorno. El identificador de cada fila es su comando, que es lo que además
+ *  encaja con la metáfora de terminal.
+ *
+ *  La descripción está SIEMPRE visible, nunca detrás de un hover: en móvil no
+ *  existe el cursor, y quien evalúa contratarte no debería tener que descubrir
+ *  un gesto para leer qué haces.
+ * ============================================================================
  */
 export function Services() {
   const { t, locale } = useLanguage();
@@ -32,43 +44,45 @@ export function Services() {
         subtitle={t.services.subtitle}
       />
 
-      <RevealGroup as="ul" className="border-t border-border">
-        {services.map((service, index) => (
+      {/* `gap-px` sobre fondo de color de borde: los filetes son el hueco de la
+          rejilla, no bordes por celda. Así nunca se duplican en los encuentros
+          ni quedan cabos sueltos en los extremos. */}
+      <RevealGroup
+        as="ul"
+        className="grid gap-px border border-border bg-border sm:grid-cols-2"
+      >
+        {services.map((service) => (
           <RevealItem
             as="li"
             key={service.cmd}
-            className="border-b border-border"
+            className="flex flex-col bg-bg p-6 sm:p-7"
           >
-            <div className="flex items-baseline gap-4 py-7 pr-4">
-              <span className="w-6 shrink-0 font-mono text-[11px] tabular-nums text-fg-subtle">
-                {String(index + 1).padStart(2, "0")}
-              </span>
+            <p className="font-mono text-data text-accent">
+              <span aria-hidden>❯ </span>
+              {service.cmd}
+            </p>
 
-              <div className="min-w-0 flex-1">
-                <p className="font-mono text-xs text-accent">
-                  ❯ {service.cmd}
-                </p>
+            <h3 className="mt-3 text-balance font-medium leading-tight tracking-[-0.015em] text-fg text-[length:var(--step-h3)]">
+              {service.title[locale]}
+            </h3>
 
-                <h3 className="mt-2 text-balance text-lg font-medium tracking-tight text-fg sm:text-xl">
-                  {service.title[locale]}
-                </h3>
+            <p className="mt-3 text-meta text-fg-muted">
+              {service.description[locale]}
+            </p>
 
-                <p className="mt-3 max-w-2xl text-sm leading-relaxed text-fg-muted">
-                  {service.description[locale]}
-                </p>
-
-                <ul className="mt-4 flex flex-wrap gap-2">
-                  {service.keywords.map((keyword) => (
-                    <li
-                      key={keyword}
-                      className="border border-border px-2 py-0.5 font-mono text-[11px] text-fg-subtle"
-                    >
-                      {keyword}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
+            {/* `mt-auto`: los chips se alinean al pie de cada celda aunque las
+                descripciones tengan distinto largo, así que la línea inferior de
+                la rejilla queda recta en vez de escalonada. */}
+            <ul className="mt-auto flex flex-wrap gap-1.5 pt-5">
+              {service.keywords.map((keyword) => (
+                <li
+                  key={keyword}
+                  className="border border-border px-1.5 py-0.5 font-mono text-data text-fg-subtle"
+                >
+                  {keyword}
+                </li>
+              ))}
+            </ul>
           </RevealItem>
         ))}
       </RevealGroup>

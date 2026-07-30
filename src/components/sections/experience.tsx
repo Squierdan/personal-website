@@ -80,7 +80,7 @@ export function Experience() {
       {publications.length > 0 ? (
         <RevealGroup className="mb-16 sm:mb-20">
           <RevealItem>
-            <h3 className="font-mono text-[11px] uppercase tracking-widest text-fg-subtle">
+            <h3 className="label">
               {t.work.publicationsTitle}
             </h3>
           </RevealItem>
@@ -95,7 +95,7 @@ export function Experience() {
 
       {/* ------------------------------------------------ Roles profesionales */}
       <Reveal>
-        <h3 className="font-mono text-[11px] uppercase tracking-widest text-fg-subtle">
+        <h3 className="label">
           {t.work.rolesTitle}
         </h3>
       </Reveal>
@@ -120,7 +120,7 @@ export function Experience() {
                   setFilter(value);
                   setOpenId(null);
                 }}
-                className={`inline-flex h-9 items-center border px-3 font-mono text-[11px] transition-colors duration-[var(--dur-micro)] ${
+                className={`inline-flex h-9 items-center border px-3 font-mono text-data transition-colors duration-[var(--dur-micro)] ${
                   isActive
                     ? "border-accent bg-accent-soft text-accent"
                     : "border-border text-fg-muted hover:border-border-strong hover:text-fg"
@@ -130,7 +130,7 @@ export function Experience() {
               </button>
             );
           })}
-          <span className="ml-auto font-mono text-[11px] tabular-nums text-fg-subtle">
+          <span className="ml-auto font-mono text-data tabular-nums text-fg-subtle">
             {String(visible.length).padStart(2, "0")} /{" "}
             {String(roles.length).padStart(2, "0")}
           </span>
@@ -138,7 +138,7 @@ export function Experience() {
       </Reveal>
 
       {/* Cabecera de la "tabla" */}
-      <div className="hidden grid-cols-[2.5rem_1fr_11rem_9rem_2rem] gap-4 border-y border-border px-1 py-2 font-mono text-[10px] uppercase tracking-widest text-fg-subtle lg:grid">
+      <div className="hidden grid-cols-[2.5rem_1fr_11rem_9rem_2rem] gap-4 border-y border-border px-1 py-2 label lg:grid">
         <span>#</span>
         <span>{t.work.colName}</span>
         <span>{t.work.colStack}</span>
@@ -172,7 +172,7 @@ export function Experience() {
                   aria-expanded={isOpen}
                   className="scan-row grid w-full grid-cols-[2.5rem_1fr_2rem] items-center gap-4 px-1 py-5 text-left lg:grid-cols-[2.5rem_1fr_11rem_9rem_2rem]"
                 >
-                  <span className="pl-3 font-mono text-[11px] tabular-nums text-fg-subtle">
+                  <span className="pl-3 font-mono text-data tabular-nums text-fg-subtle">
                     {String(index + 1).padStart(2, "0")}
                   </span>
 
@@ -184,7 +184,7 @@ export function Experience() {
                     <span className="block text-base font-medium leading-snug tracking-tight text-fg sm:text-lg">
                       {item.title[locale]}
                     </span>
-                    <span className="mt-1 block font-mono text-[11px] text-accent">
+                    <span className="mt-1 block font-mono text-data text-accent">
                       {item.org}
                     </span>
                     {/* El resumen de una línea: la tabla tiene que decir algo
@@ -192,16 +192,16 @@ export function Experience() {
                     <span className="mt-1.5 block text-sm leading-snug text-fg-muted">
                       {item.summary[locale]}
                     </span>
-                    <span className="mt-1 block truncate font-mono text-[11px] text-fg-subtle lg:hidden">
+                    <span className="mt-1 block truncate font-mono text-data text-fg-subtle lg:hidden">
                       {item.period[locale]}
                     </span>
                   </span>
 
-                  <span className="hidden truncate font-mono text-[11px] text-fg-subtle lg:block">
+                  <span className="hidden truncate font-mono text-data text-fg-subtle lg:block">
                     {categoryLabels[item.category][locale]}
                   </span>
 
-                  <span className="hidden font-mono text-[11px] text-fg-subtle lg:block">
+                  <span className="hidden font-mono text-data text-fg-subtle lg:block">
                     {item.period[locale]}
                   </span>
 
@@ -234,7 +234,7 @@ export function Experience() {
                           {item.stack.map((tag) => (
                             <li
                               key={tag}
-                              className="border border-border px-2 py-0.5 font-mono text-[11px] text-fg-subtle"
+                              className="border border-border px-2 py-0.5 font-mono text-data text-fg-subtle"
                             >
                               {tag}
                             </li>
@@ -247,7 +247,7 @@ export function Experience() {
                               href={item.link}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="inline-flex items-center gap-1.5 border border-accent bg-accent-soft px-3 py-1.5 font-mono text-[11px] text-accent transition-colors hover:bg-accent hover:text-[var(--accent-fg)]"
+                              className="inline-flex items-center gap-1.5 border border-accent bg-accent-soft px-3 py-1.5 font-mono text-data text-accent transition-colors hover:bg-accent hover:text-[var(--accent-fg)]"
                             >
                               <ArrowUpRight className="h-3.5 w-3.5" />
                               {item.linkLabel?.[locale] ?? item.link}
@@ -293,7 +293,7 @@ function Publication({
 }) {
   return (
     <article className="corner-marks mt-5 border border-border bg-bg-elevated/50 p-6 sm:p-8">
-      <div className="flex flex-wrap items-center gap-x-3 gap-y-2 font-mono text-[11px]">
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-2 font-mono text-data">
         <span className="border border-amber/40 bg-amber/10 px-2 py-0.5 text-[var(--amber)]">
           {label}
         </span>
@@ -311,7 +311,7 @@ function Publication({
 
       <p className="mt-3 font-mono text-sm text-[var(--amber)]">{item.org}</p>
 
-      <p className="mt-6 max-w-3xl text-[15px] leading-relaxed text-fg-muted">
+      <p className="mt-6 max-w-3xl text-ui leading-relaxed text-fg-muted">
         {item.detail[locale]}
       </p>
 
@@ -319,7 +319,7 @@ function Publication({
         {item.stack.map((tag) => (
           <li
             key={tag}
-            className="border border-border px-2 py-0.5 font-mono text-[11px] text-fg-subtle"
+            className="border border-border px-2 py-0.5 font-mono text-data text-fg-subtle"
           >
             {tag}
           </li>
@@ -339,7 +339,7 @@ function Publication({
           </a>
           {/* El DOI, escrito: es el identificador con el que se verifica la
               publicación en cualquier índice, no sólo el destino del enlace. */}
-          <p className="break-all font-mono text-[11px] text-fg-subtle">
+          <p className="break-all font-mono text-data text-fg-subtle">
             {item.link.replace(/^https?:\/\/(www\.)?/, "")}
           </p>
         </div>

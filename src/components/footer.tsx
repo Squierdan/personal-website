@@ -49,7 +49,7 @@ export function Footer() {
           ))}
           <a
             href="#top"
-            className="ml-2 inline-flex h-9 items-center border border-border-strong px-3 font-mono text-[11px] text-fg-muted transition-colors hover:border-accent hover:text-accent"
+            className="ml-2 inline-flex h-9 items-center border border-border-strong px-3 font-mono text-data text-fg-muted transition-colors hover:border-accent hover:text-accent"
           >
             ↑ {t.footer.backToTop}
           </a>
@@ -58,7 +58,7 @@ export function Footer() {
 
       {/* Barra de estado */}
       <div className="border-t border-border bg-bg-sunken/60">
-        <div className="mx-auto flex w-full max-w-6xl flex-wrap items-center gap-x-5 gap-y-1 px-5 py-2.5 font-mono text-[10px] uppercase tracking-wider text-fg-subtle sm:px-8 lg:px-12">
+        <div className="mx-auto flex w-full max-w-6xl flex-wrap items-center gap-x-5 gap-y-1 px-5 py-2.5 label sm:px-8 lg:px-12">
           <span className="text-accent">● {site.location}</span>
           <span>{locale === "es" ? "es-ec" : "en-us"}</span>
           <span>utf-8</span>

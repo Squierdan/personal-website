@@ -282,3 +282,26 @@ export const certifications: Certification[] = [
   },
   { name: "Programación con Python", issuer: "CEC-EPN", year: "2020" },
 ];
+
+/* -------------------------------------------------------------------------- */
+/*  RECUENTOS DERIVADOS                                                        */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Las cifras del hero, contadas desde los datos y no escritas a mano.
+ *
+ * El hero decía «+15 certificaciones» mientras la sección 01 listaba trece.
+ * Ese tipo de desajuste es exactamente el que un reclutador nota, y en un
+ * portafolio de seguridad de la información es el peor sitio donde tenerlo: la
+ * página que promete integridad de datos no puede contradecirse a sí misma dos
+ * pantallas más abajo. Contándolo aquí, la cifra del hero es la longitud real
+ * de la lista que está debajo y no puede volver a separarse de ella.
+ *
+ * Si el CV tiene más certificaciones de las que hay en `certifications`, la
+ * solución es añadirlas al array, no subir el número.
+ */
+export const counts = {
+  certifications: certifications.length,
+  publications: work.filter((item) => item.category === "research").length,
+  roles: work.filter((item) => item.category !== "research").length,
+} as const;
