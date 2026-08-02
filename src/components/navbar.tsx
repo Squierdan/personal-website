@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { AnimatePresence, motion, useScroll, useSpring } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useSpring } from "framer-motion";
 import { Menu, Search, X } from "lucide-react";
 import { useLanguage } from "@/components/providers/language-provider";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -73,10 +73,13 @@ export function Navbar() {
               const isActive = active === link.id;
               return (
                 <li key={link.id}>
+                  {/* El subrayado activo lo dibuja `.nav-link::after` en CSS,
+                      enganchado al `aria-current` que el enlace ya llevaba por
+                      accesibilidad. Ver la nota en globals.css. */}
                   <a
                     href={`#${link.id}`}
                     aria-current={isActive ? "true" : undefined}
-                    className={`group relative flex items-center gap-1.5 px-3 py-2 font-mono text-xs transition-colors ${
+                    className={`nav-link relative flex items-center gap-1.5 px-3 py-2 font-mono text-xs transition-colors ${
                       isActive ? "text-accent" : "text-fg-muted hover:text-fg"
                     }`}
                   >
@@ -84,13 +87,6 @@ export function Navbar() {
                       0{index + 1}
                     </span>
                     {link.label}
-                    {isActive ? (
-                      <motion.span
-                        layoutId="nav-active"
-                        className="absolute inset-x-2 -bottom-px h-px bg-accent"
-                        transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                      />
-                    ) : null}
                   </a>
                 </li>
               );

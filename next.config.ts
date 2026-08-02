@@ -4,6 +4,10 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   compress: true,
+  /* Se probó `experimental.optimizePackageImports: ["lucide-react"]` y se
+     quitó: medido con dos builds limpias, 813 KB con y 813 KB sin. Turbopack ya
+     hace ese tree-shaking por su cuenta, así que el flag no aportaba nada y
+     activar una opción experimental que no mejora nada es riesgo regalado. */
   images: {
     formats: ["image/avif", "image/webp"],
   },

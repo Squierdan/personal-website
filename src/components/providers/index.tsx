@@ -3,6 +3,23 @@
 import { ThemeProvider } from "next-themes";
 import { LanguageProvider } from "./language-provider";
 
+/**
+ * ⚠️ AQUÍ SE PROBÓ `LazyMotion` + `domAnimation` Y SE QUITÓ. NO LO REINTENTES
+ * SIN MEDIRLO ANTES.
+ *
+ * La idea era obvia: `motion` arrastra todas las funciones de Framer Motion,
+ * `domAnimation` trae sólo las que este sitio usa, luego el paquete adelgaza.
+ * Medido con dos builds limpias: **735 KB sin LazyMotion, 780 KB con él**. Es
+ * decir, 45 KB MÁS.
+ *
+ * El motivo: la página también importa `AnimatePresence`, `useScroll`,
+ * `useSpring` y `useInView` del punto de entrada principal, así que la librería
+ * entra entera en el grafo de módulos de todos modos, y `LazyMotion` sólo suma
+ * su propia maquinaria de carga diferida encima sin poder quitar nada.
+ *
+ * Para que `LazyMotion` compensara habría que eliminar también esos cuatro
+ * usos, y eso es otro proyecto: el sistema de apariciones depende de ellos.
+ */
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
     /*

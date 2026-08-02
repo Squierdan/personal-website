@@ -40,20 +40,35 @@
      sitio: cintillos de sección, cabeceras de tabla, emisores de certificación,
      barra de estado. Se conserva el gris frío del tema claro. */
   --fg-muted: #4a5462;
-  --fg-subtle: #666f79;
-  --border: #dfe0da;
+  /* 5.46:1. Antes #666f79 (4.72:1): pasaba AA por los pelos y es el color de
+     casi todo el texto pequeño del sitio —rótulos de 11 px, emisores de
+     certificación, cabeceras de tabla—. A ese cuerpo, «cumple el mínimo» y «se
+     lee cómodo» no son lo mismo. */
+  --fg-subtle: #5c646e;
+  /* 1.66:1. Antes #dfe0da, que sobre este fondo daba 1.23:1 — invisible.
+     Y el filete de 1 px NO es decoración en este diseño: es la rejilla de
+     servicios, los separadores de la tabla de experiencia, el marco de cada
+     celda de certificación y el borde de todas las secciones. Con el valor
+     anterior, el modo claro perdía literalmente su estructura. */
+  --border: #c0c1b9;
   /* 3.12:1 — mínimo de WCAG 1.4.11 para el contorno de un control. Es el borde
      del CTA secundario y de los campos del formulario, donde el borde es la
-     única señal de que hay algo con lo que interactuar. Antes: #c6c8c0. */
+     única señal de que hay algo con lo que interactuar. */
   --border-strong: #8b8d85;
+  /* Celda apagada del medidor de nivel. Token propio y no un alfa del acento:
+     con `accent/20` daba 1.60:1 en claro y 1.01:1 en oscuro —o sea, en oscuro
+     no se veía y el medidor dejaba de leerse como una escala de cinco para
+     parecer un número variable de cuadrados—. Un hueco vacío tiene que verse
+     tanto como uno lleno para que la escala signifique algo. */
+  --meter-off: #c4c5bd;
 
   --accent: #067077;
   --accent-fg: #ffffff;
-  --accent-soft: rgba(6, 112, 119, 0.1);
+  --accent-soft: rgba(6, 112, 119, 0.14);
   --link: #a63866;
   --amber: #a35a06;
 
-  --grid-line: rgba(19, 23, 28, 0.055);
+  --grid-line: rgba(19, 23, 28, 0.075);
   --glow: rgba(6, 112, 119, 0.18);
 }
 
@@ -140,18 +155,24 @@
      Antes: 5.94:1 y 3.14:1 — el segundo por debajo de AA. Se conserva el gris
      cálido del tema oscuro (ver la nota de colorimetría de arriba). */
   --fg-muted: #9c9486;
-  --fg-subtle: #837c6f;
-  --border: #201f1b;
-  /* 3.47:1 — contorno de control, WCAG 1.4.11. Antes: #32302a (1.48:1). */
+  /* 5.56:1. Antes #837c6f (4.73:1), por el mismo motivo que en claro. */
+  --fg-subtle: #8f8879;
+  /* 1.44:1. Antes #201f1b (1.19:1). Sube menos que en claro a propósito: sobre
+     un fondo casi negro, una línea más clara se percibe antes que una más
+     oscura sobre un fondo casi blanco, así que el mismo ratio no hace falta. */
+  --border: #2e2c27;
+  /* 3.47:1 — contorno de control, WCAG 1.4.11. */
   --border-strong: #6b675e;
+  /* Ver la nota del tema claro. 1.72:1 sobre este fondo. */
+  --meter-off: #3a3833;
 
   --accent: #2fd0c0;
   --accent-fg: #04120f;
-  --accent-soft: rgba(47, 208, 192, 0.12);
+  --accent-soft: rgba(47, 208, 192, 0.16);
   --link: #ec7fa0;
   --amber: #f0a92e;
 
-  --grid-line: rgba(234, 231, 224, 0.045);
+  --grid-line: rgba(234, 231, 224, 0.06);
   --glow: rgba(47, 208, 192, 0.2);
 }
 
@@ -164,6 +185,7 @@
   --color-fg-subtle: var(--fg-subtle);
   --color-border: var(--border);
   --color-border-strong: var(--border-strong);
+  --color-meter-off: var(--meter-off);
   --color-accent: var(--accent);
   --color-accent-fg: var(--accent-fg);
   --color-accent-soft: var(--accent-soft);
@@ -454,6 +476,33 @@ body {
   right: -1px;
   border-bottom: 1px solid;
   border-right: 1px solid;
+}
+
+/* Subrayado de la sección activa en la navegación.
+   -------------------------------------------------------------------------
+   Antes era un `layoutId` de Framer Motion, que desliza un mismo elemento de
+   un enlace a otro. Se veía bien y costaba caro: una animación de layout mide
+   la posición de los elementos implicados en CADA fotograma, y además obliga a
+   cargar el paquete de proyección de Framer (`domMax`) que no hace falta para
+   nada más en todo el sitio.
+
+   Esto hace lo mismo con `transform: scaleX`, que se resuelve en el compositor
+   sin tocar el layout, sin JavaScript y sin estado en React: el gancho es el
+   `aria-current` que el enlace activo ya llevaba por accesibilidad. Cero coste
+   y una fuente de verdad menos. */
+.nav-link::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0.5rem;
+  bottom: -1px;
+  height: 1px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  transition: transform var(--dur-base) var(--ease-out);
+}
+.nav-link[aria-current="true"]::after {
+  transform: scaleX(1);
 }
 
 /* Barra de progreso de scroll: capa propia para que su animación no obligue

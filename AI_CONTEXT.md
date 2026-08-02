@@ -59,7 +59,7 @@ declaran en `src/app/globals.css` dentro de `@theme inline`. El modo oscuro usa
 
 | Archivo | Contiene |
 |---|---|
-| `src/app/globals.css` | Paleta, escala tipográfica, ritmo vertical, tokens de Tailwind y de movimiento, utilidades (`.label`, `.term`, `.caret`, `.grid-lines`, `.accent-glow`, `.scan-row`, `.stencil`, `.corner-marks`, `.link-underline`) |
+| `src/app/globals.css` | Paleta, escala tipográfica, ritmo vertical, tokens de Tailwind y de movimiento, utilidades (`.label`, `.nav-link`, `.term`, `.caret`, `.grid-lines`, `.accent-glow`, `.scan-row`, `.stencil`, `.corner-marks`, `.link-underline`) |
 | `src/lib/motion.ts` | **Vocabulario de movimiento**: duraciones, curvas y variantes de Framer Motion. Todo el movimiento del sitio sale de aquí |
 | `src/app/layout.tsx` | Fuentes, metadatos SEO, JSON-LD, skip link |
 
@@ -108,7 +108,7 @@ Usa siempre los tokens semánticos, que cambian solos con el tema:
 bg-bg · bg-bg-elevated · bg-bg-sunken
 text-fg · text-fg-muted · text-fg-subtle
 border-border · border-border-strong
-text-accent · bg-accent · bg-accent-soft · text-[var(--accent-fg)]
+text-accent · bg-accent · bg-accent-soft · bg-meter-off · text-[var(--accent-fg)]
 text-link · text-[var(--amber)]
 ```
 
@@ -119,13 +119,30 @@ Contrastes medidos y verificados (no los bajes sin volver a medir):
 
 | Par | Claro | Oscuro | Mínimo |
 |---|---|---|---|
+| `--fg` sobre `--bg` | 16.64:1 | 15.85:1 | 4.5:1 (AA) |
 | `--fg-muted` sobre `--bg` | 7.10:1 | 6.52:1 | 4.5:1 (AA) |
-| `--fg-subtle` sobre `--bg` | 4.72:1 | 4.73:1 | 4.5:1 (AA) |
+| `--fg-subtle` sobre `--bg` | 5.54:1 | 5.56:1 | 4.5:1 (AA) |
+| `--accent` sobre `--bg` | 5.41:1 | 10.16:1 | 4.5:1 (AA) |
+| `--amber` sobre `--bg` | 4.83:1 | 9.71:1 | 4.5:1 (AA) |
+| `--link` sobre `--bg` | 5.75:1 | 7.56:1 | 4.5:1 (AA) |
 | `--border-strong` sobre `--bg` | 3.11:1 | 3.47:1 | 3:1 (WCAG 1.4.11) |
+| `--border` sobre `--bg` | 1.68:1 | 1.40:1 | — (filete visible) |
+| `--meter-off` sobre `--bg` | 1.61:1 | 1.67:1 | — (celda vacía visible) |
 
-`--border` es sólo para reglas y separadores decorativos. Cualquier control
-interactivo cuyo borde sea su única señal de afordancia (campos de formulario,
-botones de icono, CTA secundario) usa `border-border-strong`.
+> ⚠️ **Los filetes no son decoración en este diseño, son la estructura.**
+> `--border` dibuja la rejilla de servicios, los separadores de la tabla de
+> experiencia, el marco de cada certificación y el borde de todas las secciones.
+> Estuvo en 1.23:1 en claro —invisible— y el modo claro perdía literalmente su
+> estructura. No lo bajes de ~1.6:1 en claro ni de ~1.4:1 en oscuro.
+>
+> `--meter-off` existe por lo mismo: era `accent/20` y medía 1.01:1 en oscuro,
+> así que la celda vacía del medidor no se veía y la escala de cinco dejaba de
+> leerse como una escala. Un hueco tiene que verse tanto como un lleno.
+
+`--border` es el filete estructural: rejillas, separadores y marcos de sección.
+Cualquier control **interactivo** cuyo borde sea su única señal de afordancia
+—campos de formulario, botones de icono, CTA secundario, chips de la portada—
+usa `border-border-strong`, que es el que cumple el 3:1 de WCAG 1.4.11.
 
 > ⚠️ **Trampa de capas CSS.** La regla `* { border-color: … }` vive dentro de
 > `@layer base`. Tiene que seguir ahí: en la cascada de capas, lo que está

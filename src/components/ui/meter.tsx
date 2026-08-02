@@ -38,8 +38,11 @@ type MeterProps = {
  *  para lo que anima una magnitud. Aquí la opacidad ES el dato, así que:
  *
  *   · el estado encendido/apagado va en una clase estática (`bg-accent` frente
- *     a `bg-accent/20`), que es alfa del color y no la propiedad `opacity`, de
- *     modo que ninguna red puede pisarlo;
+ *     a `bg-meter-off`), que son dos colores sólidos y no la propiedad
+ *     `opacity`, de modo que ninguna red puede pisarlo. `--meter-off` es un
+ *     token propio por tema y no un alfa del acento: `accent/20` medía 1.01:1
+ *     sobre el fondo oscuro, o sea que la celda vacía no se veía y el medidor
+ *     dejaba de leerse como una escala de cinco;
  *   · no hay Framer ni `data-reveal` en la celda;
  *   · lo único que aparece es el conjunto, desde el envoltorio.
  *
@@ -63,7 +66,7 @@ export function Meter({ level, label }: MeterProps) {
             key={cell}
             aria-hidden
             className={`h-3 w-[7px] ${
-              cell < filled ? "bg-accent" : "bg-accent/20"
+              cell < filled ? "bg-accent" : "bg-meter-off"
             }`}
           />
         ))}

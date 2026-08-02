@@ -23,7 +23,7 @@ Bilingüe (ES/EN), tema claro/oscuro, responsivo, con una interfaz de estética
 | Animación | **Framer Motion 12** | Animaciones declarativas con soporte de `prefers-reduced-motion` |
 | Tema | **next-themes** | Claro/oscuro sin parpadeo en la carga inicial |
 | Iconos | **lucide-react** | SVG tree-shakeable, sin fuentes de iconos |
-| Tipografía | **Fontsource** (Inter + JetBrains Mono) | Auto-alojada: cero peticiones a Google, cero CLS, builds offline |
+| Tipografía | **Fontsource** (IBM Plex Sans + JetBrains Mono) | Auto-alojada: cero peticiones a Google, cero CLS, builds offline |
 
 ## Ejecutar localmente
 
@@ -59,9 +59,9 @@ src/
 │   ├── theme-toggle.tsx     Conmutador claro/oscuro
 │   ├── language-toggle.tsx  Conmutador ES/EN
 │   ├── providers/           ThemeProvider + LanguageProvider
-│   ├── sections/            hero · about · services · experience · contact
+│   ├── sections/            hero · about · skills · experience · services · contact
 │   └── ui/                  section · reveal · icons
-├── hooks/              use-active-section · use-typewriter · use-clock · use-mounted
+├── hooks/              use-active-section · use-clock · use-mounted
 ├── i18n/
 │   ├── config.ts       Idiomas soportados
 │   └── dictionary.ts   ★ TODOS LOS TEXTOS (ES + EN)
