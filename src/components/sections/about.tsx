@@ -45,10 +45,19 @@ export function About() {
             as="ul"
             className="mt-[var(--space-stack)] divide-y divide-border border-y border-border"
           >
-            {t.about.education.map((item) => (
+            {/* `key` por índice y NUNCA por el texto.
+                `key={item.degree}` parecía más honesto, pero `degree` viene del
+                diccionario: al cambiar de idioma la clave pasaba de «Software
+                Engineering» a «Ingeniería de Software», React desmontaba las
+                filas y montaba otras nuevas, y las nuevas arrancan en
+                `opacity: 0` esperando al observador de scroll. Combinado con el
+                `content-visibility: auto` que había en globals.css, ese
+                observador no llegaba a dispararse y la lista se quedaba en
+                blanco. La lista es fija y ordenada: el índice ES su identidad. */}
+            {t.about.education.map((item, index) => (
               <RevealItem
                 as="li"
-                key={item.degree}
+                key={index}
                 className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 py-3.5"
               >
                 <span>
@@ -76,10 +85,17 @@ export function About() {
             as="ul"
             className="mt-[var(--space-stack)] divide-y divide-border border-y border-border"
           >
+            {/* Mismo motivo que en formación: `principle.title` está traducido
+                y como `key` remontaba la lista entera al cambiar de idioma. */}
             {t.about.principles.map((principle, index) => (
-              <RevealItem as="li" key={principle.title} className="py-4">
+              <RevealItem as="li" key={index} className="py-4">
                 <div className="flex items-baseline gap-3">
-                  <span className="font-mono text-data tabular-nums text-accent">
+                  {/* `shrink-0`: la regla global `* { min-width: 0 }` de
+                      globals.css deja que un hijo de flex se encoja por debajo
+                      de su contenido. Sin esto el numeral medía 13 px y se
+                      pintaban 7, o sea «0» y media «1» — peor en español, donde
+                      el título de al lado es más largo y aprieta más. */}
+                  <span className="shrink-0 font-mono text-data tabular-nums text-accent">
                     {String(index + 1).padStart(2, "0")}
                   </span>
                   <div>

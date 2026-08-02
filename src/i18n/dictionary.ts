@@ -21,19 +21,15 @@ type Dictionary = {
   };
   hero: {
     status: { available: string; busy: string };
-    cmdWhoami: string;
-    cmdRole: string;
+    /** Disciplina, en el cintillo superior junto a la ubicación. */
+    discipline: string;
     intro: string;
+    /** Rótulo del bloque de titular: la publicación revisada por pares. */
+    leadEyebrow: string;
     ctaPrimary: string;
     ctaSecondary: string;
     ctaCv: string;
     stats: { value: string; label: string }[];
-    /** Etiquetas de la placa de identidad SHA-256 del hero. */
-    hashLabel: string;
-    hashVerify: string;
-    hashVerified: string;
-    hashComputing: string;
-    hashLegend: string;
   };
   about: {
     index: string;
@@ -125,8 +121,8 @@ export const dictionaries: Record<Locale, Dictionary> = {
         available: "disponible para nuevas oportunidades",
         busy: "agenda completa por ahora",
       },
-      cmdWhoami: "whoami",
-      cmdRole: "cat rol.txt",
+      discipline: "seguridad de la información",
+      leadEyebrow: "publicación revisada por pares",
       intro:
         "Ingeniero de software especializado en seguridad de la información. Gestiono vulnerabilidades, administro sistemas de gestión de seguridad bajo ISO/IEC 27001 y construyo software pensando en la integridad, disponibilidad y confidencialidad de los datos desde el primer commit.",
       ctaPrimary: "Ver experiencia",
@@ -143,12 +139,6 @@ export const dictionaries: Record<Locale, Dictionary> = {
         },
         { value: String(counts.roles), label: "roles en TI y seguridad" },
       ],
-      hashLabel: "sha-256 · identidad",
-      hashVerify: "Volver a calcular la huella",
-      hashVerified: "verificado",
-      hashComputing: "avalancha",
-      hashLegend:
-        "Rejilla de 64 celdas. Cada celda es uno de los 64 dígitos hexadecimales del SHA-256 de esta identidad, y su intensidad representa el valor del dígito. El digest completo está escrito debajo de la rejilla.",
     },
     about: {
       index: "01",
@@ -275,8 +265,8 @@ export const dictionaries: Record<Locale, Dictionary> = {
         available: "open to new opportunities",
         busy: "fully booked right now",
       },
-      cmdWhoami: "whoami",
-      cmdRole: "cat role.txt",
+      discipline: "information security",
+      leadEyebrow: "peer-reviewed publication",
       intro:
         "Software engineer specialising in information security. I manage vulnerabilities, administer security management systems under ISO/IEC 27001, and build software with the integrity, availability and confidentiality of data in mind from the first commit.",
       ctaPrimary: "View experience",
@@ -293,12 +283,6 @@ export const dictionaries: Record<Locale, Dictionary> = {
         },
         { value: String(counts.roles), label: "roles in IT and security" },
       ],
-      hashLabel: "sha-256 · identity",
-      hashVerify: "Recompute the fingerprint",
-      hashVerified: "verified",
-      hashComputing: "avalanche",
-      hashLegend:
-        "A grid of 64 cells. Each cell is one of the 64 hexadecimal digits of the SHA-256 digest of this identity, and its intensity represents that digit's value. The full digest is written below the grid.",
     },
     about: {
       index: "01",

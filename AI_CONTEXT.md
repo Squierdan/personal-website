@@ -72,17 +72,13 @@ components/command-palette.tsx Paleta ⌘K + atajos globales T / L
 components/theme-toggle.tsx    Presentado como bandera --theme=dark
 components/language-toggle.tsx Presentado como bandera --lang=es
 components/providers/          ThemeProvider (next-themes) + LanguageProvider (contexto propio)
-components/sections/*.tsx      hero · about · services · experience · contact
+components/sections/*.tsx      hero (portada editorial) · about · services · experience · contact
 components/ui/section.tsx      <Section> y <SectionHeading> (numeral de plancha + regla + título)
-components/ui/hash-portrait.tsx  FIRMA del sitio: la placa SHA-256 del hero
 components/ui/reveal.tsx       <Reveal> · <RevealGroup>/<RevealItem> · <RevealRule>
 components/ui/icons.tsx        GitHub · LinkedIn · X
 hooks/use-active-section.ts    IntersectionObserver
-hooks/use-typewriter.ts        Efecto de tecleo (respeta reduced-motion)
 hooks/use-clock.ts             Reloj vía useSyncExternalStore
 hooks/use-mounted.ts           Bandera de hidratación
-hooks/use-digest.ts            SHA-256 + secuencia de avalancha de la placa
-hooks/use-prefers-reduced-motion.ts  Preferencia de movimiento, reactiva
 ```
 
 ## 4. Reglas obligatorias
@@ -144,7 +140,7 @@ Motion **debe** llevar `"use client";` en la primera línea.
 
 ### 4.4 Hidratación
 El idioma y el tema se resuelven en el cliente. Para cualquier valor que
-difiera entre servidor y cliente (hora, tema resuelto, texto tecleado), usa
+difiera entre servidor y cliente (la hora del hero, el tema resuelto), usa
 `useMounted()` y renderiza un marcador neutro mientras `mounted === false`.
 
 ### 4.5 ESLint — la trampa más frecuente
@@ -249,7 +245,7 @@ que se impone a lo que escriba Framer, en esta versión y en las futuras.
 **Contrato: todo elemento de Framer Motion que parta de `opacity: 0` tiene que
 llevar `data-reveal`.** Ya lo llevan los cuatro componentes de `ui/reveal.tsx`,
 los ocho pasos del arranque del hero, las filas de la tabla de roles y el menú
-móvil. No lo pongas en la barra de progreso de scroll ni en la placa del hero:
+móvil. No lo pongas en la barra de progreso de scroll:
 esas animan `scaleX`/`scale` legítimamente y la regla las rompería.
 
 Aparte, `useDigest` consulta la preferencia con `usePrefersReducedMotion` porque
@@ -275,8 +271,9 @@ Reglas del sistema:
   único sitio con una cadena de retardos explícita. En el resto de la página se
   usa `<RevealGroup>` + `<RevealItem>`, que reparte la entrada desde el
   contenedor: no calcules `delay` a mano por hijo.
-- **La firma es la placa del hero.** El peso visual se gasta ahí y en el bloque
-  de publicación; todo lo demás se mantiene callado a propósito.
+- **El peso visual se gasta en la portada.** El titular, la entradilla y el
+  artículo destacado; de ahí para abajo la página se mantiene callada a
+  propósito.
 
 Utilidades relacionadas: `.scan-row` (barrido de escáner sobre una fila
 interactiva, sustituye al antiguo `.row-hover`) y `.stencil` (numeral de plancha
@@ -284,13 +281,66 @@ en contorno).
 
 > ⚠️ **`color-mix()` no interpola en una transición.** Si animas
 > `background-color` con un valor `color-mix(in srgb, var(--x) N%, transparent)`,
-> el navegador deja la transición congelada en el valor inicial (medido: las 64
-> celdas de la placa se quedaban en 0,08 con el `style` inline correcto). Usa un
-> color sólido y anima `opacity`, que además va al compositor.
+> el navegador deja la transición congelada en el valor inicial. Usa un color
+> sólido y anima `opacity`, que además va al compositor.
 
 > ⚠️ **`min-h-*` no genera CSS en este proyecto.** `min-h-9` no produce ninguna
 > regla (`min-height` queda en `auto`). Usa `h-9` con `inline-flex items-center`,
 > que es lo que ya emplea el resto del sitio.
+
+### 4.9 Contenido invisible — el fallo más caro de este sitio
+
+Las apariciones arrancan en `opacity: 0` y sólo las sube el JavaScript cuando un
+IntersectionObserver dispara. **Cada vez que algo impide que ese observador
+dispare, el contenido no se degrada: desaparece.** Ha pasado tres veces por tres
+causas distintas, así que trátalo como una clase de fallo, no como un bug.
+
+| Causa | Síntoma | Estado |
+|---|---|---|
+| `prefers-reduced-motion` | Framer deja el elemento en `initial` | Red en `globals.css` (§4.7) |
+| Sin JavaScript | Nada sube la opacidad nunca | Red `@media (scripting: none)` |
+| `content-visibility: auto` | El observador no ve contenido omitido | **Regla eliminada** |
+| `key` traducida en un `.map()` | Cambiar de idioma remonta y reinicia a `opacity: 0` | Reglas abajo |
+
+**Regla 1 — `content-visibility: auto` está prohibido mientras las apariciones
+dependan de un observador.** Ahorraba ~10 ms de layout y costaba secciones
+enteras en blanco. Si lo recuperas, primero cambia el sistema de apariciones.
+
+**Regla 2 — nunca uses una cadena traducida como `key`.** Al cambiar de idioma
+la clave cambia, React desmonta y monta de cero, y lo nuevo arranca invisible.
+
+```tsx
+// MAL: la clave cambia al cambiar de idioma
+{t.about.principles.map((p) => <RevealItem key={p.title} …>)}
+// BIEN: la lista es fija y ordenada, el índice ES su identidad
+{t.about.principles.map((p, i) => <RevealItem key={i} …>)}
+// BIEN también: un campo que no se traduce
+{work.map((item) => <li key={item.org + item.title.en} …>)}
+```
+
+Esto era exactamente el bug de «al cambiar a español se queda una sección en
+blanco»: sólo se veía hacia el español porque el sitio abre en inglés y nadie
+hace el cambio al revés.
+
+**Cómo comprobarlo antes de entregar** — en la consola del navegador, a 375 px,
+tras recorrer la página entera en español:
+
+```js
+[...document.querySelectorAll('main *')]
+  .filter(el => parseFloat(getComputedStyle(el).opacity) < 0.9
+             && el.getBoundingClientRect().height > 0).length   // tiene que dar 0
+```
+
+### 4.10 Flex + la regla global `min-width: 0`
+
+`@layer base { * { min-width: 0 } }` (§4.2) deja que **cualquier** hijo de un
+flex se encoja por debajo de su contenido. Todo elemento de ancho fijo dentro de
+un flex —numerales, iconos, insignias— necesita `shrink-0` explícito.
+
+Sin él, los numerales `01`–`04` de la sección 01 medían 13 px y se pintaban 7:
+se veía «0» y media «1». Se notaba más en español, donde el texto contiguo es
+más largo y aprieta más. Para detectarlo, `scrollWidth > clientWidth` en
+elementos hoja delata cualquier recorte de este tipo.
 
 ## 5. Recetas frecuentes
 
@@ -358,10 +408,10 @@ Revisión manual mínima:
 - abrir la paleta con ⌘K / Ctrl+K y navegar con flechas + Enter
 - probar a 360 px, 768 px y 1440 px de ancho
 - navegar toda la página solo con Tab y comprobar que el foco es visible
-- comprobar que la placa del hero recorre la avalancha y termina en `verificado`,
-  y que el botón de recalcular la vuelve a ejecutar
-- activar «reducir movimiento» en el sistema: la placa debe aparecer ya fijada y
-  el barrido de las filas no debe ejecutarse
+- **cambiar a español EN EL MÓVIL y recorrer la página entera**: ninguna
+  sección puede quedarse en blanco (ver §4.9)
+- activar «reducir movimiento» en el sistema: el barrido de las filas no debe
+  ejecutarse y ningún bloque puede quedarse invisible
 
 ## 7. Estado actual y pendientes conocidos
 
@@ -389,6 +439,23 @@ matriz de capacidades de dos columnas, certificaciones alineadas en registro con
 filetes que cruzan las columnas (y sin los trece checks redundantes), lecturas
 del hero integradas dentro de la placa como pie del instrumento, y cifras del
 hero derivadas de `counts` en `content.ts`.
+
+**Hecho en el rediseño editorial (portada como titular):** se retira el
+retrato-hash SHA-256 y con él `use-digest` y `use-prefers-reduced-motion`; se
+retira el tecleo automático y `use-typewriter`; el hero se recompone como
+portada de revista técnica —cabecera, nombre, entradilla y **la publicación de
+Springer como artículo destacado**, leída de `content.ts` para que haya una sola
+fuente de verdad—; pasos tipográficos `--step-deck` y `--step-lead` con la
+jerarquía medida y monótona (84 → 44 → 36 → 22 → 17 en escritorio); y las tres
+correcciones de contenido invisible de §4.9 y §4.10.
+
+> **Por qué se fue el retrato-hash.** Era una rejilla de 8×8 donde cada celda era
+> un dígito del SHA-256 de la identidad. Estaba bien construido y bien
+> argumentado, y aun así se quitó: el propio dueño del sitio preguntó para qué
+> servía. Un elemento que necesita un párrafo de explicación para justificarse no
+> está comunicando, está pidiendo que lo descifren, y en una portada que tiene 30
+> segundos para convencer a un reclutador eso es espacio gastado. La lección para
+> quien siga: en este sitio, prefiere el dato verificable al gesto ingenioso.
 
 **Pendiente (requiere datos o decisiones del usuario):**
 

@@ -305,7 +305,10 @@ function Publication({
         </span>
       </div>
 
-      <h4 className="mt-5 max-w-3xl text-balance text-2xl font-semibold leading-[1.12] tracking-[-0.02em] sm:text-[2rem]">
+      {/* Un escalón por debajo del titular de la portada, a propósito: allí
+          este artículo es la noticia y aquí es el desarrollo. Si los dos se
+          componen al mismo cuerpo, la página tiene dos primeras páginas. */}
+      <h4 className="mt-5 max-w-3xl text-balance font-semibold leading-[1.15] tracking-[-0.02em] text-[length:var(--step-h3)]">
         {item.title[locale]}
       </h4>
 

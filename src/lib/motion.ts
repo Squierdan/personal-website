@@ -14,8 +14,8 @@ import type { Variants } from "framer-motion";
  *     al navegador a recalcular el layout en cada fotograma.
  *   · La salida es más rápida que la entrada (~65 %): así la interfaz se siente
  *     receptiva en vez de lenta.
- *   · Todo degrada con `prefers-reduced-motion` (ver globals.css y
- *     `usePrefersReducedMotion`).
+ *   · Todo degrada con `prefers-reduced-motion`, y la garantía es declarativa:
+ *     vive en `globals.css`, no en JavaScript. Ver §4.7 y §4.9 de AI_CONTEXT.md.
  * ============================================================================
  */
 

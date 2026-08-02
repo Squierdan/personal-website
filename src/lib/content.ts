@@ -135,9 +135,14 @@ export type WorkItem = {
 
 export const work: WorkItem[] = [
   {
+    /* Sin el sufijo «· publicación científica» que llevaba antes: ahora este
+       título se compone como el titular de la portada y el rótulo que tiene
+       encima ya dice «publicación revisada por pares / primer autor / 2025».
+       Repetirlo en el titular era decir dos veces lo mismo en dos cuerpos
+       distintos. Nombrar el protocolo por lo que es se sostiene solo. */
     title: {
-      es: "Protocolo Nested-C · publicación científica",
-      en: "Nested-C protocol · peer-reviewed publication",
+      es: "Protocolo de consenso Nested-C",
+      en: "Nested-C consensus protocol",
     },
     org: "Annals of Telecommunications — Springer Nature",
     category: "research",

@@ -96,7 +96,17 @@
   --fs-body: 1.0625rem; /* 17px */
 
   --step-h3: clamp(1.0625rem, 1.1vw + 0.85rem, 1.3rem);
-  --step-h2: clamp(1.85rem, 4vw, 3rem);
+  /** Entradilla: el escalón entre el texto de lectura y el titular. Sin él,
+      una portada salta de 17 px a 48 px y la jerarquía se rompe en el hueco. */
+  --step-deck: clamp(1.125rem, 0.6vw + 1rem, 1.4rem);
+  /** Titular del artículo destacado: la SEGUNDA cosa que se lee en la página,
+      sólo por detrás del nombre.
+      Medido a 1440 px, la primera versión dejaba el titular en 38 px y los
+      títulos de sección en 48: un rótulo de navegación pesaba más que la
+      noticia de portada, que es exactamente la jerarquía al revés. Ahora el
+      titular va por delante (44 px) y los títulos de sección bajan a 36. */
+  --step-lead: clamp(1.6rem, 2.4vw + 0.7rem, 2.75rem);
+  --step-h2: clamp(1.45rem, 2.2vw + 0.6rem, 2.25rem);
   --step-display: clamp(2.6rem, 7.2vw, 5.25rem);
 }
 
@@ -462,18 +472,26 @@ main > section {
   contain: layout style;
 }
 
-/* El navegador omite por completo el layout y el pintado de las secciones que
-   están fuera de la pantalla, y las procesa al acercarse durante el scroll.
-   Medido: el peor caso de layout baja de 12,9 ms a 2,3 ms.
+/* ⚠️ AQUÍ VIVÍA `content-visibility: auto`, Y SE HA QUITADO A PROPÓSITO.
+   -------------------------------------------------------------------------
+   Ahorraba layout (el peor caso bajaba de 12,9 ms a 2,3 ms) pero causaba el
+   bug de «una sección entera se queda en blanco»:
 
-   · Se excluye la primera sección (el hero), que siempre es visible al cargar.
-   · `contain-intrinsic-size: auto …` hace que el navegador recuerde la altura
-     real ya medida, de modo que la barra de scroll no salta y los enlaces
-     ancla (#about, #contact) siguen aterrizando en el sitio correcto. */
-main > section:not(:first-of-type) {
-  content-visibility: auto;
-  contain-intrinsic-size: auto 1400px;
-}
+   `content-visibility: auto` hace que el navegador **omita por completo** el
+   contenido fuera de pantalla. Un IntersectionObserver no dispara sobre
+   contenido omitido, y las apariciones de este sitio (`whileInView` de Framer
+   Motion) dependen de ese observador para pasar de `opacity: 0` a `opacity: 1`.
+   Resultado: la sección se pintaba, pero todo lo de dentro se quedaba
+   transparente. Se veía un hueco vacío del alto de la sección.
+
+   Saltaba sobre todo al cambiar de idioma en el móvil, porque el cambio
+   remontaba los componentes —volvían a `opacity: 0`— justo mientras la sección
+   estaba omitida y, por tanto, ciega al observador. Y sólo se notaba hacia el
+   español porque el sitio abre en inglés: nadie hace el cambio al revés.
+
+   Es un fallo de contenido invisible, no de rendimiento: 10 ms de layout no
+   valen una sección en blanco. Si algún día hace falta recuperarlo, primero
+   hay que sustituir las apariciones por algo que no dependa de un observador. */
 
 /* ==========================================================================
    PREFERENCIA DE MOVIMIENTO REDUCIDO (accesibilidad)
@@ -519,6 +537,26 @@ main > section:not(:first-of-type) {
      Sólo afecta a lo marcado con `data-reveal`: la barra de progreso de scroll
      y la placa del hero animan `scaleX`/`scale` legítimamente y NO llevan esa
      marca. */
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* ==========================================================================
+   SEGUNDA RED: SIN JAVASCRIPT, EL CONTENIDO SE VE
+   --------------------------------------------------------------------------
+   Las apariciones arrancan en `opacity: 0` y sólo las sube Framer Motion. Si
+   el JavaScript no llega a ejecutarse —falla la red, un bloqueador, un
+   rastreador que no ejecuta scripts— todo lo que está bajo el pliegue se queda
+   invisible y la página aparenta estar vacía.
+
+   `scripting: none` cubre exactamente ese caso. No sustituye a la regla de
+   movimiento reducido de arriba: aquella actúa con JS activo pero con la
+   animación suprimida; ésta actúa sin JS. Son dos fallos distintos y hacen
+   falta las dos.
+   ========================================================================== */
+@media (scripting: none) {
   [data-reveal] {
     opacity: 1 !important;
     transform: none !important;
