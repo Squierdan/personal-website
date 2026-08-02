@@ -1,0 +1,185 @@
+"use client";
+
+import { Section, SectionHeading } from "@/components/ui/section";
+import { Reveal, RevealGroup, RevealItem } from "@/components/ui/reveal";
+import { Meter } from "@/components/ui/meter";
+import { useLanguage } from "@/components/providers/language-provider";
+import {
+  certificationsByYear,
+  counts,
+  languages,
+  skills,
+  toolkit,
+} from "@/lib/content";
+
+/**
+ * ============================================================================
+ *  HABILIDADES Y CERTIFICACIONES
+ * ============================================================================
+ *  Sección nueva, y es la que ahora carga con el peso de la página.
+ *
+ *  Antes, lo que Elian quiere que se vea —lo que sabe hacer y lo que ha
+ *  certificado— vivía enterrado como dos sub-bloques al final de la sección 01,
+ *  después de cuatro párrafos de prosa, mientras la portada la ocupaba un
+ *  artículo en el que su aporte fue la redacción. Estaba al revés.
+ *
+ *  Tres bloques, de más a menos concreto:
+ *   1. Herramientas CON nivel declarado en el CV, con medidor.
+ *   2. El resto del instrumental, sin puntuar: son etiquetas, no medidores.
+ *   3. Las quince certificaciones, agrupadas por año.
+ *
+ *  El agrupado por año no es decorativo: nueve de las quince son de 2025. Sin
+ *  agrupar, eso es una lista larga; agrupado, es una trayectoria que acelera, y
+ *  se lee sin que nadie tenga que escribirlo en una frase de relleno.
+ * ============================================================================
+ */
+export function Skills() {
+  const { t, locale } = useLanguage();
+
+  return (
+    <Section id="skills">
+      <SectionHeading
+        index={t.skills.index}
+        eyebrow={t.skills.eyebrow}
+        title={t.skills.title}
+        subtitle={t.skills.subtitle}
+      />
+
+      {/* ------------------------------------------- 1 · Con nivel declarado */}
+      <Reveal>
+        <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+          <h3 className="label">{t.skills.ratedTitle}</h3>
+          <p className="text-meta text-fg-subtle">{t.skills.ratedNote}</p>
+        </div>
+      </Reveal>
+
+      <RevealGroup className="mt-[var(--space-stack)] grid gap-px border border-border bg-border sm:grid-cols-2">
+        {skills.map((group) => (
+          <RevealItem key={group.id} className="bg-bg p-5 sm:p-6">
+            <p className="font-mono text-data text-accent">
+              {group.group[locale]}/
+            </p>
+
+            <ul className="mt-4 space-y-3">
+              {group.items.map((skill) => (
+                <li
+                  key={skill.name}
+                  className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1"
+                >
+                  <span className="text-ui text-fg">{skill.name}</span>
+                  <Meter
+                    level={skill.level}
+                    label={t.skills.levels[skill.level]}
+                  />
+                </li>
+              ))}
+            </ul>
+          </RevealItem>
+        ))}
+      </RevealGroup>
+
+      {/* ------------------------------------------------ 2 · Sin puntuar */}
+      <Reveal>
+        <h3 className="label mt-[var(--space-block)]">
+          {t.skills.toolkitTitle}
+        </h3>
+      </Reveal>
+      <RevealGroup className="mt-[var(--space-stack)] grid gap-x-8 gap-y-6 sm:grid-cols-2 lg:grid-cols-4">
+        {toolkit.map((group) => (
+          <RevealItem key={group.id}>
+            <p className="font-mono text-data text-accent">
+              {group.group[locale]}/
+            </p>
+            <ul className="mt-3 flex flex-wrap gap-1.5">
+              {group.items.map((item) => (
+                <li
+                  key={item}
+                  className="border border-border px-2 py-1 font-mono text-data text-fg-muted transition-colors duration-[var(--dur-micro)] hover:border-border-strong hover:text-fg"
+                >
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </RevealItem>
+        ))}
+      </RevealGroup>
+
+      {/* --------------------------------------------------- 3 · Idiomas */}
+      <Reveal>
+        <h3 className="label mt-[var(--space-block)]">
+          {t.skills.languagesTitle}
+        </h3>
+      </Reveal>
+      <RevealGroup
+        as="ul"
+        className="mt-[var(--space-stack)] flex flex-wrap gap-px border border-border bg-border"
+      >
+        {languages.map((language) => (
+          <RevealItem
+            as="li"
+            key={language.id}
+            className="flex-1 bg-bg px-5 py-4"
+          >
+            <span className="block text-ui text-fg">
+              {language.name[locale]}
+            </span>
+            <span className="mt-1 block font-mono text-data text-accent">
+              {language.level[locale]}
+            </span>
+          </RevealItem>
+        ))}
+      </RevealGroup>
+
+      {/* --------------------------------------------- 4 · Certificaciones */}
+      <Reveal>
+        <div className="mt-[var(--space-block)] flex flex-wrap items-baseline gap-x-4 gap-y-1">
+          <h3 className="label">{t.skills.certificationsTitle}</h3>
+          <span className="font-mono text-data tabular-nums text-accent">
+            {counts.certifications}
+          </span>
+          <p className="text-meta text-fg-subtle">{t.skills.certificationsNote}</p>
+        </div>
+      </Reveal>
+
+      <div className="mt-[var(--space-stack)] border-t border-border">
+        {certificationsByYear.map((bucket) => (
+          <div
+            key={bucket.year}
+            className="grid gap-x-8 border-b border-border py-6 sm:grid-cols-[5rem_1fr]"
+          >
+            {/* El año, con su recuento. La columna de años convierte la lista
+                en una cronología sin necesidad de dibujar un eje. */}
+            <Reveal>
+              <p className="font-mono text-2xl font-semibold tabular-nums leading-none text-fg">
+                {bucket.year}
+              </p>
+              <p className="label mt-1.5">
+                {bucket.items.length}{" "}
+                {bucket.items.length === 1
+                  ? t.skills.certUnitOne
+                  : t.skills.certUnitMany}
+              </p>
+            </Reveal>
+
+            <RevealGroup as="ul" className="mt-4 space-y-2.5 sm:mt-0">
+              {bucket.items.map((cert) => (
+                <RevealItem
+                  as="li"
+                  key={cert.name}
+                  className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-0.5"
+                >
+                  <span className="text-meta leading-snug text-fg">
+                    {cert.name}
+                  </span>
+                  <span className="font-mono text-data text-fg-subtle">
+                    {cert.issuer}
+                  </span>
+                </RevealItem>
+              ))}
+            </RevealGroup>
+          </div>
+        ))}
+      </div>
+    </Section>
+  );
+}

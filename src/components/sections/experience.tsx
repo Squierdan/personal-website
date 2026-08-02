@@ -4,14 +4,13 @@ import { useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { Section, SectionHeading } from "@/components/ui/section";
-import { Reveal, RevealGroup, RevealItem } from "@/components/ui/reveal";
+import { Reveal } from "@/components/ui/reveal";
 import { useLanguage } from "@/components/providers/language-provider";
 import { DUR, EASE_OUT } from "@/lib/motion";
 import {
   categoryLabels,
   work,
   workCategories,
-  type WorkItem,
   type WorkCategory,
 } from "@/lib/content";
 
@@ -21,20 +20,18 @@ type Filter = WorkCategory | "all";
  * ============================================================================
  *  TRAYECTORIA
  * ============================================================================
- *  Dos bloques con jerarquía distinta, y eso es deliberado:
+ *  Un único índice tabular expandible: se lee más rápido que una rejilla de
+ *  tarjetas y escala a decenas de entradas.
  *
- *  1. **Investigación publicada**, arriba y con su propio tratamiento. Antes
- *     era la fila 01 de la tabla con un ★ al lado: un artículo revisado por
- *     pares en Springer Nature, como primer autor, es la credencial que
- *     distingue este perfil, y un reclutador que hojea la tabla se la perdía.
- *     Va en ámbar, el color de énfasis del sistema.
- *  2. **Roles profesionales**, como índice tabular expandible: se lee más
- *     rápido que una rejilla de tarjetas y escala a decenas de entradas.
+ *  ⚠️ LA PUBLICACIÓN YA NO TIENE BLOQUE DESTACADO.
+ *  Tenía uno propio arriba, en ámbar, con la insignia «primer autor». Elian
+ *  corrigió el alcance de su aporte —redacción y algunas ideas para el
+ *  algoritmo, en un equipo de ocho—, así que ahora es una fila más, con su
+ *  categoría «investigación» y el DOI al desplegarla. Sigue estando y sigue
+ *  siendo verificable; lo que se retiró es el énfasis, no el dato.
  *
- *  El reparto se deriva de `category === "research"`, no de una lista fija:
- *  añadir otro artículo a `content.ts` lo coloca solo en el bloque de arriba, y
- *  los filtros sólo ofrecen las categorías que de verdad existen entre los
- *  roles.
+ *  Los filtros se generan sólo con las categorías que existen de verdad entre
+ *  las entradas, así que nunca aparece un filtro que devuelve una tabla vacía.
  * ============================================================================
  */
 export function Experience() {
@@ -42,14 +39,9 @@ export function Experience() {
   const [filter, setFilter] = useState<Filter>("all");
   const [openId, setOpenId] = useState<string | null>(null);
 
-  const publications = useMemo(
-    () => work.filter((item) => item.category === "research"),
-    [],
-  );
-  const roles = useMemo(
-    () => work.filter((item) => item.category !== "research"),
-    [],
-  );
+  /* Sin separar investigación del resto: la publicación es una entrada más de
+     la trayectoria, no un bloque destacado. Ver la nota de `content.ts`. */
+  const roles = work;
 
   const visible = useMemo(
     () =>
@@ -75,23 +67,6 @@ export function Experience() {
         title={t.work.title}
         subtitle={t.work.subtitle}
       />
-
-      {/* ------------------------------------------- Investigación publicada */}
-      {publications.length > 0 ? (
-        <RevealGroup className="mb-16 sm:mb-20">
-          <RevealItem>
-            <h3 className="label">
-              {t.work.publicationsTitle}
-            </h3>
-          </RevealItem>
-
-          {publications.map((item) => (
-            <RevealItem key={item.org}>
-              <Publication item={item} locale={locale} label={t.work.firstAuthor} />
-            </RevealItem>
-          ))}
-        </RevealGroup>
-      ) : null}
 
       {/* ------------------------------------------------ Roles profesionales */}
       <Reveal>
@@ -272,81 +247,5 @@ export function Experience() {
         </p>
       ) : null}
     </Section>
-  );
-}
-
-/* -------------------------------------------------------------------------- */
-
-/**
- * Bloque de publicación. Sin plegar: el detalle completo, la revista, el rol de
- * autoría y el DOI están a la vista, porque es exactamente la información que
- * alguien va a querer contrastar.
- */
-function Publication({
-  item,
-  locale,
-  label,
-}: {
-  item: WorkItem;
-  locale: "es" | "en";
-  label: string;
-}) {
-  return (
-    <article className="corner-marks mt-5 border border-border bg-bg-elevated/50 p-6 sm:p-8">
-      <div className="flex flex-wrap items-center gap-x-3 gap-y-2 font-mono text-data">
-        <span className="border border-amber/40 bg-amber/10 px-2 py-0.5 text-[var(--amber)]">
-          {label}
-        </span>
-        <span className="tabular-nums text-fg-subtle">
-          {item.period[locale]}
-        </span>
-        <span className="text-fg-subtle sm:ml-auto">
-          {categoryLabels[item.category][locale]}
-        </span>
-      </div>
-
-      {/* Un escalón por debajo del titular de la portada, a propósito: allí
-          este artículo es la noticia y aquí es el desarrollo. Si los dos se
-          componen al mismo cuerpo, la página tiene dos primeras páginas. */}
-      <h4 className="mt-5 max-w-3xl text-balance font-semibold leading-[1.15] tracking-[-0.02em] text-[length:var(--step-h3)]">
-        {item.title[locale]}
-      </h4>
-
-      <p className="mt-3 font-mono text-sm text-[var(--amber)]">{item.org}</p>
-
-      <p className="mt-6 max-w-3xl text-ui leading-relaxed text-fg-muted">
-        {item.detail[locale]}
-      </p>
-
-      <ul className="mt-6 flex flex-wrap gap-2">
-        {item.stack.map((tag) => (
-          <li
-            key={tag}
-            className="border border-border px-2 py-0.5 font-mono text-data text-fg-subtle"
-          >
-            {tag}
-          </li>
-        ))}
-      </ul>
-
-      {item.link ? (
-        <div className="mt-7 flex flex-wrap items-center gap-x-5 gap-y-3 border-t border-border pt-6">
-          <a
-            href={item.link}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group inline-flex h-10 items-center gap-2 border border-[var(--amber)] px-4 font-mono text-xs text-[var(--amber)] transition-colors hover:bg-amber/10"
-          >
-            {item.linkLabel?.[locale] ?? item.link}
-            <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-[var(--dur-base)] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-          </a>
-          {/* El DOI, escrito: es el identificador con el que se verifica la
-              publicación en cualquier índice, no sólo el destino del enlace. */}
-          <p className="break-all font-mono text-data text-fg-subtle">
-            {item.link.replace(/^https?:\/\/(www\.)?/, "")}
-          </p>
-        </div>
-      ) : null}
-    </article>
   );
 }

@@ -15,6 +15,7 @@ import { counts } from "@/lib/content";
 type Dictionary = {
   nav: {
     about: string;
+    skills: string;
     services: string;
     work: string;
     contact: string;
@@ -24,8 +25,8 @@ type Dictionary = {
     /** Disciplina, en el cintillo superior junto a la ubicación. */
     discipline: string;
     intro: string;
-    /** Rótulo del bloque de titular: la publicación revisada por pares. */
-    leadEyebrow: string;
+    /** Rótulo de la tira de tecnologías de la portada. */
+    stackLabel: string;
     ctaPrimary: string;
     ctaSecondary: string;
     ctaCv: string;
@@ -38,11 +39,23 @@ type Dictionary = {
     paragraphs: string[];
     educationTitle: string;
     education: { degree: string; school: string; period: string }[];
-    skillsTitle: string;
     principlesTitle: string;
     principles: { title: string; body: string }[];
+  };
+  skills: {
+    index: string;
+    eyebrow: string;
+    title: string;
+    subtitle: string;
+    ratedTitle: string;
+    ratedNote: string;
+    levels: { expert: string; advanced: string };
+    toolkitTitle: string;
+    languagesTitle: string;
     certificationsTitle: string;
     certificationsNote: string;
+    certUnitOne: string;
+    certUnitMany: string;
   };
   services: {
     index: string;
@@ -60,9 +73,7 @@ type Dictionary = {
     colStack: string;
     colYear: string;
     empty: string;
-    publicationsTitle: string;
     rolesTitle: string;
-    firstAuthor: string;
   };
   contact: {
     index: string;
@@ -112,6 +123,7 @@ export const dictionaries: Record<Locale, Dictionary> = {
   es: {
     nav: {
       about: "sobre-mí",
+      skills: "habilidades",
       services: "servicios",
       work: "experiencia",
       contact: "contacto",
@@ -122,7 +134,7 @@ export const dictionaries: Record<Locale, Dictionary> = {
         busy: "agenda completa por ahora",
       },
       discipline: "seguridad de la información",
-      leadEyebrow: "publicación revisada por pares",
+      stackLabel: "trabajo con",
       intro:
         "Ingeniero de software especializado en seguridad de la información. Gestiono vulnerabilidades, administro sistemas de gestión de seguridad bajo ISO/IEC 27001 y construyo software pensando en la integridad, disponibilidad y confidencialidad de los datos desde el primer commit.",
       ctaPrimary: "Ver experiencia",
@@ -133,11 +145,11 @@ export const dictionaries: Record<Locale, Dictionary> = {
           value: String(counts.certifications),
           label: "certificaciones técnicas",
         },
-        {
-          value: String(counts.publications),
-          label: "publicación científica indexada",
-        },
         { value: String(counts.roles), label: "roles en TI y seguridad" },
+        {
+          value: String(counts.skills),
+          label: "herramientas con nivel experto o avanzado",
+        },
       ],
     },
     about: {
@@ -147,7 +159,7 @@ export const dictionaries: Record<Locale, Dictionary> = {
       paragraphs: [
         "Soy estudiante de Ingeniería de Software en la Escuela Politécnica Nacional y profesional de tecnología especializado en seguridad informática. Trabajo en el cruce de tres cosas: sistemas que hay que sostener, normas que hay que cumplir y código que hay que escribir bien.",
         "Mi experiencia cubre gestión de vulnerabilidades con Nessus, administración de un Sistema de Gestión de Seguridad de la Información bajo ISO/IEC 27001 —incluida la auditoría de certificación—, migración de sistemas ERP empresariales y reestructuración de infraestructura de centro de datos.",
-        "En 2025 publiqué como primer autor el protocolo de consenso Nested-C en Annals of Telecommunications (Springer Nature). Me interesa el punto exacto donde la teoría deja de ser un paper y se convierte en algo que corre en producción sin romperse.",
+        "En 2025 participé como coautor en un artículo sobre el protocolo de consenso Nested-C, publicado en Annals of Telecommunications (Springer Nature), aportando en la redacción y en ideas para el algoritmo. Me interesa el punto exacto donde la teoría deja de ser un paper y se convierte en algo que corre en producción sin romperse.",
         "Trabajo con constancia, responsabilidad y comunicación directa. Prefiero explicar un riesgo en términos que la dirección entienda antes que entregar un informe impecable que nadie lee.",
       ],
       educationTitle: "Formación",
@@ -163,7 +175,6 @@ export const dictionaries: Record<Locale, Dictionary> = {
           period: "2012 — 2018",
         },
       ],
-      skillsTitle: "Stack y herramientas",
       principlesTitle: "Cómo trabajo",
       principles: [
         {
@@ -183,11 +194,25 @@ export const dictionaries: Record<Locale, Dictionary> = {
           body: "El mismo hallazgo, explicado al equipo técnico y a la dirección, sin perder precisión en el camino.",
         },
       ],
+    },
+    skills: {
+      index: "02",
+      eyebrow: "habilidades",
+      title: "Lo que sé hacer, y con qué lo he hecho",
+      subtitle:
+        "Herramientas con nivel declarado, el resto del instrumental que uso a diario y quince certificaciones técnicas.",
+      ratedTitle: "Nivel de dominio",
+      ratedNote: "Tal como está declarado en el CV.",
+      levels: { expert: "experto", advanced: "avanzado" },
+      toolkitTitle: "Resto del instrumental",
+      languagesTitle: "Idiomas",
       certificationsTitle: "Certificaciones",
       certificationsNote: "Formación continua en seguridad, redes y sistemas.",
+      certUnitOne: "certificación",
+      certUnitMany: "certificaciones",
     },
     services: {
-      index: "02",
+      index: "04",
       eyebrow: "servicios",
       title: "En qué puedo ayudarte",
       subtitle:
@@ -198,18 +223,16 @@ export const dictionaries: Record<Locale, Dictionary> = {
       eyebrow: "trayectoria",
       title: "Experiencia e investigación",
       subtitle:
-        "Roles profesionales y trabajo publicado. Filtra por área para explorar.",
+        "Roles profesionales, investigación y las áreas de cada uno. Filtra para explorar.",
       filterAll: "todo",
       colName: "rol",
       colStack: "áreas",
       colYear: "periodo",
       empty: "No hay resultados en esta categoría.",
-      publicationsTitle: "Investigación publicada",
-      rolesTitle: "Roles profesionales",
-      firstAuthor: "primer autor",
+      rolesTitle: "Roles y publicaciones",
     },
     contact: {
-      index: "04",
+      index: "05",
       eyebrow: "contacto",
       title: "Hablemos de tu proyecto o vacante",
       subtitle:
@@ -256,6 +279,7 @@ export const dictionaries: Record<Locale, Dictionary> = {
   en: {
     nav: {
       about: "about",
+      skills: "skills",
       services: "services",
       work: "experience",
       contact: "contact",
@@ -266,7 +290,7 @@ export const dictionaries: Record<Locale, Dictionary> = {
         busy: "fully booked right now",
       },
       discipline: "information security",
-      leadEyebrow: "peer-reviewed publication",
+      stackLabel: "i work with",
       intro:
         "Software engineer specialising in information security. I manage vulnerabilities, administer security management systems under ISO/IEC 27001, and build software with the integrity, availability and confidentiality of data in mind from the first commit.",
       ctaPrimary: "View experience",
@@ -277,11 +301,11 @@ export const dictionaries: Record<Locale, Dictionary> = {
           value: String(counts.certifications),
           label: "technical certifications",
         },
-        {
-          value: String(counts.publications),
-          label: "peer-reviewed publication",
-        },
         { value: String(counts.roles), label: "roles in IT and security" },
+        {
+          value: String(counts.skills),
+          label: "tools at expert or advanced level",
+        },
       ],
     },
     about: {
@@ -291,7 +315,7 @@ export const dictionaries: Record<Locale, Dictionary> = {
       paragraphs: [
         "I'm a Software Engineering student at Escuela Politécnica Nacional and a technology professional specialising in IT security. I work where three things meet: systems that have to stay up, standards that have to be met, and code that has to be written well.",
         "My experience covers vulnerability management with Nessus, administering an Information Security Management System under ISO/IEC 27001 — including the certification audit — enterprise ERP migrations, and data centre infrastructure restructuring.",
-        "In 2025 I published the Nested-C consensus protocol as first author in Annals of Telecommunications (Springer Nature). I'm drawn to the exact point where theory stops being a paper and becomes something that runs in production without breaking.",
+        "In 2025 I co-authored a paper on the Nested-C consensus protocol, published in Annals of Telecommunications (Springer Nature), contributing to the writing and to ideas for the algorithm. I'm drawn to the exact point where theory stops being a paper and becomes something that runs in production without breaking.",
         "I work with consistency, accountability and direct communication. I'd rather explain a risk in terms leadership actually understands than deliver a flawless report nobody reads.",
       ],
       educationTitle: "Education",
@@ -307,7 +331,6 @@ export const dictionaries: Record<Locale, Dictionary> = {
           period: "2012 — 2018",
         },
       ],
-      skillsTitle: "Stack & tooling",
       principlesTitle: "How I work",
       principles: [
         {
@@ -327,12 +350,26 @@ export const dictionaries: Record<Locale, Dictionary> = {
           body: "The same finding, explained to the technical team and to leadership, without losing precision.",
         },
       ],
+    },
+    skills: {
+      index: "02",
+      eyebrow: "skills",
+      title: "What I can do, and what I've done it with",
+      subtitle:
+        "Tools with a declared proficiency level, the rest of the kit I use day to day, and fifteen technical certifications.",
+      ratedTitle: "Proficiency",
+      ratedNote: "As declared on the CV.",
+      levels: { expert: "expert", advanced: "advanced" },
+      toolkitTitle: "Rest of the toolkit",
+      languagesTitle: "Languages",
       certificationsTitle: "Certifications",
       certificationsNote:
         "Continuous training in security, networking and systems.",
+      certUnitOne: "certification",
+      certUnitMany: "certifications",
     },
     services: {
-      index: "02",
+      index: "04",
       eyebrow: "services",
       title: "How I can help",
       subtitle:
@@ -343,18 +380,16 @@ export const dictionaries: Record<Locale, Dictionary> = {
       eyebrow: "track record",
       title: "Experience & research",
       subtitle:
-        "Professional roles and published work. Filter by area to explore.",
+        "Professional roles, research, and the areas behind each. Filter to explore.",
       filterAll: "all",
       colName: "role",
       colStack: "areas",
       colYear: "period",
       empty: "No results in this category.",
-      publicationsTitle: "Published research",
-      rolesTitle: "Professional roles",
-      firstAuthor: "first author",
+      rolesTitle: "Roles & publications",
     },
     contact: {
-      index: "04",
+      index: "05",
       eyebrow: "contact",
       title: "Let's talk about your project or role",
       subtitle:

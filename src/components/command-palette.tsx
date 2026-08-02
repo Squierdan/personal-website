@@ -56,8 +56,9 @@ export function CommandPalette() {
     const nav: Command[] = [
       { id: "top", label: t.footer.backToTop, hash: "top" },
       { id: "about", label: t.nav.about, hash: "about" },
-      { id: "services", label: t.nav.services, hash: "services" },
+      { id: "skills", label: t.nav.skills, hash: "skills" },
       { id: "experience", label: t.nav.work, hash: "experience" },
+      { id: "services", label: t.nav.services, hash: "services" },
       { id: "contact", label: t.nav.contact, hash: "contact" },
     ].map(({ id, label, hash }) => ({
       id,

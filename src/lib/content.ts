@@ -135,11 +135,21 @@ export type WorkItem = {
 
 export const work: WorkItem[] = [
   {
-    /* Sin el sufijo «· publicación científica» que llevaba antes: ahora este
-       título se compone como el titular de la portada y el rótulo que tiene
-       encima ya dice «publicación revisada por pares / primer autor / 2025».
-       Repetirlo en el titular era decir dos veces lo mismo en dos cuerpos
-       distintos. Nombrar el protocolo por lo que es se sostiene solo. */
+    /* ⚠️ APORTE DECLARADO CON PRECISIÓN, Y ES DELIBERADO.
+       Una versión anterior de este sitio presentaba el artículo como el titular
+       de la portada y con la insignia «primer autor» en ámbar. El propio Elian
+       lo corrigió: su aporte real fue la redacción y algunas ideas para el
+       algoritmo del protocolo, dentro de un equipo de ocho autores.
+
+       Sobrevender aquí es el peor negocio posible. Un reclutador que abra el
+       DOI ve la lista de autores y el alcance del trabajo en treinta segundos, y
+       la distancia entre lo que promete la web y lo que dice el paper le cuesta
+       a Elian toda la credibilidad del resto de la página, incluida la parte
+       que sí es sólida. Declarado con exactitud, sigue siendo una credencial
+       poco común para alguien de pregrado.
+
+       NO reintroduzcas «primer autor» ni devuelvas esto a la portada sin que
+       Elian lo pida explícitamente. */
     title: {
       es: "Protocolo de consenso Nested-C",
       en: "Nested-C consensus protocol",
@@ -148,14 +158,14 @@ export const work: WorkItem[] = [
     category: "research",
     period: { es: "2025", en: "2025" },
     summary: {
-      es: "Protocolo de consenso diseñado para la arquitectura NestedChain.",
-      en: "Consensus protocol designed for the NestedChain architecture.",
+      es: "Coautoría en un artículo sobre un protocolo de consenso para NestedChain.",
+      en: "Co-authored a paper on a consensus protocol for NestedChain.",
     },
     detail: {
-      es: "Artículo revisado por pares y publicado en Annals of Telecommunications (Springer Nature), donde figuro como primer autor. El trabajo propone Nested-C, un protocolo de consenso pensado para la arquitectura NestedChain, e incluye su diseño, formalización y análisis frente a las alternativas existentes. Autores: Caizapanta, E., Maldonado-Ruiz, D., Tufiño, C., Vásconez, G., Castro, E., Pabón, T., Torres, J. y El Madhoun, N.",
-      en: "Peer-reviewed article published in Annals of Telecommunications (Springer Nature), where I appear as first author. The work proposes Nested-C, a consensus protocol designed for the NestedChain architecture, covering its design, formalisation and analysis against existing alternatives. Authors: Caizapanta, E., Maldonado-Ruiz, D., Tufiño, C., Vásconez, G., Castro, E., Pabón, T., Torres, J. and El Madhoun, N.",
+      es: "Artículo revisado por pares publicado en Annals of Telecommunications (Springer Nature), sobre Nested-C, un protocolo de consenso para la arquitectura NestedChain. Formé parte de un equipo de ocho autores: mi aporte se centró en la redacción del artículo y en algunas ideas para el algoritmo del protocolo. Autores: Caizapanta, E., Maldonado-Ruiz, D., Tufiño, C., Vásconez, G., Castro, E., Pabón, T., Torres, J. y El Madhoun, N.",
+      en: "Peer-reviewed article published in Annals of Telecommunications (Springer Nature) on Nested-C, a consensus protocol for the NestedChain architecture. I was part of an eight-author team: my contribution centred on writing the paper and on some ideas for the protocol's algorithm. Authors: Caizapanta, E., Maldonado-Ruiz, D., Tufiño, C., Vásconez, G., Castro, E., Pabón, T., Torres, J. and El Madhoun, N.",
     },
-    stack: ["Blockchain", "Protocolos de consenso", "Investigación"],
+    stack: ["Redacción técnica", "Protocolos de consenso", "Blockchain"],
     link: "https://doi.org/10.1007/s12243-025-01104-1",
     linkLabel: { es: "ver artículo", en: "read paper" },
   },
@@ -216,25 +226,125 @@ export const work: WorkItem[] = [
 ];
 
 /* -------------------------------------------------------------------------- */
-/*  STACK                                                                      */
+/*  HABILIDADES CON NIVEL DECLARADO                                            */
 /* -------------------------------------------------------------------------- */
 
-export const stack: { group: Localized; items: string[] }[] = [
+/**
+ * ⚠️ Los niveles salen TAL CUAL del apartado HABILIDADES del CV
+ * (`public/Elian-Caizapanta-CV-ES.pdf`). El CV sólo declara dos: «Experto» y
+ * «Avanzado», y sólo para diez herramientas.
+ *
+ * **No inventes un nivel para una herramienta que el CV no puntúa.** Si algo no
+ * tiene nivel declarado, va en `toolkit` de abajo, que es una lista sin
+ * puntuar. Un medidor es una afirmación cuantitativa: o sale del CV o no se
+ * pinta. Es el mismo criterio que hizo bajar el énfasis de la publicación.
+ */
+export type SkillLevel = "expert" | "advanced";
+
+export type SkillGroup = {
+  /** Clave estable para React: NUNCA uses el nombre traducido (ver §4.9). */
+  id: string;
+  group: Localized;
+  items: { name: string; level: SkillLevel }[];
+};
+
+export const skills: SkillGroup[] = [
   {
+    id: "dev",
+    group: { es: "lenguajes y desarrollo", en: "languages & development" },
+    items: [
+      { name: "Python", level: "expert" },
+      { name: "Java", level: "expert" },
+      { name: "HTML · CSS · JavaScript", level: "expert" },
+    ],
+  },
+  {
+    id: "sys",
+    group: { es: "sistemas y nube", en: "systems & cloud" },
+    items: [
+      { name: "VirtualBox", level: "expert" },
+      { name: "Linux", level: "advanced" },
+      { name: "Microsoft Azure", level: "advanced" },
+    ],
+  },
+  {
+    id: "sec",
+    group: { es: "seguridad ofensiva", en: "offensive security" },
+    items: [{ name: "Pentesting", level: "advanced" }],
+  },
+  {
+    id: "office",
+    group: { es: "ofimática y datos", en: "office & data" },
+    items: [
+      { name: "Microsoft Excel", level: "expert" },
+      { name: "Microsoft Word", level: "expert" },
+      { name: "Microsoft PowerPoint", level: "expert" },
+    ],
+  },
+];
+
+/* -------------------------------------------------------------------------- */
+/*  RESTO DEL INSTRUMENTAL — sin nivel declarado                               */
+/* -------------------------------------------------------------------------- */
+
+/** Herramientas y conocimientos del CV que no llevan nivel. Sin medidor. */
+export const toolkit: { id: string; group: Localized; items: string[] }[] = [
+  {
+    id: "security",
     group: { es: "seguridad", en: "security" },
-    items: ["Nessus", "OWASP Top 10", "Pentesting", "Criptografía", "ISO 27001"],
+    items: ["Nessus", "OWASP Top 10", "ISO/IEC 27001", "Criptografía", "SGSI"],
   },
   {
-    group: { es: "lenguajes", en: "languages" },
-    items: ["Python", "Java", "JavaScript", "HTML / CSS", "SQL"],
+    id: "infra",
+    group: { es: "sistemas y redes", en: "systems & networking" },
+    items: ["Windows Server", "Redes on-premise", "DataCenter", "HelpDesk"],
   },
   {
-    group: { es: "sistemas", en: "systems" },
-    items: ["Linux", "Windows", "Microsoft Azure", "VirtualBox", "Redes"],
+    id: "data",
+    group: { es: "datos y empresa", en: "data & enterprise" },
+    items: ["SQL", "Genexus", "ERP", "Migración de bases de datos"],
   },
   {
-    group: { es: "herramientas", en: "tooling" },
-    items: ["Genexus", "Git", "Scrum", "Excel avanzado", "Next.js"],
+    id: "process",
+    group: { es: "proceso", en: "process" },
+    items: ["Git", "Scrum", "Next.js", "Automatización"],
+  },
+];
+
+/**
+ * Tira de la portada: la respuesta de un vistazo a «¿con qué trabajas?».
+ *
+ * Es un subconjunto ELEGIDO, no derivado de `skills`, y por eso vive aquí
+ * escrito a mano: derivarlo arrastraría Word y PowerPoint a la portada, que
+ * están en el CV y son ciertos pero no son el titular de un perfil de ingeniería.
+ * Ocho es el máximo que se lee sin contar; si añades uno, quita otro.
+ */
+export const headlineStack = [
+  "Python",
+  "Java",
+  "JavaScript",
+  "Linux",
+  "Microsoft Azure",
+  "Nessus",
+  "OWASP Top 10",
+  "ISO/IEC 27001",
+];
+
+/* -------------------------------------------------------------------------- */
+/*  IDIOMAS                                                                    */
+/* -------------------------------------------------------------------------- */
+
+/** Del CV. Relevante para vacantes internacionales, y no estaba en la web. */
+export const languages: { id: string; name: Localized; level: Localized }[] = [
+  {
+    id: "es",
+    name: { es: "Español", en: "Spanish" },
+    level: { es: "nativo", en: "native" },
+  },
+  {
+    id: "en",
+    name: { es: "Inglés", en: "English" },
+    level: { es: "C1 · avanzado", en: "C1 · advanced" },
   },
 ];
 
@@ -242,50 +352,89 @@ export const stack: { group: Localized; items: string[] }[] = [
 /*  CERTIFICACIONES                                                            */
 /* -------------------------------------------------------------------------- */
 
+/**
+ * `date` en formato `YYYY-MM`, tal como aparece en el CV.
+ *
+ * Antes sólo se guardaba el año, y con ocho entradas de 2025 la lista no tenía
+ * orden interno: se leía como un montón. El mes permite ordenarlas de verdad y
+ * agruparlas por año, que es lo que convierte la lista en una trayectoria — se
+ * ve que la formación se concentra y acelera en 2025 en vez de haber que
+ * contarlo a mano.
+ *
+ * El año se deriva con `date.slice(0, 4)`: no lo dupliques en un campo aparte
+ * o los dos acabarán discrepando.
+ */
 export type Certification = {
   name: string;
   issuer: string;
-  year: string;
+  /** `YYYY-MM` */
+  date: string;
 };
 
+/**
+ * Las quince del CV, en orden cronológico inverso.
+ *
+ * Antes había trece: faltaban «Guía para Aprender Seguridad Informática» e
+ * «Introducción a la Terminal y Línea de Comandos», ambas de Platzi (abril
+ * 2025). El hero llevaba tiempo anunciando «+15» mientras la lista mostraba
+ * trece; la cifra del CV era la correcta y lo que faltaba eran los datos.
+ */
 export const certifications: Certification[] = [
-  { name: "Foundations of Cybersecurity", issuer: "Google", year: "2025" },
+  { name: "Hacking Ético", issuer: "Platzi", date: "2025-06" },
   {
-    name: "Career Essentials in Cybersecurity",
-    issuer: "Microsoft · LinkedIn",
-    year: "2025",
+    name: "OWASP Top 10: Riesgos en Aplicaciones",
+    issuer: "Platzi",
+    date: "2025-06",
   },
-  { name: "Hacking Ético", issuer: "Platzi", year: "2025" },
-  { name: "OWASP Top 10", issuer: "Platzi", year: "2025" },
-  { name: "Fundamentos de Criptografía", issuer: "Platzi", year: "2025" },
-  { name: "Seguridad de Redes On-Premise", issuer: "Platzi", year: "2025" },
-  { name: "Redes de Internet — Profesional", issuer: "Platzi", year: "2025" },
+  { name: "Fundamentos de Criptografía", issuer: "Platzi", date: "2025-06" },
+  { name: "Redes de Internet — Profesional", issuer: "Platzi", date: "2025-06" },
+  { name: "Seguridad de Redes On-Premise", issuer: "Platzi", date: "2025-06" },
   {
     name: "Ciberseguridad y Privacidad para Empresas",
     issuer: "Platzi",
-    year: "2025",
+    date: "2025-05",
+  },
+  { name: "Foundations of Cybersecurity", issuer: "Google", date: "2025-04" },
+  {
+    name: "Introducción a la Terminal y Línea de Comandos",
+    issuer: "Platzi",
+    date: "2025-04",
+  },
+  {
+    name: "Guía para Aprender Seguridad Informática",
+    issuer: "Platzi",
+    date: "2025-04",
+  },
+  {
+    name: "Career Essentials in Cybersecurity",
+    issuer: "Microsoft · LinkedIn Learning",
+    date: "2025-03",
   },
   {
     name: "Introduction to Cybersecurity",
     issuer: "Cisco Networking Academy",
-    year: "2024",
+    date: "2024-05",
   },
   {
-    name: "Seguridad Informática y Protección de Datos",
+    name: "Seguridad Informática y Protección de Datos Personales",
     issuer: "CEC-EPN",
-    year: "2024",
+    date: "2024-05",
   },
   {
     name: "NDG Linux Essentials",
     issuer: "Cisco Networking Academy",
-    year: "2023",
+    date: "2023-08",
   },
   {
     name: "Scrum Foundation Professional (SFPC)",
     issuer: "CertiProf",
-    year: "2023",
+    date: "2023-06",
   },
-  { name: "Programación con Python", issuer: "CEC-EPN", year: "2020" },
+  {
+    name: "Programación con Python aplicada a la Ingeniería",
+    issuer: "CEC-EPN",
+    date: "2020-03",
+  },
 ];
 
 /* -------------------------------------------------------------------------- */
@@ -309,4 +458,23 @@ export const counts = {
   certifications: certifications.length,
   publications: work.filter((item) => item.category === "research").length,
   roles: work.filter((item) => item.category !== "research").length,
+  /** Herramientas con nivel declarado en el CV. */
+  skills: skills.reduce((total, group) => total + group.items.length, 0),
 } as const;
+
+/**
+ * Certificaciones agrupadas por año, de más reciente a más antiguo.
+ *
+ * Se calcula aquí y no en el componente para que la sección se limite a pintar:
+ * el año sale de `date`, nunca de un campo duplicado que pueda discrepar.
+ */
+export const certificationsByYear: { year: string; items: Certification[] }[] =
+  Object.entries(
+    certifications.reduce<Record<string, Certification[]>>((acc, cert) => {
+      const year = cert.date.slice(0, 4);
+      (acc[year] ??= []).push(cert);
+      return acc;
+    }, {}),
+  )
+    .map(([year, items]) => ({ year, items }))
+    .sort((a, b) => b.year.localeCompare(a.year));

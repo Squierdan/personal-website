@@ -3,41 +3,36 @@
 import { motion } from "framer-motion";
 import { ArrowUpRight, Download } from "lucide-react";
 import { useLanguage } from "@/components/providers/language-provider";
+import { CountUp } from "@/components/ui/count-up";
 import { useClock } from "@/hooks/use-clock";
-import { bootItem, bootStep } from "@/lib/motion";
-import { work } from "@/lib/content";
+import { bootItem, bootStep, riseIn, stagger } from "@/lib/motion";
+import { headlineStack } from "@/lib/content";
 import { site } from "@/lib/site";
 
 /**
  * ============================================================================
  *  HERO — PORTADA EDITORIAL
  * ============================================================================
- *  La página se abre como la portada de una revista técnica: cabecera, titular,
- *  entradilla y, debajo, **el artículo destacado**. Y aquí el artículo destacado
- *  es literal: la publicación revisada por pares en Annals of Telecommunications
- *  (Springer Nature), como primer autor.
+ *  Cabecera, nombre, entradilla, con qué trabaja y las cifras. En ese orden,
+ *  que es el de las preguntas que hace quien está contratando: quién eres, qué
+ *  haces, con qué herramientas y cuánto has acreditado.
  *
- *  Por qué ahí y no en la sección 03: es el dato más difícil de conseguir de
- *  todo el CV y el que ningún otro candidato de su nivel va a tener. Estaba
- *  enterrado a tres pantallas de scroll, donde un reclutador que hojea no llega.
- *  Un titular no se guarda para la página cinco.
+ *  ⚠️ AQUÍ ESTUVO LA PUBLICACIÓN DE SPRINGER COMO TITULAR, Y SE MOVIÓ.
+ *  El artículo ocupaba este sitio con la insignia «primer autor» en ámbar.
+ *  Elian lo corrigió: su aporte fue la redacción y algunas ideas para el
+ *  algoritmo, dentro de un equipo de ocho. Presentarlo como titular decía de él
+ *  más de lo que hizo, y eso en un perfil que un reclutador va a contrastar con
+ *  el DOI es el peor sitio donde inflar nada. Ahora vive en la sección 03,
+ *  declarado con precisión, y la portada la ocupa lo que sí sostiene: las
+ *  herramientas, la experiencia y las quince certificaciones.
  *
- *  El bloque lee la publicación de `content.ts` —no la reescribe— así que hay
- *  una sola fuente de verdad: añadir un segundo artículo con
- *  `category: "research"` cambia el titular solo, y la sección 03 sigue
- *  mostrando el detalle completo sin que nada se duplique a mano.
- *
- *  SIN retrato-hash, sin `❯ whoami`, sin tecleo automático. Eran tres gestos
- *  que pedían ser descifrados antes de decir nada, y la portada de un dossier
- *  no juega a las adivinanzas: dice quién eres, qué haces y qué has publicado.
+ *  SIN retrato-hash, sin `❯ whoami`, sin tecleo automático: tres gestos que
+ *  pedían ser descifrados antes de decir nada.
  * ============================================================================
  */
 export function Hero() {
   const { t, locale } = useLanguage();
   const clock = useClock(site.timezone);
-
-  /** El titular sale de los datos, no de una copia escrita a mano. */
-  const lead = work.find((item) => item.category === "research");
 
   return (
     <section
@@ -101,53 +96,40 @@ export function Hero() {
           {t.hero.intro}
         </motion.p>
 
-        {/* ------------------------------------------------ Artículo destacado */}
-        {lead ? (
-          <motion.article
-            data-reveal
-            initial="hidden"
-            animate="visible"
-            variants={bootItem}
-            transition={bootStep(3)}
-            className="mt-12 border-t border-border pt-8 sm:mt-14"
-          >
-            {/* El rótulo va en ámbar, que en este sistema es el color del
-                énfasis. Es la única credencial de la portada que lo lleva. */}
-            <p className="label text-[var(--amber)]">
-              {t.hero.leadEyebrow} / {t.work.firstAuthor} /{" "}
-              {lead.period[locale]}
-            </p>
+        {/* ------------------------------------------------------ Tira de stack
+            La respuesta de un vistazo a «¿con qué trabajas?», que es la primera
+            pregunta de cualquiera que esté contratando. Ocupa el sitio donde
+            antes estaba el artículo destacado: la publicación se movió a la
+            sección 03, con su aporte declarado con precisión, porque presentarla
+            como titular decía de Elian más de lo que hizo.
 
-            <h2 className="mt-4 max-w-3xl text-balance font-medium leading-[1.1] tracking-[-0.02em] text-[length:var(--step-lead)]">
-              {lead.title[locale]}
-            </h2>
+            Entra escalonada, una etiqueta tras otra. Es el único movimiento
+            coreografiado que queda además del arranque, y dura lo que tarda el
+            ojo en recorrer la fila. */}
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          variants={stagger}
+          transition={{ delayChildren: 0.42 }}
+          className="mt-12 border-t border-border pt-7 sm:mt-14"
+        >
+          <motion.p data-reveal variants={riseIn} className="label">
+            {t.hero.stackLabel}
+          </motion.p>
 
-            <p className="mt-3 font-mono text-ui text-fg-muted">{lead.org}</p>
-
-            {lead.link ? (
-              <div className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-3">
-                <a
-                  href={lead.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group inline-flex h-11 items-center gap-2 border border-[var(--amber)] px-4 font-mono text-ui text-[var(--amber)] transition-colors hover:bg-amber/10"
-                >
-                  {lead.linkLabel?.[locale]}
-                  <ArrowUpRight
-                    aria-hidden
-                    className="h-4 w-4 transition-transform duration-[var(--dur-base)] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                  />
-                </a>
-                {/* El DOI escrito: es el identificador con el que se verifica
-                    la publicación en cualquier índice, no sólo el destino del
-                    enlace. Un reclutador que contrasta lo copia de aquí. */}
-                <p className="break-all font-mono text-data text-fg-subtle">
-                  {lead.link.replace(/^https?:\/\/(www\.)?/, "")}
-                </p>
-              </div>
-            ) : null}
-          </motion.article>
-        ) : null}
+          <ul className="mt-4 flex flex-wrap gap-2">
+            {headlineStack.map((item) => (
+              <motion.li
+                key={item}
+                data-reveal
+                variants={riseIn}
+                className="border border-border-strong px-2.5 py-1 font-mono text-data text-fg transition-colors duration-[var(--dur-micro)] hover:border-accent hover:text-accent"
+              >
+                {item}
+              </motion.li>
+            ))}
+          </ul>
+        </motion.div>
 
         {/* ------------------------------------------------------- Llamadas */}
         <motion.div
@@ -201,7 +183,7 @@ export function Hero() {
             <div key={index} className="bg-bg py-5 pr-4">
               <dt className="sr-only">{stat.label}</dt>
               <dd className="font-mono text-3xl font-semibold leading-none tabular-nums text-fg sm:text-4xl">
-                {stat.value}
+                <CountUp value={Number(stat.value)} />
               </dd>
               <dd className="mt-2 text-meta leading-snug text-fg-subtle">
                 {stat.label}

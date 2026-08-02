@@ -12,11 +12,11 @@
 
 Sitio personal + portafolio de **Elian Caizapanta** (alias `SquierDan`),
 ingeniero de software especializado en **seguridad de la información**.
-Una sola página con cinco secciones ancladas, bilingüe (ES/EN), tema claro/oscuro.
+Una sola página con seis secciones ancladas, bilingüe (ES/EN), tema claro/oscuro.
 
 El contenido es REAL, tomado de su CV: pasantías en MARCSEAL S.A. y Coris del
 Ecuador, rol en Marino Robalino LLC, publicación indexada del protocolo Nested-C
-en Annals of Telecommunications (Springer), y 13 certificaciones. No inventes
+en Annals of Telecommunications (Springer), y 15 certificaciones. No inventes
 proyectos, métricas, años de experiencia ni tecnologías que no estén en
 `src/lib/content.ts`: este sitio lo leen reclutadores que contrastan con LinkedIn.
 No hay backend, no hay base de datos y no hay CMS: **todo el contenido está en
@@ -53,7 +53,7 @@ declaran en `src/app/globals.css` dentro de `@theme inline`. El modo oscuro usa
 |---|---|
 | `src/lib/site.ts` | Datos personales: nombre, handle, rol, email, redes, URL, zona horaria, disponibilidad |
 | `src/i18n/dictionary.ts` | **Todas** las cadenas visibles, en `es` y `en` |
-| `src/lib/content.ts` | Servicios, experiencia/investigación (+ categorías), stack y certificaciones |
+| `src/lib/content.ts` | Servicios, experiencia/investigación, habilidades con nivel, instrumental, idiomas y certificaciones |
 
 ### Archivos de diseño — edita con cuidado
 
@@ -72,7 +72,9 @@ components/command-palette.tsx Paleta ⌘K + atajos globales T / L
 components/theme-toggle.tsx    Presentado como bandera --theme=dark
 components/language-toggle.tsx Presentado como bandera --lang=es
 components/providers/          ThemeProvider (next-themes) + LanguageProvider (contexto propio)
-components/sections/*.tsx      hero (portada editorial) · about · services · experience · contact
+components/sections/*.tsx      hero · about · skills · experience · services · contact
+components/ui/meter.tsx        Medidor de nivel. LEE SU CABECERA antes de tocarlo
+components/ui/count-up.tsx     Contador que renderiza el valor final desde el primer frame
 components/ui/section.tsx      <Section> y <SectionHeading> (numeral de plancha + regla + título)
 components/ui/reveal.tsx       <Reveal> · <RevealGroup>/<RevealItem> · <RevealRule>
 components/ui/icons.tsx        GitHub · LinkedIn · X
@@ -288,7 +290,30 @@ en contorno).
 > regla (`min-height` queda en `auto`). Usa `h-9` con `inline-flex items-center`,
 > que es lo que ya emplea el resto del sitio.
 
-### 4.9 Contenido invisible — el fallo más caro de este sitio
+### 4.9 No exageres las credenciales — la regla del alcance declarado
+
+El artículo de Springer llegó a ser el titular de la portada, con la insignia
+«primer autor» en ámbar. Elian lo corrigió: su aporte fue **la redacción y
+algunas ideas para el algoritmo**, dentro de un equipo de ocho autores. Ahora es
+una fila más de la sección 03, con el alcance escrito.
+
+La razón no es modestia, es aritmética de credibilidad: el DOI está a un clic, y
+un reclutador que abra el paper y vea la distancia entre lo que prometía la web
+y lo que dice el artículo deja de creerse **también** la parte sólida —los tres
+roles, las quince certificaciones, el nivel de las herramientas—. Inflar la
+credencial más llamativa cuesta las demás.
+
+De ahí sale la regla que aplica a todo dato nuevo de este sitio:
+
+- **Un medidor es una afirmación cuantitativa.** Sólo se pinta si el CV declara
+  el nivel. `skills` lleva nivel; `toolkit` no lleva y por eso son etiquetas.
+- **Las cifras se cuentan, no se escriben.** Salen de `counts` en `content.ts`.
+- **Ante la duda, declara menos.** Es recuperable; lo contrario no.
+
+> ⚠️ No devuelvas la publicación a la portada ni reintroduzcas «primer autor»
+> sin que Elian lo pida explícitamente.
+
+### 4.10 Contenido invisible — el fallo más caro de este sitio
 
 Las apariciones arrancan en `opacity: 0` y sólo las sube el JavaScript cuando un
 IntersectionObserver dispara. **Cada vez que algo impide que ese observador
@@ -331,7 +356,7 @@ tras recorrer la página entera en español:
              && el.getBoundingClientRect().height > 0).length   // tiene que dar 0
 ```
 
-### 4.10 Flex + la regla global `min-width: 0`
+### 4.11 Flex + la regla global `min-width: 0`
 
 `@layer base { * { min-width: 0 } }` (§4.2) deja que **cualquier** hijo de un
 flex se encoja por debajo de su contenido. Todo elemento de ancho fijo dentro de
@@ -374,8 +399,8 @@ la sección 01 automáticamente.
 5. Añadir `"mi-seccion"` a `SECTION_IDS` y a `links` en `navbar.tsx`.
 6. Añadir la entrada de navegación en `command-palette.tsx`.
 
-Los ids de sección actuales son: `top`, `about`, `services`, `experience`,
-`contact`. Están duplicados en `navbar.tsx` (`SECTION_IDS` + `links`) y en
+Los ids de sección actuales son: `top`, `about`, `skills`, `experience`,
+`services`, `contact`. Están duplicados en `navbar.tsx` (`SECTION_IDS` + `links`) y en
 `command-palette.tsx`; si cambias uno, cambia los tres sitios.
 
 **Cambiar la paleta** → edita `--accent` en `:root` y en `.dark` de
@@ -409,7 +434,7 @@ Revisión manual mínima:
 - probar a 360 px, 768 px y 1440 px de ancho
 - navegar toda la página solo con Tab y comprobar que el foco es visible
 - **cambiar a español EN EL MÓVIL y recorrer la página entera**: ninguna
-  sección puede quedarse en blanco (ver §4.9)
+  sección puede quedarse en blanco (ver §4.10)
 - activar «reducir movimiento» en el sistema: el barrido de las filas no debe
   ejecutarse y ningún bloque puede quedarse invisible
 
@@ -447,7 +472,7 @@ portada de revista técnica —cabecera, nombre, entradilla y **la publicación 
 Springer como artículo destacado**, leída de `content.ts` para que haya una sola
 fuente de verdad—; pasos tipográficos `--step-deck` y `--step-lead` con la
 jerarquía medida y monótona (84 → 44 → 36 → 22 → 17 en escritorio); y las tres
-correcciones de contenido invisible de §4.9 y §4.10.
+correcciones de contenido invisible de §4.10 y §4.11.
 
 > **Por qué se fue el retrato-hash.** Era una rejilla de 8×8 donde cada celda era
 > un dígito del SHA-256 de la identidad. Estaba bien construido y bien
@@ -456,6 +481,14 @@ correcciones de contenido invisible de §4.9 y §4.10.
 > está comunicando, está pidiendo que lo descifren, y en una portada que tiene 30
 > segundos para convencer a un reclutador eso es espacio gastado. La lección para
 > quien siga: en este sitio, prefiere el dato verificable al gesto ingenioso.
+
+**Hecho en el rebalanceo hacia habilidades:** la publicación baja de titular de
+portada a fila de la sección 03 con su alcance declarado (§4.9); nueva sección
+02 «Habilidades y certificaciones» con nivel de dominio, instrumental, idiomas y
+las quince certificaciones agrupadas por año; el orden pasa a perfil ·
+habilidades · experiencia · servicios · contacto, con la prueba por delante de
+la oferta; tira de tecnologías y contador en la portada; datos nuevos leídos del
+CV (niveles, inglés C1 y las dos certificaciones que faltaban).
 
 **Pendiente (requiere datos o decisiones del usuario):**
 
@@ -467,9 +500,8 @@ correcciones de contenido invisible de §4.9 y §4.10.
    usuario aporte 2–4 trabajos reales —título, problema, qué hizo, stack, enlace
    o captura—. Con eso, la sección natural es un índice numerado como el de la
    tabla de roles, insertado como `03` y desplazando trayectoria y contacto.
-2. **Las cifras del hero dicen 13 certificaciones porque `certifications` tiene
-   trece.** El texto anterior decía «+15». Si el CV tiene quince, faltan dos por
-   añadir al array; la cifra se recalcula sola.
+2. ~~Certificaciones descuadradas.~~ **Resuelto:** eran quince en el CV y trece
+   en el array. Añadidas las dos de Platzi que faltaban (abril 2025).
 3. **Correo de contacto en Hotmail.** `site.email` es `daniel_caiz@hotmail.com`.
    Para un perfil de seguridad de la información un dominio propio o Gmail
    proyecta mejor; decisión del usuario.

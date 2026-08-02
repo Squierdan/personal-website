@@ -10,7 +10,7 @@ import { openCommandPalette } from "@/components/command-palette";
 import { useActiveSection } from "@/hooks/use-active-section";
 import { site } from "@/lib/site";
 
-const SECTION_IDS = ["about", "services", "experience", "contact"];
+const SECTION_IDS = ["about", "skills", "experience", "services", "contact"];
 
 export function Navbar() {
   const { t } = useLanguage();
@@ -26,8 +26,9 @@ export function Navbar() {
 
   const links = [
     { id: "about", label: t.nav.about },
-    { id: "services", label: t.nav.services },
+    { id: "skills", label: t.nav.skills },
     { id: "experience", label: t.nav.work },
+    { id: "services", label: t.nav.services },
     { id: "contact", label: t.nav.contact },
   ];
 
