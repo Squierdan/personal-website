@@ -52,7 +52,7 @@ export function Navbar() {
           {/* Marca: prompt de terminal en lugar de un logotipo genérico */}
           <a
             href="#top"
-            className="press group -my-2 flex shrink-0 items-center gap-2 py-2 font-mono text-sm"
+            className="group -my-2 flex shrink-0 items-center gap-2 py-2 font-mono text-sm"
           >
             <span
               aria-hidden
@@ -100,13 +100,15 @@ export function Navbar() {
             })}
           </ul>
 
-          <div className="ml-auto flex items-center gap-2 md:ml-2">
+          {/* `shrink-0`: sin él, las etiquetas largas del español comprimían este
+              grupo hasta partir el texto de los conmutadores. */}
+          <div className="ml-auto flex shrink-0 items-center gap-2 md:ml-2">
             {/* Disparador de la paleta de comandos */}
             <button
               type="button"
               onClick={openCommandPalette}
               aria-label={t.ui.openPalette}
-              className="press hidden h-8 items-center gap-2 border border-border-strong px-2.5 font-mono text-data text-fg-muted hover:border-accent hover:text-accent sm:flex"
+              className="press hidden h-8 items-center gap-2 whitespace-nowrap border border-border-strong px-2.5 font-mono text-data text-fg-muted hover:border-accent hover:text-accent sm:flex"
             >
               <Search className="h-3.5 w-3.5" />
               <kbd className="text-fg-subtle">⌘K</kbd>

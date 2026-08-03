@@ -65,6 +65,16 @@
   --accent: #067077;
   --accent-fg: #ffffff;
   --accent-soft: rgba(6, 112, 119, 0.14);
+  /* Barrido de hover. Token propio y no `--accent-soft`: aquel se usa como
+     fondo permanente del filtro activo, donde ser discreto es lo correcto,
+     mientras que esto es un estado transitorio de medio segundo que tiene que
+     NOTARSE. Con `--accent-soft` medía 1.31:1 contra el fondo y pasaba
+     inadvertido, que era exactamente la queja. */
+  /* Más alfa que en oscuro (0,28 frente a 0,22) y no es un descuido: un teal
+     translúcido sobre casi-blanco apenas mueve la luminancia. Medido, al 0,18
+     daba 1.29:1 —imperceptible— y al 0,28 sube a 1.47, equiparable al 1.51 del
+     tema oscuro. El mismo alfa en los dos temas NO da el mismo efecto. */
+  --press-wipe: rgba(6, 112, 119, 0.28);
   --link: #a63866;
   --amber: #a35a06;
 
@@ -169,6 +179,8 @@
   --accent: #2fd0c0;
   --accent-fg: #04120f;
   --accent-soft: rgba(47, 208, 192, 0.16);
+  /* Ver la nota del tema claro. */
+  --press-wipe: rgba(47, 208, 192, 0.22);
   --link: #ec7fa0;
   --amber: #f0a92e;
 
@@ -508,19 +520,55 @@ body {
    diferencia entre «responde al instante» y «va un poco lento», y no cuesta
    nada. */
 .press {
+  position: relative;
+  isolation: isolate;
   touch-action: manipulation;
   transition:
     transform var(--dur-micro) var(--ease-out),
+    filter var(--dur-base) ease,
     border-color var(--dur-micro) ease,
-    color var(--dur-micro) ease,
-    background-color var(--dur-micro) ease;
+    color var(--dur-micro) ease;
 }
 .press:active {
   transform: scale(0.97);
 }
 
-/* El acento es un fondo sólido: ahí la escala sola se nota poco, así que la
-   pulsación además lo oscurece ligeramente. */
+/* Barrido de entrada al pasar el cursor.
+   -------------------------------------------------------------------------
+   Antes estos controles sólo cambiaban de color, que es el gesto por defecto
+   de cualquier sitio. Este es el MISMO barrido que ya recorre las filas de la
+   tabla de experiencia (`.scan-row::before`), reutilizado: una banda que se
+   despliega desde el borde izquierdo. No se inventa vocabulario nuevo, se
+   extiende el que la página ya tenía, y eso es lo que hace que se lea como un
+   sistema y no como efectos sueltos.
+
+   `scaleX` sobre un pseudo-elemento con `inset: 0`, así que va al compositor y
+   no toca el layout: el botón no cambia de tamaño ni empuja a sus vecinos.
+   `focus-visible` recibe el mismo trato — quien navega con teclado ve
+   exactamente lo mismo que quien usa ratón. */
+.press::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--press-wipe);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  transition: transform var(--dur-base) var(--ease-out);
+}
+.press:hover::before,
+.press:focus-visible::before {
+  transform: scaleX(1);
+}
+
+/* El CTA sólido no lleva barrido: su fondo ya es el acento, así que una banda
+   de acento encima no se vería. Se ilumina, que es el equivalente. */
+.press-solid::before {
+  content: none;
+}
+.press-solid:hover {
+  filter: brightness(1.08);
+}
 .press-solid:active {
   filter: brightness(0.92);
 }

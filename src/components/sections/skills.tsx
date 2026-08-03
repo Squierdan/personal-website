@@ -153,11 +153,23 @@ export function Skills() {
               <p className="font-mono text-2xl font-semibold tabular-nums leading-none text-fg">
                 {bucket.year}
               </p>
-              <p className="label mt-1.5">
-                {bucket.items.length}{" "}
-                {bucket.items.length === 1
-                  ? t.skills.certUnitOne
-                  : t.skills.certUnitMany}
+              {/* Sólo la cifra, sin la palabra.
+                  «10 certificaciones» necesitaba 119 px en una columna de 64:
+                  envolvía, y su segunda línea caía a la altura de los nombres,
+                  que es lo que se veía como texto superpuesto. Ensanchar la
+                  columna devolvería el problema contrario —la lista empujada a
+                  la derecha—, así que lo que sobra es la palabra: la sección ya
+                  se titula «Certificaciones» y repetirla cuatro veces más no
+                  añade nada. La frase completa sigue existiendo para lectores
+                  de pantalla. */}
+              <p className="label mt-1.5 tabular-nums">
+                <span aria-hidden>{bucket.items.length}</span>
+                <span className="sr-only">
+                  {bucket.items.length}{" "}
+                  {bucket.items.length === 1
+                    ? t.skills.certUnitOne
+                    : t.skills.certUnitMany}
+                </span>
               </p>
             </Reveal>
 
