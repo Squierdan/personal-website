@@ -31,7 +31,7 @@ numéricos, sin sombras difusas ni bordes muy redondeados.
 ## 2. Stack y versiones
 
 ```
-Next.js 16.2.9      App Router · Turbopack · React 19.2.4
+Next.js 16.3.0      App Router · Turbopack · React 19.2.4
 TypeScript 5        modo strict
 Tailwind CSS v4     configuración en CSS (@theme inline), NO tailwind.config.js
 Framer Motion 12
@@ -62,6 +62,7 @@ declaran en `src/app/globals.css` dentro de `@theme inline`. El modo oscuro usa
 | `src/app/globals.css` | Paleta, escala tipográfica, ritmo vertical, tokens de Tailwind y de movimiento, utilidades (`.label`, `.press`, `.nav-link`, `.term`, `.caret`, `.grid-lines`, `.accent-glow`, `.scan-row`, `.stencil`, `.corner-marks`, `.link-underline`) |
 | `src/lib/motion.ts` | **Vocabulario de movimiento**: duraciones, curvas y variantes de Framer Motion. Todo el movimiento del sitio sale de aquí |
 | `src/app/layout.tsx` | Fuentes, metadatos SEO, JSON-LD, skip link |
+| `next.config.ts` | Cabeceras de seguridad, incluida la CSP. **Si añades un recurso externo** (una fuente de Google, un script de analítica, una imagen de otro dominio) la CSP lo bloqueará hasta que lo declares ahí |
 
 ### Componentes
 
