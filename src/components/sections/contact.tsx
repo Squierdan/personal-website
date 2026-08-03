@@ -146,7 +146,7 @@ export function Contact() {
             <div className="flex flex-wrap items-center gap-4">
               <button
                 type="submit"
-                className="inline-flex h-11 items-center gap-2 bg-accent px-5 font-mono text-sm font-medium text-[var(--accent-fg)] transition-[filter] duration-[var(--dur-micro)] hover:brightness-110"
+                className="press press-solid inline-flex h-11 items-center gap-2 bg-accent px-5 font-mono text-sm font-medium text-[var(--accent-fg)] hover:brightness-110"
               >
                 ./send.sh
               </button>
@@ -184,7 +184,7 @@ export function Contact() {
                 type="button"
                 onClick={copyEmail}
                 aria-label={t.contact.copy}
-                className="inline-flex h-9 w-9 shrink-0 items-center justify-center border border-border-strong text-fg-subtle transition-colors hover:border-accent hover:text-accent"
+                className="press inline-flex h-9 w-9 shrink-0 items-center justify-center border border-border-strong text-fg-subtle hover:border-accent hover:text-accent"
               >
                 {copied ? (
                   <Check className="h-3.5 w-3.5" />
@@ -221,7 +221,7 @@ export function Contact() {
                 <a
                   href={site.cv.es}
                   download
-                  className="inline-flex h-9 items-center gap-1.5 border border-border-strong px-3 font-mono text-data text-fg-muted transition-colors hover:border-accent hover:text-accent"
+                  className="press inline-flex h-9 items-center gap-1.5 border border-border-strong px-3 font-mono text-data text-fg-muted hover:border-accent hover:text-accent"
                 >
                   <FileDown className="h-3.5 w-3.5" />
                   {t.contact.cvEs}
@@ -229,7 +229,7 @@ export function Contact() {
                 <a
                   href={site.cv.en}
                   download
-                  className="inline-flex h-9 items-center gap-1.5 border border-border-strong px-3 font-mono text-data text-fg-muted transition-colors hover:border-accent hover:text-accent"
+                  className="press inline-flex h-9 items-center gap-1.5 border border-border-strong px-3 font-mono text-data text-fg-muted hover:border-accent hover:text-accent"
                 >
                   <FileDown className="h-3.5 w-3.5" />
                   {t.contact.cvEn}
@@ -246,7 +246,7 @@ export function Contact() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={key}
-                    className="inline-flex h-9 w-9 items-center justify-center border border-border-strong text-fg-muted transition-colors hover:border-accent hover:text-accent"
+                    className="press inline-flex h-9 w-9 items-center justify-center border border-border-strong text-fg-muted hover:border-accent hover:text-accent"
                   >
                     <Icon className="h-4 w-4" />
                   </a>

@@ -52,7 +52,7 @@ export function Navbar() {
           {/* Marca: prompt de terminal en lugar de un logotipo genérico */}
           <a
             href="#top"
-            className="group -my-2 flex shrink-0 items-center gap-2 py-2 font-mono text-sm"
+            className="press group -my-2 flex shrink-0 items-center gap-2 py-2 font-mono text-sm"
           >
             <span
               aria-hidden
@@ -79,7 +79,14 @@ export function Navbar() {
                   <a
                     href={`#${link.id}`}
                     aria-current={isActive ? "true" : undefined}
-                    className={`nav-link relative flex items-center gap-1.5 px-3 py-2 font-mono text-xs transition-colors ${
+                    /* `whitespace-nowrap`: en español las etiquetas son más
+                       largas —«sobre-mí», «experiencia», «habilidades»— y al
+                       cambiar de idioma «01 sobre-mí» partía en dos líneas.
+                       Eso estiraba la altura del enlace, y con él la fila
+                       entera de navegación, así que TODA la barra daba un salto
+                       vertical al pulsar --lang. Con el texto en una sola línea
+                       el flex sólo se reparte a lo ancho y no salta nada. */
+                    className={`nav-link relative flex items-center gap-1.5 whitespace-nowrap px-3 py-2 font-mono text-xs transition-colors ${
                       isActive ? "text-accent" : "text-fg-muted hover:text-fg"
                     }`}
                   >
@@ -99,7 +106,7 @@ export function Navbar() {
               type="button"
               onClick={openCommandPalette}
               aria-label={t.ui.openPalette}
-              className="hidden h-8 items-center gap-2 border border-border-strong px-2.5 font-mono text-data text-fg-muted transition-colors hover:border-accent hover:text-accent sm:flex"
+              className="press hidden h-8 items-center gap-2 border border-border-strong px-2.5 font-mono text-data text-fg-muted hover:border-accent hover:text-accent sm:flex"
             >
               <Search className="h-3.5 w-3.5" />
               <kbd className="text-fg-subtle">⌘K</kbd>
@@ -114,7 +121,7 @@ export function Navbar() {
               type="button"
               onClick={() => setMenuOpen(true)}
               aria-label={t.ui.menu}
-              className="inline-flex h-11 w-11 items-center justify-center border border-border-strong text-fg-muted transition-colors hover:border-accent hover:text-accent md:hidden"
+              className="press inline-flex h-11 w-11 items-center justify-center border border-border-strong text-fg-muted hover:border-accent hover:text-accent md:hidden"
             >
               <Menu className="h-4 w-4" />
             </button>
@@ -145,7 +152,7 @@ export function Navbar() {
                 type="button"
                 onClick={() => setMenuOpen(false)}
                 aria-label={t.ui.close}
-                className="inline-flex h-11 w-11 items-center justify-center border border-border-strong text-fg-muted"
+                className="press inline-flex h-11 w-11 items-center justify-center border border-border-strong text-fg-muted"
               >
                 <X className="h-4 w-4" />
               </button>

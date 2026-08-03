@@ -65,7 +65,6 @@ export function Experience() {
         index={t.work.index}
         eyebrow={t.work.eyebrow}
         title={t.work.title}
-        subtitle={t.work.subtitle}
       />
 
       {/* ------------------------------------------------ Roles profesionales */}
@@ -95,7 +94,7 @@ export function Experience() {
                   setFilter(value);
                   setOpenId(null);
                 }}
-                className={`inline-flex h-9 items-center border px-3 font-mono text-data transition-colors duration-[var(--dur-micro)] ${
+                className={`press inline-flex h-9 items-center border px-3 font-mono text-data ${
                   isActive
                     ? "border-accent bg-accent-soft text-accent"
                     : "border-border text-fg-muted hover:border-border-strong hover:text-fg"

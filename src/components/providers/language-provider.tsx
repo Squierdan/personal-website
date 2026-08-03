@@ -8,7 +8,7 @@ import {
   useMemo,
   useState,
 } from "react";
-import { defaultLocale, locales, type Locale } from "@/i18n/config";
+import { defaultLocale, type Locale } from "@/i18n/config";
 import { dictionaries } from "@/i18n/dictionary";
 
 type LanguageContextValue = {
@@ -20,28 +20,27 @@ type LanguageContextValue = {
 
 const LanguageContext = createContext<LanguageContextValue | null>(null);
 
-const STORAGE_KEY = "preferred-locale";
-
-function isLocale(value: string | null): value is Locale {
-  return value !== null && locales.includes(value as Locale);
-}
-
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [locale, setLocaleState] = useState<Locale>(defaultLocale);
 
-  useEffect(() => {
-    /*
-     * El sitio SIEMPRE abre en `defaultLocale` (inglés), sin importar el idioma
-     * del navegador: así el enlace se ve igual para todo el mundo.
-     * Solo se respeta la elección explícita que el visitante haya hecho antes
-     * con el conmutador --lang, guardada en localStorage.
-     */
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (isLocale(stored) && stored !== defaultLocale) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect -- init única en cliente
-      setLocaleState(stored);
-    }
-  }, []);
+  /*
+   * ⚠️ EL IDIOMA NO SE GUARDA, Y ES DELIBERADO.
+   * -------------------------------------------------------------------------
+   * Antes se recordaba en localStorage. El problema es que este sitio es, sobre
+   * todo, un enlace que se comparte: si Elian dejaba su móvil en español y le
+   * enseñaba la página a alguien, esa persona la veía en español. Y al volver
+   * él mismo días después, se la encontraba como la hubiera dejado en vez de
+   * como la ve un reclutador.
+   *
+   * Ahora abre SIEMPRE en `defaultLocale` (inglés), que es como llega a
+   * cualquiera que reciba el enlace. El conmutador --lang sigue funcionando
+   * durante la visita; simplemente no sobrevive a una recarga.
+   *
+   * El tema sí se recuerda, y no es una incoherencia: el idioma es una decisión
+   * de presentación, pero claro/oscuro es una preferencia de confort visual y
+   * a veces de accesibilidad. Obligar a alguien a volver a elegirlo en cada
+   * visita sería hostil. Ver la nota en `providers/index.tsx`.
+   */
 
   useEffect(() => {
     document.documentElement.lang = locale;
@@ -49,7 +48,6 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
 
   const setLocale = useCallback((next: Locale) => {
     setLocaleState(next);
-    localStorage.setItem(STORAGE_KEY, next);
   }, []);
 
   const toggleLocale = useCallback(() => {

@@ -22,7 +22,7 @@ export function ThemeToggle({ compact = false }: { compact?: boolean }) {
       onClick={() => setTheme(isDark ? "light" : "dark")}
       aria-label={isDark ? t.ui.themeLight : t.ui.themeDark}
       title={isDark ? t.ui.themeLight : t.ui.themeDark}
-      className="group inline-flex h-10 items-center gap-1.5 border border-border-strong px-2.5 sm:h-8 font-mono text-data text-fg-muted transition-colors hover:border-accent hover:text-accent"
+      className="press group inline-flex h-10 items-center gap-1.5 border border-border-strong px-2.5 sm:h-8 font-mono text-data text-fg-muted hover:border-accent hover:text-accent"
     >
       <span className="text-fg-subtle group-hover:text-accent">--theme=</span>
       <span className="min-w-[34px] text-left text-fg">

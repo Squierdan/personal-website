@@ -42,15 +42,11 @@ export function Skills() {
         index={t.skills.index}
         eyebrow={t.skills.eyebrow}
         title={t.skills.title}
-        subtitle={t.skills.subtitle}
       />
 
       {/* ------------------------------------------- 1 · Con nivel declarado */}
       <Reveal>
-        <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
-          <h3 className="label">{t.skills.ratedTitle}</h3>
-          <p className="text-meta text-fg-subtle">{t.skills.ratedNote}</p>
-        </div>
+        <h3 className="label">{t.skills.ratedTitle}</h3>
       </Reveal>
 
       <RevealGroup className="mt-[var(--space-stack)] grid gap-px border border-border bg-border sm:grid-cols-2">
@@ -137,7 +133,6 @@ export function Skills() {
           <span className="font-mono text-data tabular-nums text-accent">
             {counts.certifications}
           </span>
-          <p className="text-meta text-fg-subtle">{t.skills.certificationsNote}</p>
         </div>
       </Reveal>
 
@@ -145,7 +140,12 @@ export function Skills() {
         {certificationsByYear.map((bucket) => (
           <div
             key={bucket.year}
-            className="grid gap-x-8 border-b border-border py-6 sm:grid-cols-[5rem_1fr]"
+            /* `4rem` y `gap-x-5` en vez de `5rem` y `gap-x-8`: la columna del
+               año más el hueco dejaban 112 px de aire entre «2025» y el primer
+               nombre de certificación, y con quince filas eso se lee como si la
+               lista estuviera empujada hacia la derecha en vez de colgando del
+               año. El año cabe de sobra en 4rem —son cuatro cifras tabulares—. */
+            className="grid gap-x-5 border-b border-border py-6 sm:grid-cols-[4rem_1fr]"
           >
             {/* El año, con su recuento. La columna de años convierte la lista
                 en una cronología sin necesidad de dibujar un eje. */}

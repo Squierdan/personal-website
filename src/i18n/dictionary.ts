@@ -46,14 +46,11 @@ type Dictionary = {
     index: string;
     eyebrow: string;
     title: string;
-    subtitle: string;
     ratedTitle: string;
-    ratedNote: string;
     levels: { expert: string; advanced: string };
     toolkitTitle: string;
     languagesTitle: string;
     certificationsTitle: string;
-    certificationsNote: string;
     certUnitOne: string;
     certUnitMany: string;
   };
@@ -67,7 +64,6 @@ type Dictionary = {
     index: string;
     eyebrow: string;
     title: string;
-    subtitle: string;
     filterAll: string;
     colName: string;
     colStack: string;
@@ -199,15 +195,11 @@ export const dictionaries: Record<Locale, Dictionary> = {
       index: "02",
       eyebrow: "habilidades",
       title: "Lo que sé hacer, y con qué lo he hecho",
-      subtitle:
-        "Herramientas con nivel declarado, el resto del instrumental que uso a diario y quince certificaciones técnicas.",
       ratedTitle: "Nivel de dominio",
-      ratedNote: "Tal como está declarado en el CV.",
       levels: { expert: "experto", advanced: "avanzado" },
       toolkitTitle: "Resto del instrumental",
       languagesTitle: "Idiomas",
       certificationsTitle: "Certificaciones",
-      certificationsNote: "Formación continua en seguridad, redes y sistemas.",
       certUnitOne: "certificación",
       certUnitMany: "certificaciones",
     },
@@ -222,8 +214,6 @@ export const dictionaries: Record<Locale, Dictionary> = {
       index: "03",
       eyebrow: "trayectoria",
       title: "Experiencia e investigación",
-      subtitle:
-        "Roles profesionales, investigación y las áreas de cada uno. Filtra para explorar.",
       filterAll: "todo",
       colName: "rol",
       colStack: "áreas",
@@ -355,16 +345,11 @@ export const dictionaries: Record<Locale, Dictionary> = {
       index: "02",
       eyebrow: "skills",
       title: "What I can do, and what I've done it with",
-      subtitle:
-        "Tools with a declared proficiency level, the rest of the kit I use day to day, and fifteen technical certifications.",
       ratedTitle: "Proficiency",
-      ratedNote: "As declared on the CV.",
       levels: { expert: "expert", advanced: "advanced" },
       toolkitTitle: "Rest of the toolkit",
       languagesTitle: "Languages",
       certificationsTitle: "Certifications",
-      certificationsNote:
-        "Continuous training in security, networking and systems.",
       certUnitOne: "certification",
       certUnitMany: "certifications",
     },
@@ -379,8 +364,6 @@ export const dictionaries: Record<Locale, Dictionary> = {
       index: "03",
       eyebrow: "track record",
       title: "Experience & research",
-      subtitle:
-        "Professional roles, research, and the areas behind each. Filter to explore.",
       filterAll: "all",
       colName: "role",
       colStack: "areas",

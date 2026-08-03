@@ -383,6 +383,19 @@ body {
   background-color: var(--accent-soft);
 }
 
+/* Pulsación en una fila de tabla.
+   Aquí NO se usa `.press`: una fila ocupa todo el ancho, y encogerla un 3 %
+   despega sus bordes de los de la fila de arriba y de abajo — el gesto que en
+   un botón se lee como «pulsado», en una fila se lee como que la tabla se
+   rompe. El equivalente correcto es que la fila se ilumine un punto más de lo
+   que ya hace al pasar el cursor, que es lo que hace un gestor de archivos. */
+.scan-row {
+  touch-action: manipulation;
+}
+.scan-row:active {
+  background-color: color-mix(in srgb, var(--accent) 18%, transparent);
+}
+
 /* Marca de fila activa: se despliega desde el centro. */
 .scan-row::before {
   content: "";
@@ -476,6 +489,46 @@ body {
   right: -1px;
   border-bottom: 1px solid;
   border-right: 1px solid;
+}
+
+/* Respuesta a la pulsación.
+   -------------------------------------------------------------------------
+   Todo lo que se puede pulsar tiene que acusar el golpe, y antes no lo hacía:
+   los botones sólo cambiaban de color al pasar el cursor, que en un móvil no
+   existe. Quien tocaba «./send.sh» o un filtro no recibía ninguna señal de que
+   el toque hubiera llegado hasta que la interfaz cambiaba sola.
+
+   Una escala de 0,97 durante la pulsación, que es el rango que recomiendan
+   tanto Apple como Material (0,95–1,05): se nota y no deforma. Va en
+   `transform`, así que la resuelve el compositor y no toca el layout — el
+   elemento no empuja a sus vecinos ni un píxel.
+
+   `touch-action: manipulation` quita de paso el retardo de ~300 ms que algunos
+   navegadores móviles reservan para detectar un doble toque de zoom. Es la
+   diferencia entre «responde al instante» y «va un poco lento», y no cuesta
+   nada. */
+.press {
+  touch-action: manipulation;
+  transition:
+    transform var(--dur-micro) var(--ease-out),
+    border-color var(--dur-micro) ease,
+    color var(--dur-micro) ease,
+    background-color var(--dur-micro) ease;
+}
+.press:active {
+  transform: scale(0.97);
+}
+
+/* El acento es un fondo sólido: ahí la escala sola se nota poco, así que la
+   pulsación además lo oscurece ligeramente. */
+.press-solid:active {
+  filter: brightness(0.92);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .press:active {
+    transform: none;
+  }
 }
 
 /* Subrayado de la sección activa en la navegación.

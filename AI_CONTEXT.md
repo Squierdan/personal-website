@@ -59,7 +59,7 @@ declaran en `src/app/globals.css` dentro de `@theme inline`. El modo oscuro usa
 
 | Archivo | Contiene |
 |---|---|
-| `src/app/globals.css` | Paleta, escala tipográfica, ritmo vertical, tokens de Tailwind y de movimiento, utilidades (`.label`, `.nav-link`, `.term`, `.caret`, `.grid-lines`, `.accent-glow`, `.scan-row`, `.stencil`, `.corner-marks`, `.link-underline`) |
+| `src/app/globals.css` | Paleta, escala tipográfica, ritmo vertical, tokens de Tailwind y de movimiento, utilidades (`.label`, `.press`, `.nav-link`, `.term`, `.caret`, `.grid-lines`, `.accent-glow`, `.scan-row`, `.stencil`, `.corner-marks`, `.link-underline`) |
 | `src/lib/motion.ts` | **Vocabulario de movimiento**: duraciones, curvas y variantes de Framer Motion. Todo el movimiento del sitio sale de aquí |
 | `src/app/layout.tsx` | Fuentes, metadatos SEO, JSON-LD, skip link |
 
@@ -307,7 +307,33 @@ en contorno).
 > regla (`min-height` queda en `auto`). Usa `h-9` con `inline-flex items-center`,
 > que es lo que ya emplea el resto del sitio.
 
-### 4.9 No exageres las credenciales — la regla del alcance declarado
+### 4.9 Persistencia: qué se recuerda y qué no
+
+| | ¿Se guarda? | Visitante nuevo |
+|---|---|---|
+| **Idioma** | **No** | Siempre inglés |
+| **Tema** | Sí (`localStorage.theme`) | Siempre oscuro |
+
+El idioma no persiste porque este sitio es un enlace que se comparte: si Elian
+dejaba su móvil en español y se lo enseñaba a alguien, esa persona lo veía en
+español. El tema sí persiste porque claro/oscuro es confort visual y a veces
+accesibilidad — reiniciarlo cada visita obligaría a quien necesita el modo claro
+a volver a elegirlo siempre.
+
+**El tema NO se alinea con el sistema operativo, y es deliberado.** Para
+cambiarlo: `defaultTheme="system"` + `enableSystem` en `providers/index.tsx`.
+Antes de hacerlo, el matiz que importa: `prefers-color-scheme` devuelve `light`
+tanto para «quiero claro» como para «no he elegido nada», y la mayoría de
+sistemas vienen en claro de fábrica, así que alinearlo significa que la mayoría
+de visitantes verían el sitio en claro. **No existe** la combinación «oscuro
+salvo que el sistema pida claro explícitamente»: el navegador no distingue esos
+dos casos.
+
+> Medido: `enableSystem` a secas, sin tocar `defaultTheme`, no hace nada — un
+> visitante nuevo con el sistema en claro seguía viendo oscuro, porque
+> next-themes usa `defaultTheme` mientras no haya nada guardado.
+
+### 4.10 No exageres las credenciales — la regla del alcance declarado
 
 El artículo de Springer llegó a ser el titular de la portada, con la insignia
 «primer autor» en ámbar. Elian lo corrigió: su aporte fue **la redacción y
@@ -330,7 +356,7 @@ De ahí sale la regla que aplica a todo dato nuevo de este sitio:
 > ⚠️ No devuelvas la publicación a la portada ni reintroduzcas «primer autor»
 > sin que Elian lo pida explícitamente.
 
-### 4.10 Contenido invisible — el fallo más caro de este sitio
+### 4.11 Contenido invisible — el fallo más caro de este sitio
 
 Las apariciones arrancan en `opacity: 0` y sólo las sube el JavaScript cuando un
 IntersectionObserver dispara. **Cada vez que algo impide que ese observador
@@ -373,7 +399,7 @@ tras recorrer la página entera en español:
              && el.getBoundingClientRect().height > 0).length   // tiene que dar 0
 ```
 
-### 4.11 Flex + la regla global `min-width: 0`
+### 4.12 Flex + la regla global `min-width: 0`
 
 `@layer base { * { min-width: 0 } }` (§4.2) deja que **cualquier** hijo de un
 flex se encoja por debajo de su contenido. Todo elemento de ancho fijo dentro de
@@ -451,7 +477,7 @@ Revisión manual mínima:
 - probar a 360 px, 768 px y 1440 px de ancho
 - navegar toda la página solo con Tab y comprobar que el foco es visible
 - **cambiar a español EN EL MÓVIL y recorrer la página entera**: ninguna
-  sección puede quedarse en blanco (ver §4.10)
+  sección puede quedarse en blanco (ver §4.11)
 - activar «reducir movimiento» en el sistema: el barrido de las filas no debe
   ejecutarse y ningún bloque puede quedarse invisible
 
@@ -489,7 +515,7 @@ portada de revista técnica —cabecera, nombre, entradilla y **la publicación 
 Springer como artículo destacado**, leída de `content.ts` para que haya una sola
 fuente de verdad—; pasos tipográficos `--step-deck` y `--step-lead` con la
 jerarquía medida y monótona (84 → 44 → 36 → 22 → 17 en escritorio); y las tres
-correcciones de contenido invisible de §4.10 y §4.11.
+correcciones de contenido invisible de §4.11 y §4.12.
 
 > **Por qué se fue el retrato-hash.** Era una rejilla de 8×8 donde cada celda era
 > un dígito del SHA-256 de la identidad. Estaba bien construido y bien

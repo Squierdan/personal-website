@@ -142,7 +142,7 @@ export function Hero() {
         >
           <a
             href="#experience"
-            className="group inline-flex h-11 items-center gap-2 bg-accent px-5 font-mono text-ui font-medium text-[var(--accent-fg)]"
+            className="press press-solid group inline-flex h-11 items-center gap-2 bg-accent px-5 font-mono text-ui font-medium text-[var(--accent-fg)]"
           >
             {t.hero.ctaPrimary}
             <ArrowUpRight
@@ -152,14 +152,14 @@ export function Hero() {
           </a>
           <a
             href="#contact"
-            className="inline-flex h-11 items-center gap-2 border border-border-strong px-5 font-mono text-ui text-fg transition-colors hover:border-accent hover:text-accent"
+            className="press inline-flex h-11 items-center gap-2 border border-border-strong px-5 font-mono text-ui text-fg hover:border-accent hover:text-accent"
           >
             {t.hero.ctaSecondary}
           </a>
           <a
             href={site.cv[locale]}
             download
-            className="inline-flex h-11 items-center gap-2 px-2 font-mono text-ui text-fg-muted transition-colors hover:text-accent"
+            className="press inline-flex h-11 items-center gap-2 px-2 font-mono text-ui text-fg-muted hover:text-accent"
           >
             <Download aria-hidden className="h-4 w-4" />
             <span className="link-underline">{t.hero.ctaCv}</span>
@@ -179,8 +179,18 @@ export function Hero() {
         >
           {/* `key={index}` y no `key={stat.label}`: la etiqueta está traducida
               y como clave remontaría las tres cifras al cambiar de idioma. */}
+          {/* Reparto dentro de cada celda, con `first:pl-0` para que el primer
+              número siga alineado con el titular de arriba. Antes sólo había
+              `pr-4`: el contenido de las celdas 2 y 3 arrancaba pegado al
+              filete izquierdo y la etiqueta larga de la tercera llegaba casi al
+              borde derecho, así que la fila se leía descentrada.
+
+              El padding es responsivo y no fijo: a 375 px la celda mide 111 px,
+              y con `px-5` quedaban 71 px útiles para una etiqueta cuya palabra
+              más larga —«herramientas»— necesita 78. Se cortaba. Con `px-3` en
+              móvil quedan 87 y entra holgada. */}
           {t.hero.stats.map((stat, index) => (
-            <div key={index} className="bg-bg py-5 pr-4">
+            <div key={index} className="bg-bg px-3 py-5 first:pl-0 sm:px-5">
               <dt className="sr-only">{stat.label}</dt>
               <dd className="font-mono text-3xl font-semibold leading-none tabular-nums text-fg sm:text-4xl">
                 <CountUp value={Number(stat.value)} />
