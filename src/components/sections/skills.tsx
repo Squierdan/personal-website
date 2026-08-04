@@ -3,6 +3,7 @@
 import { Section, SectionHeading } from "@/components/ui/section";
 import { Reveal, RevealGroup, RevealItem } from "@/components/ui/reveal";
 import { Meter } from "@/components/ui/meter";
+import { SpotlightCard } from "@/components/ui/spotlight-card";
 import { useLanguage } from "@/components/providers/language-provider";
 import {
   certificationsByYear,
@@ -51,25 +52,27 @@ export function Skills() {
 
       <RevealGroup className="mt-[var(--space-stack)] grid gap-px border border-border bg-border sm:grid-cols-2">
         {skills.map((group) => (
-          <RevealItem key={group.id} className="bg-bg p-5 sm:p-6">
-            <p className="font-mono text-data text-accent">
-              {group.group[locale]}/
-            </p>
+          <RevealItem key={group.id} className="bg-bg">
+            <SpotlightCard className="h-full p-5 sm:p-6">
+              <p className="font-mono text-data text-accent">
+                {group.group[locale]}/
+              </p>
 
-            <ul className="mt-4 space-y-3">
-              {group.items.map((skill) => (
-                <li
-                  key={skill.name}
-                  className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1"
-                >
-                  <span className="text-ui text-fg">{skill.name}</span>
-                  <Meter
-                    level={skill.level}
-                    label={t.skills.levels[skill.level]}
-                  />
-                </li>
-              ))}
-            </ul>
+              <ul className="mt-4 space-y-3">
+                {group.items.map((skill) => (
+                  <li
+                    key={skill.name}
+                    className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1"
+                  >
+                    <span className="text-ui text-fg">{skill.name}</span>
+                    <Meter
+                      level={skill.level}
+                      label={t.skills.levels[skill.level]}
+                    />
+                  </li>
+                ))}
+              </ul>
+            </SpotlightCard>
           </RevealItem>
         ))}
       </RevealGroup>
@@ -111,17 +114,15 @@ export function Skills() {
         className="mt-[var(--space-stack)] flex flex-wrap gap-px border border-border bg-border"
       >
         {languages.map((language) => (
-          <RevealItem
-            as="li"
-            key={language.id}
-            className="flex-1 bg-bg px-5 py-4"
-          >
-            <span className="block text-ui text-fg">
-              {language.name[locale]}
-            </span>
-            <span className="mt-1 block font-mono text-data text-accent">
-              {language.level[locale]}
-            </span>
+          <RevealItem as="li" key={language.id} className="flex-1 bg-bg">
+            <SpotlightCard className="h-full px-5 py-4">
+              <span className="block text-ui text-fg">
+                {language.name[locale]}
+              </span>
+              <span className="mt-1 block font-mono text-data text-accent">
+                {language.level[locale]}
+              </span>
+            </SpotlightCard>
           </RevealItem>
         ))}
       </RevealGroup>

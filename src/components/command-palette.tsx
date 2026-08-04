@@ -4,6 +4,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useTheme } from "next-themes";
 import { useLanguage } from "@/components/providers/language-provider";
+import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion";
+import { SPRING } from "@/lib/motion";
 import { site } from "@/lib/site";
 
 /** Evento global para abrir la paleta desde cualquier botón del sitio. */
@@ -37,6 +39,31 @@ export function CommandPalette() {
 
   const { t, toggleLocale } = useLanguage();
   const { setTheme, resolvedTheme } = useTheme();
+
+  /**
+   * ⚠️ SIN ESTO, LA PALETA NO SE PUEDE CERRAR. NO LO QUITES.
+   * --------------------------------------------------------------------------
+   * Con «reducir movimiento» activo, Framer Motion suprime la animación de
+   * salida y nunca dispara su callback de finalización, así que
+   * `AnimatePresence` se queda esperando para siempre y NO desmonta al hijo.
+   * El estado de React sí cierra —medido: el efecto que bloquea el scroll del
+   * body se limpia correctamente—, pero el nodo sigue en el DOM.
+   *
+   * Consecuencia medida en el build de producción: el backdrop es
+   * `fixed inset-0 z-[100]`, y la opacidad 0 NO desactiva el hit-testing. La
+   * página entera quedaba inutilizable tras abrir ⌘K una sola vez; los enlaces
+   * de la barra de navegación devolvían «bloqueado por .absolute.inset-0».
+   * Sólo se recuperaba recargando.
+   *
+   * El arreglo es no darle animación de salida en ese caso: sin `exit`,
+   * `AnimatePresence` no tiene nada que esperar y desmonta en el acto. Quien
+   * no ha pedido reducir movimiento conserva la salida animada.
+   *
+   * `exit` es seguro de condicionar con un hook, al contrario que `initial`
+   * (§4.11): se lee al desmontar, mucho después de la hidratación. Ver la
+   * cabecera de `use-prefers-reduced-motion.ts`.
+   */
+  const reducedMotion = usePrefersReducedMotion();
 
   const close = useCallback(() => {
     setOpen(false);
@@ -198,7 +225,7 @@ export function CommandPalette() {
           className="fixed inset-0 z-[100] flex items-start justify-center px-4 pt-[12vh]"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
+          exit={reducedMotion ? undefined : { opacity: 0 }}
           transition={{ duration: 0.16 }}
         >
           <button
@@ -215,8 +242,12 @@ export function CommandPalette() {
             className="term relative w-full max-w-xl overflow-hidden"
             initial={{ y: -12, scale: 0.98 }}
             animate={{ y: 0, scale: 1 }}
-            exit={{ y: -8, scale: 0.98 }}
-            transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+            exit={
+              reducedMotion
+                ? undefined
+                : { y: -8, scale: 0.98, transition: { duration: 0.14 } }
+            }
+            transition={SPRING.snappy}
             onKeyDown={onListKeyDown}
           >
             <div className="flex items-center gap-2 border-b border-border px-4 py-3">
@@ -261,7 +292,7 @@ export function CommandPalette() {
                           command.run();
                           if (command.group === t.ui.paletteNav) close();
                         }}
-                        className={`flex w-full items-center justify-between gap-3 px-4 py-2 text-left font-mono text-sm transition-colors ${
+                        className={`relative flex w-full items-center justify-between gap-3 px-4 py-2 text-left font-mono text-sm transition-colors ${
                           index === cursor
                             ? "bg-accent-soft text-accent"
                             : "text-fg-muted"

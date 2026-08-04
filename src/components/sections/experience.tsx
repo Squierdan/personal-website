@@ -6,6 +6,7 @@ import { ArrowUpRight } from "lucide-react";
 import { Section, SectionHeading } from "@/components/ui/section";
 import { Reveal } from "@/components/ui/reveal";
 import { useLanguage } from "@/components/providers/language-provider";
+import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion";
 import { DUR, EASE_OUT } from "@/lib/motion";
 import {
   categoryLabels,
@@ -38,6 +39,12 @@ export function Experience() {
   const { t, locale } = useLanguage();
   const [filter, setFilter] = useState<Filter>("all");
   const [openId, setOpenId] = useState<string | null>(null);
+
+  /* Mismo motivo que en la paleta y el menú móvil: con «reducir movimiento»
+     `AnimatePresence` no desmonta al hijo porque la salida nunca termina. Aquí
+     el síntoma sería una tabla que no filtra —las filas descartadas seguirían
+     visibles— y un detalle desplegado que no se puede volver a plegar. */
+  const reducedMotion = usePrefersReducedMotion();
 
   /* Sin separar investigación del resto: la publicación es una entrada más de
      la trayectoria, no un bloque destacado. Ver la nota de `content.ts`. */
@@ -136,7 +143,7 @@ export function Experience() {
                 data-reveal
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -6 }}
+                exit={reducedMotion ? undefined : { opacity: 0, y: -6 }}
                 transition={{ duration: DUR.base, ease: EASE_OUT }}
                 className="border-t border-border lg:first:border-t-0"
               >
@@ -193,9 +200,22 @@ export function Experience() {
                 <AnimatePresence initial={false}>
                   {isOpen ? (
                     <motion.div
-                      initial={{ height: 0, opacity: 0 }}
+                      /* `initial={false}` con movimiento reducido: Framer
+                         renderiza directamente en el estado `animate` sin
+                         animar. Sin esto, suprimía la animación y dejaba el
+                         panel en su `initial` —medido: `height: 0; opacity: 0`
+                         con el texto dentro—, así que pulsar «+» no mostraba
+                         nada en absoluto.
+
+                         Aquí SÍ es seguro condicionar `initial` con un hook,
+                         al contrario que en las apariciones de scroll (§4.11):
+                         este panel se monta al hacer clic, mucho después de la
+                         hidratación, cuando el hook ya devuelve el valor real.
+                         La red CSS de `[data-reveal]` tampoco servía como
+                         alternativa: sólo corrige `opacity`, no `height`. */
+                      initial={reducedMotion ? false : { height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
+                      exit={reducedMotion ? undefined : { height: 0, opacity: 0 }}
                       transition={{ duration: DUR.slow, ease: EASE_OUT }}
                       className="overflow-hidden"
                     >

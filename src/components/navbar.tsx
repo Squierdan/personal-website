@@ -8,6 +8,7 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { LanguageToggle } from "@/components/language-toggle";
 import { openCommandPalette } from "@/components/command-palette";
 import { useActiveSection } from "@/hooks/use-active-section";
+import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion";
 import { site } from "@/lib/site";
 
 const SECTION_IDS = ["about", "skills", "experience", "services", "contact"];
@@ -16,6 +17,27 @@ export function Navbar() {
   const { t } = useLanguage();
   const [menuOpen, setMenuOpen] = useState(false);
   const active = useActiveSection(SECTION_IDS);
+
+  /**
+   * ⚠️ SIN ESTO, EL MENÚ MÓVIL NO SE CIERRA NUNCA. NO LO QUITES.
+   * --------------------------------------------------------------------------
+   * Mismo fallo que en la paleta de comandos, y aquí era todavía peor. Con
+   * «reducir movimiento» activo, `AnimatePresence` no llega a desmontar el
+   * menú porque la animación de salida nunca termina — y como este panel lleva
+   * `data-reveal`, la red de seguridad de `globals.css`
+   * (`[data-reveal] { opacity: 1 !important }`) lo forzaba a quedarse
+   * COMPLETAMENTE VISIBLE, no transparente.
+   *
+   * Medido en el build de producción: tras pulsar la X, el menú seguía en el
+   * DOM con `opacity: 1`, tapando la página entera a pantalla completa. En un
+   * móvil eso deja el sitio inservible hasta recargar.
+   *
+   * Es el punto ciego de la red del §4.11: resuelve que el contenido no se
+   * quede invisible al ENTRAR, y por eso mismo agrava que no se quede visible
+   * al SALIR. Sin `exit`, `AnimatePresence` desmonta en el acto y las dos
+   * cosas quedan bien.
+   */
+  const reducedMotion = usePrefersReducedMotion();
 
   const { scrollYProgress } = useScroll();
   const progress = useSpring(scrollYProgress, {
@@ -54,9 +76,14 @@ export function Navbar() {
             href="#top"
             className="group -my-2 flex shrink-0 items-center gap-2 py-2 font-mono text-sm"
           >
+            {/* `group-hover:scale-110`: el cuadro ya invertía sus colores al
+                pasar el cursor, pero un cambio de color puro no se siente
+                como una respuesta, se siente como un estado. Añadir el
+                crecimiento hace que se lea como un gesto en marcha y no como
+                un interruptor. */}
             <span
               aria-hidden
-              className="grid h-6 w-6 place-items-center border border-accent text-data font-bold text-accent transition-colors group-hover:bg-accent group-hover:text-[var(--accent-fg)]"
+              className="grid h-6 w-6 place-items-center border border-accent text-data font-bold text-accent transition-[transform,background-color,color] duration-[var(--dur-micro)] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-110 group-hover:bg-accent group-hover:text-[var(--accent-fg)]"
             >
               {site.handle.charAt(0).toUpperCase()}
             </span>
@@ -142,7 +169,7 @@ export function Navbar() {
             data-reveal
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
+            exit={reducedMotion ? undefined : { opacity: 0, y: -10 }}
             transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
           >
             <div className="flex h-14 items-center justify-between border-b border-border px-5">

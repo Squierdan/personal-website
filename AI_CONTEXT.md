@@ -59,7 +59,7 @@ declaran en `src/app/globals.css` dentro de `@theme inline`. El modo oscuro usa
 
 | Archivo | Contiene |
 |---|---|
-| `src/app/globals.css` | Paleta, escala tipográfica, ritmo vertical, tokens de Tailwind y de movimiento, utilidades (`.label`, `.press`, `.nav-link`, `.term`, `.caret`, `.grid-lines`, `.accent-glow`, `.scan-row`, `.stencil`, `.corner-marks`, `.link-underline`) |
+| `src/app/globals.css` | Paleta, escala tipográfica, ritmo vertical, tokens de Tailwind y de movimiento, utilidades (`.label`, `.press`, `.spotlight`, `.nav-link`, `.term`, `.caret`, `.grid-lines`, `.accent-glow`, `.scan-row`, `.stencil`, `.corner-marks`, `.link-underline`) |
 | `src/lib/motion.ts` | **Vocabulario de movimiento**: duraciones, curvas y variantes de Framer Motion. Todo el movimiento del sitio sale de aquí |
 | `src/app/layout.tsx` | Fuentes, metadatos SEO, JSON-LD, skip link |
 | `next.config.ts` | Cabeceras de seguridad, incluida la CSP. **Si añades un recurso externo** (una fuente de Google, un script de analítica, una imagen de otro dominio) la CSP lo bloqueará hasta que lo declares ahí |
@@ -79,7 +79,9 @@ components/ui/count-up.tsx     Contador que renderiza el valor final desde el pr
 components/ui/section.tsx      <Section> y <SectionHeading> (numeral de plancha + regla + título)
 components/ui/reveal.tsx       <Reveal> · <RevealGroup>/<RevealItem> · <RevealRule>
 components/ui/icons.tsx        GitHub · LinkedIn · X
+components/ui/spotlight-card.tsx  Foco que sigue al cursor en las celdas de rejilla
 hooks/use-active-section.ts    IntersectionObserver
+hooks/use-prefers-reduced-motion.ts  Preferencia de movimiento. LEE SU CABECERA: sirve para `exit`, no para `initial`
 hooks/use-clock.ts             Reloj vía useSyncExternalStore
 hooks/use-mounted.ts           Bandera de hidratación
 ```
@@ -400,7 +402,60 @@ tras recorrer la página entera en español:
              && el.getBoundingClientRect().height > 0).length   // tiene que dar 0
 ```
 
-### 4.12 Flex + la regla global `min-width: 0`
+### 4.12 `AnimatePresence` + movimiento reducido — el contrario del §4.11
+
+El §4.11 trata el contenido que se queda **invisible al entrar**. Éste es su
+reflejo exacto: contenido que se queda **visible al salir**, y es peor, porque
+lo que queda montado son capas a pantalla completa que interceptan clics.
+
+Con «reducir movimiento» activo, Framer Motion suprime la animación de salida y
+**nunca dispara su callback de finalización**, así que `AnimatePresence` espera
+para siempre y no desmonta al hijo. El estado de React sí cambia —medido: el
+efecto que bloquea el scroll del body se limpia bien— pero el nodo sigue en el
+DOM.
+
+Medido en el build de producción, antes del arreglo:
+
+| Elemento | Síntoma | Gravedad |
+|---|---|---|
+| Paleta ⌘K | Backdrop `fixed inset-0 z-[100]` con `opacity: 0`. La opacidad **no** desactiva el hit-testing | Página entera sin poder pulsar nada tras abrir ⌘K una vez |
+| Menú móvil | Se quedaba con `opacity: 1` porque lleva `data-reveal`, y la red del §4.11 lo forzaba a ser visible | Sitio tapado por completo en móvil |
+| Tabla de experiencia | Las filas descartadas no desaparecían | El filtro parecía roto |
+
+> ⚠️ **La red del §4.11 agrava este fallo, no lo arregla.**
+> `[data-reveal] { opacity: 1 !important }` existe para que nada se quede
+> invisible al entrar — y por eso mismo obliga a un elemento que está saliendo
+> a permanecer completamente visible.
+
+**La regla:** todo `exit` de un elemento bajo `AnimatePresence` se condiciona.
+Sin `exit`, `AnimatePresence` no tiene nada que esperar y desmonta en el acto.
+
+```tsx
+const reducedMotion = usePrefersReducedMotion();
+<motion.div exit={reducedMotion ? undefined : { opacity: 0 }} />
+```
+
+**Y el caso hermano: `initial` que anima `height`.** El detalle desplegable de
+la sección 03 se quedaba en `height: 0; opacity: 0` con el texto dentro —
+pulsar «+» no mostraba nada—. La red CSS no servía: sólo corrige `opacity`, no
+`height`. Se arregla con `initial={reducedMotion ? false : {…}}`, que hace que
+Framer renderice directamente en el estado final.
+
+> **¿No dice el §4.11 que condicionar `initial` con un hook NO funciona?**
+> Dice que no funciona **en las apariciones de scroll**, porque se montan
+> durante la hidratación, cuando el hook todavía devuelve el snapshot de
+> servidor (`false`). Un panel que se monta **al hacer clic** es otro caso: para
+> entonces el hook ya devuelve el valor real del navegador. La distinción es
+> *cuándo monta el elemento*, no la prop.
+
+El hook está en `hooks/use-prefers-reduced-motion.ts` y usa
+`useSyncExternalStore` para no chocar con la regla de ESLint del §4.5.
+
+**Cómo comprobarlo** — con «reducir movimiento» activo en el sistema: abre y
+cierra ⌘K, abre y cierra el menú móvil, filtra la tabla de experiencia y
+despliega y pliega una fila. Las cuatro cosas tienen que volver a su sitio.
+
+### 4.13 Flex + la regla global `min-width: 0`
 
 `@layer base { * { min-width: 0 } }` (§4.2) deja que **cualquier** hijo de un
 flex se encoja por debajo de su contenido. Todo elemento de ancho fijo dentro de

@@ -529,8 +529,18 @@ body {
     border-color var(--dur-micro) ease,
     color var(--dur-micro) ease;
 }
+/* Crece un poco al acercarse el cursor, encoge al pulsar. Antes sólo existía
+   el encogido: el botón pasaba directo de "quieto" a "pulsado" sin ningún
+   paso intermedio, que es justo lo que se echaba en falta —«pasa
+   inmediatamente lo que tiene que pasar sin más»—. El orden de las reglas
+   importa: `:hover` va primero para que `:active` (después en la cascada)
+   gane cuando el cursor pulsa estando encima, y el botón encoja en vez de
+   quedarse a medio crecer. */
+.press:hover {
+  transform: scale(1.015);
+}
 .press:active {
-  transform: scale(0.97);
+  transform: scale(0.965);
 }
 
 /* Barrido de entrada al pasar el cursor.
@@ -574,8 +584,62 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .press:hover,
   .press:active {
     transform: none;
+  }
+}
+
+/* Foco puntual bajo el cursor, dentro de las celdas de Servicios y
+   Habilidades.
+   -------------------------------------------------------------------------
+   Antes esas dos rejillas eran las únicas superficies de la página que no
+   respondían a nada: entraban con la aparición de scroll y ahí se quedaban.
+   El resto del sitio tiene su propio lenguaje de interacción —el barrido de
+   `.scan-row` en la tabla de experiencia, el barrido de `.press` en los
+   botones— y estas celdas no tenían el suyo.
+
+   El gesto: un resplandor que se enciende bajo el cursor y lo sigue mientras
+   se mueve dentro de la celda, como enfocar una linterna sobre un panel de
+   instrumentos. Reutiliza `--glow`, el mismo color que ya usa el barrido de
+   `.scan-row`, así que no es un color nuevo en el sistema.
+
+   Coste, medido en la arquitectura, no en un perfilador:
+   · La posición se escribe como variables CSS (`--spot-x/--spot-y`) desde
+     JavaScript, acotada a un `requestAnimationFrame` por fotograma como
+     mucho —nunca una escritura por evento de puntero, que puede disparar
+     cientos de veces por segundo—.
+   · Lo que cambia es el fondo de UNA celda de ~300–400 px, no la página
+     entera: es una repintada local, no un layout ni una repintada global.
+   · Un fallback de 50 %/50 % evita que la mancha aparezca en una esquina si
+     el usuario llega al elemento por teclado, sin haber movido el ratón.
+
+   Por diseño, en vez de por confianza en el JavaScript: la capa del
+   resplandor se apaga por completo (`display: none`) en cualquier
+   dispositivo sin puntero fino, o con «reducir movimiento» activo. Ni
+   siquiera un fallo en la detección por JavaScript la dejaría encendida
+   donde no toca. */
+.spotlight {
+  position: relative;
+}
+.spotlight-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--dur-base) var(--ease-out);
+  background: radial-gradient(
+    220px circle at var(--spot-x, 50%) var(--spot-y, 50%),
+    var(--glow),
+    transparent 70%
+  );
+}
+.spotlight:hover .spotlight-glow {
+  opacity: 1;
+}
+@media (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) {
+  .spotlight-glow {
+    display: none;
   }
 }
 

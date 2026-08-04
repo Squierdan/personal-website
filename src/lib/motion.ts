@@ -41,6 +41,28 @@ export const DUR = {
 /** Desfase entre hijos de una lista. Por debajo de 30 ms no se percibe. */
 export const STAGGER = 0.045;
 
+/**
+ * Física de resorte, reservada a momentos INTERACTIVOS — nunca a apariciones.
+ *
+ * El resto del vocabulario es `duration` + `EASE_OUT`: una curva fija que
+ * siempre tarda lo mismo, adecuada para algo estructural como un párrafo
+ * apareciendo al hacer scroll, donde la precisión importa más que la gracia.
+ * Un resorte se comporta distinto: la duración depende de la distancia y
+ * puede pasarse de largo antes de asentarse, que es exactamente lo que hace
+ * sentir "vivo" un gesto de respuesta directa —abrir la paleta de comandos,
+ * deslizar el cursor de selección— pero leería como impreciso si gobernara
+ * un párrafo entero revelándose.
+ *
+ * Dos perfiles y ni uno más, por la misma razón que hay tres duraciones y no
+ * siete: `snappy` para lo que el usuario dispara con una tecla o un clic y
+ * espera ver resuelto ya (la paleta, su cursor de selección); `soft` para
+ * telón de fondo que no debe competir por atención.
+ */
+export const SPRING = {
+  snappy: { type: "spring", stiffness: 420, damping: 32, mass: 0.9 } as const,
+  soft: { type: "spring", stiffness: 260, damping: 28, mass: 1 } as const,
+};
+
 /* -------------------------------------------------------------------------- */
 /*  VARIANTES                                                                  */
 /* -------------------------------------------------------------------------- */

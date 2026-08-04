@@ -2,6 +2,7 @@
 
 import { Section, SectionHeading } from "@/components/ui/section";
 import { RevealGroup, RevealItem } from "@/components/ui/reveal";
+import { SpotlightCard } from "@/components/ui/spotlight-card";
 import { useLanguage } from "@/components/providers/language-provider";
 import { services } from "@/lib/content";
 
@@ -52,37 +53,35 @@ export function Services() {
         className="grid gap-px border border-border bg-border sm:grid-cols-2"
       >
         {services.map((service) => (
-          <RevealItem
-            as="li"
-            key={service.cmd}
-            className="flex flex-col bg-bg p-6 sm:p-7"
-          >
-            <p className="font-mono text-data text-accent">
-              <span aria-hidden>❯ </span>
-              {service.cmd}
-            </p>
+          <RevealItem as="li" key={service.cmd} className="flex bg-bg">
+            <SpotlightCard className="flex h-full flex-col p-6 sm:p-7">
+              <p className="font-mono text-data text-accent">
+                <span aria-hidden>❯ </span>
+                {service.cmd}
+              </p>
 
-            <h3 className="mt-3 text-balance font-medium leading-tight tracking-[-0.015em] text-fg text-[length:var(--step-h3)]">
-              {service.title[locale]}
-            </h3>
+              <h3 className="mt-3 text-balance font-medium leading-tight tracking-[-0.015em] text-fg text-[length:var(--step-h3)]">
+                {service.title[locale]}
+              </h3>
 
-            <p className="mt-3 text-meta text-fg-muted">
-              {service.description[locale]}
-            </p>
+              <p className="mt-3 text-meta text-fg-muted">
+                {service.description[locale]}
+              </p>
 
-            {/* `mt-auto`: los chips se alinean al pie de cada celda aunque las
-                descripciones tengan distinto largo, así que la línea inferior de
-                la rejilla queda recta en vez de escalonada. */}
-            <ul className="mt-auto flex flex-wrap gap-1.5 pt-5">
-              {service.keywords.map((keyword) => (
-                <li
-                  key={keyword}
-                  className="border border-border px-1.5 py-0.5 font-mono text-data text-fg-subtle"
-                >
-                  {keyword}
-                </li>
-              ))}
-            </ul>
+              {/* `mt-auto`: los chips se alinean al pie de cada celda aunque las
+                  descripciones tengan distinto largo, así que la línea inferior
+                  de la rejilla queda recta en vez de escalonada. */}
+              <ul className="mt-auto flex flex-wrap gap-1.5 pt-5">
+                {service.keywords.map((keyword) => (
+                  <li
+                    key={keyword}
+                    className="border border-border px-1.5 py-0.5 font-mono text-data text-fg-subtle"
+                  >
+                    {keyword}
+                  </li>
+                ))}
+              </ul>
+            </SpotlightCard>
           </RevealItem>
         ))}
       </RevealGroup>
