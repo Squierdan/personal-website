@@ -113,9 +113,12 @@ export function Skills() {
         as="ul"
         className="mt-[var(--space-stack)] flex flex-wrap gap-px border border-border bg-border"
       >
+        {/* `spotlight-tight`: estas celdas miden ~60 px de alto y el foco por
+            defecto (220 px de radio) se recortaba casi entero, leyéndose como
+            un lavado plano en vez de como un punto de luz. */}
         {languages.map((language) => (
           <RevealItem as="li" key={language.id} className="flex-1 bg-bg">
-            <SpotlightCard className="h-full px-5 py-4">
+            <SpotlightCard className="spotlight-tight h-full px-5 py-4">
               <span className="block text-ui text-fg">
                 {language.name[locale]}
               </span>

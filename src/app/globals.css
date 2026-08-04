@@ -621,6 +621,15 @@ body {
    donde no toca. */
 .spotlight {
   position: relative;
+  /* Radio del foco. Es una variable y no un valor fijo porque las celdas de
+     esta página no miden todas lo mismo: una tarjeta de Servicios pasa de los
+     200 px de alto, pero una celda de Idiomas ronda los 60. Un radio de 220 px
+     dentro de una caja de 60 se recorta casi entero y deja de leerse como un
+     foco para parecer un lavado plano de color. */
+  --spot-r: 220px;
+}
+.spotlight-tight {
+  --spot-r: 110px;
 }
 .spotlight-glow {
   position: absolute;
@@ -629,7 +638,7 @@ body {
   opacity: 0;
   transition: opacity var(--dur-base) var(--ease-out);
   background: radial-gradient(
-    220px circle at var(--spot-x, 50%) var(--spot-y, 50%),
+    var(--spot-r) circle at var(--spot-x, 50%) var(--spot-y, 50%),
     var(--glow),
     transparent 70%
   );
