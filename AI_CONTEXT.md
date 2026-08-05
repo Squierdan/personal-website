@@ -402,7 +402,40 @@ tras recorrer la página entera en español:
              && el.getBoundingClientRect().height > 0).length   // tiene que dar 0
 ```
 
-### 4.12 `AnimatePresence` + movimiento reducido — el contrario del §4.11
+### 4.12 Movimiento reducido: reducir MOVIMIENTO, no eliminar la respuesta
+
+`prefers-reduced-motion` pide quitar lo que provoca mareo —desplazamientos,
+escalados, parallax, giros—. **No pide dejar la interfaz muda.** Una transición
+de color o de opacidad no dispara ningún trastorno vestibular, y tanto WCAG como
+Apple la recomiendan como el *sustituto* del gesto.
+
+Este sitio lo tuvo mal calibrado y el resultado fue una interfaz sin ninguna
+respuesta para esos visitantes: ni tinte al pasar el cursor, ni foco en las
+tarjetas, ni cambio al pulsar. Tres causas sumadas:
+
+| Causa | Efecto |
+|---|---|
+| `transition-duration: 0.001ms !important` sobre `*` | Apagaba **todas** las transiciones, también las de color |
+| `.spotlight-glow { display: none }` | El foco de las tarjetas desaparecía entero |
+| `.press:hover { transform: none }` | Sin escalado y sin nada que lo sustituyera |
+
+**La regla:** con la preferencia activa, cambia el TIPO de respuesta, no la
+elimines.
+
+- En vez de matar `transition-duration`, acota `transition-property` a lo
+  seguro (`opacity, color, background-color, border-color, fill, stroke,
+  filter, box-shadow`). Las transiciones de `transform` dejan de ejecutarse
+  solas y las de color siguen vivas.
+- El barrido de `.press` usa `scaleX`; con la preferencia se sustituye por el
+  mismo tinte apareciendo por opacidad, sin desplazarse.
+- El foco de `.spotlight` no se oculta: deja de **seguir** al cursor —eso es lo
+  que era movimiento— y se queda quieto en el centro apareciendo por opacidad.
+- Las animaciones por keyframes sí se apagan enteras: ahí no hay matiz.
+
+> Sólo se oculta el foco por completo en `(hover: none), (pointer: coarse)`,
+> donde no hay cursor que seguir ni hover que responder.
+
+### 4.13 `AnimatePresence` + movimiento reducido — el contrario del §4.11
 
 El §4.11 trata el contenido que se queda **invisible al entrar**. Éste es su
 reflejo exacto: contenido que se queda **visible al salir**, y es peor, porque
@@ -455,7 +488,7 @@ El hook está en `hooks/use-prefers-reduced-motion.ts` y usa
 cierra ⌘K, abre y cierra el menú móvil, filtra la tabla de experiencia y
 despliega y pliega una fila. Las cuatro cosas tienen que volver a su sitio.
 
-### 4.13 Flex + la regla global `min-width: 0`
+### 4.14 Flex + la regla global `min-width: 0`
 
 `@layer base { * { min-width: 0 } }` (§4.2) deja que **cualquier** hijo de un
 flex se encoja por debajo de su contenido. Todo elemento de ancho fijo dentro de

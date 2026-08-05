@@ -536,8 +536,12 @@ body {
    importa: `:hover` va primero para que `:active` (después en la cascada)
    gane cuando el cursor pulsa estando encima, y el botón encoja en vez de
    quedarse a medio crecer. */
+/* 1.03 y no 1.015: sobre un botón de 44 px de alto, un 1,5 % son 0,66 px —
+   por debajo del umbral en que el ojo registra un cambio, o sea trabajo
+   invisible. Un 3 % son 1,3 px y ya se lee como que el botón se acerca. Sigue
+   dentro del rango 0,95–1,05 que recomiendan Apple y Material. */
 .press:hover {
-  transform: scale(1.015);
+  transform: scale(1.03);
 }
 .press:active {
   transform: scale(0.965);
@@ -571,6 +575,36 @@ body {
   transform: scaleX(1);
 }
 
+/* Área táctil de 44 px SIN engordar el botón.
+   -------------------------------------------------------------------------
+   Medido a 375 px, diecinueve controles quedaban por debajo del mínimo de
+   44×44 que piden Apple HIG y Material: los filtros, los iconos sociales, las
+   descargas de CV y los conmutadores rondan los 36 px, y el botón de recalcular
+   llegaba a 32.
+
+   Subirlos a 44 px de alto visible no era opción: la estética del sitio es
+   densa, de filetes de 1 px, y unos botones un 25 % más altos la rompen.
+
+   Este `::after` no pinta nada — sólo amplía la zona que responde al dedo,
+   centrada sobre el control. Al ser `position: absolute` no ocupa espacio ni
+   empuja a sus vecinos, así que el diseño no cambia ni un píxel y el objetivo
+   táctil pasa a cumplir la norma.
+
+   `(pointer: coarse)` lo limita a dispositivos táctiles: con ratón la
+   precisión ya es suficiente, y ampliar la zona en escritorio dispararía el
+   hover antes de llegar al botón. */
+@media (pointer: coarse) {
+  .press::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: max(100%, 44px);
+    height: max(100%, 44px);
+  }
+}
+
 /* El CTA sólido no lleva barrido: su fondo ya es el acento, así que una banda
    de acento encima no se vería. Se ilumina, que es el equivalente. */
 .press-solid::before {
@@ -583,10 +617,38 @@ body {
   filter: brightness(0.92);
 }
 
+/* Respuesta para quien pidió menos movimiento.
+   -------------------------------------------------------------------------
+   No se les deja sin respuesta: se les cambia el TIPO de respuesta.
+
+   `prefers-reduced-motion` significa reducir el MOVIMIENTO —desplazamientos,
+   escalados, parallax, giros—, que es lo que dispara los trastornos
+   vestibulares. Una transición de color o de opacidad no provoca mareo, y
+   tanto WCAG como Apple la recomiendan justamente como el SUSTITUTO del gesto,
+   no como algo que también haya que quitar.
+
+   Antes esto estaba mal calibrado: se anulaba el `scale` y, además, la regla
+   global de más abajo mataba todas las transiciones a 0,001 ms. Resultado: un
+   visitante con la preferencia activa —en Windows, «Mostrar animaciones»
+   desactivado— no recibía NINGUNA señal al pasar el cursor ni al pulsar. Eso
+   no es accesibilidad, es una interfaz muda.
+
+   Ahora: fuera el escalado (movimiento), dentro el tinte que aparece por
+   opacidad (sin movimiento). El barrido normal usa `scaleX`, así que aquí se
+   sustituye por el mismo tinte apareciendo en su sitio, sin desplazarse. */
 @media (prefers-reduced-motion: reduce) {
   .press:hover,
   .press:active {
     transform: none;
+  }
+  .press::before {
+    transform: scaleX(1);
+    opacity: 0;
+    transition: opacity var(--dur-base) ease;
+  }
+  .press:hover::before,
+  .press:focus-visible::before {
+    opacity: 1;
   }
 }
 
@@ -646,7 +708,17 @@ body {
 .spotlight:hover .spotlight-glow {
   opacity: 1;
 }
-@media (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) {
+/* En un dispositivo sin puntero fino no hay cursor al que seguir, así que la
+   capa sobra por completo.
+
+   ⚠️ `prefers-reduced-motion` ya NO entra en esta lista, y es deliberado.
+   Antes sí, y dejaba a esos visitantes sin ninguna respuesta en las tarjetas.
+   El componente ya no escribe `--spot-x/--spot-y` cuando la preferencia está
+   activa (ver `spotlight-card.tsx`), así que el foco se queda quieto en el
+   centro con el 50 %/50 % por defecto y lo único que ocurre es que aparece por
+   opacidad. Eso no es movimiento: es un cambio de color, que es exactamente lo
+   que la preferencia permite conservar. */
+@media (hover: none), (pointer: coarse) {
   .spotlight-glow {
     display: none;
   }
@@ -720,12 +792,30 @@ main > section {
    PREFERENCIA DE MOVIMIENTO REDUCIDO (accesibilidad)
    ========================================================================== */
 @media (prefers-reduced-motion: reduce) {
+  /* ⚠️ AQUÍ HABÍA `transition-duration: 0.001ms !important`, Y SE HA QUITADO.
+     -----------------------------------------------------------------------
+     Esa línea es el patrón que circula por todas partes, y es demasiado
+     brusca: apagaba TODAS las transiciones del sitio, incluidas las de color
+     y opacidad, que no provocan mareo. Un visitante con la preferencia activa
+     se quedaba sin ninguna respuesta al pasar el cursor o pulsar — ni tinte,
+     ni cambio de borde, nada.
+
+     En su lugar se acota `transition-property` a lo que es seguro. Como lleva
+     `!important`, gana a cualquier `transition` declarada en un componente, y
+     el efecto es quirúrgico: las transiciones de `transform` sencillamente no
+     se ejecutan (el estado final se aplica de golpe, sin animar), mientras que
+     color, opacidad, bordes y filtros siguen transicionando con normalidad.
+
+     Las animaciones por keyframes sí se apagan enteras: son las que giran,
+     rebotan y desplazan, y ahí no hay matiz que hacer. */
   *,
   *::before,
   *::after {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
+    transition-property:
+      opacity, color, background-color, border-color, fill, stroke, filter,
+      box-shadow !important;
     scroll-behavior: auto !important;
   }
   .caret {

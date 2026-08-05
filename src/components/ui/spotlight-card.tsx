@@ -26,11 +26,21 @@ type SpotlightCardProps = {
  *  seguimiento de puntero y evita convertir un gesto decorativo en un
  *  problema de rendimiento.
  *
- *  La detección de capacidad del dispositivo (`matchMedia`) es sólo para
- *  ahorrar el trabajo del listener en un móvil, donde nunca hay puntero que
- *  seguir. La garantía real de que el resplandor no aparece donde no debe
- *  vive en CSS (`globals.css`, la media query sobre `.spotlight-glow`): si
- *  esta comprobación fallara, la capa seguiría oculta por `display: none`.
+ *  ⚠️ CON «REDUCIR MOVIMIENTO» EL FOCO SIGUE EXISTIENDO, PERO NO SIGUE AL
+ *  CURSOR.
+ *  Lo que molesta de este gesto no es el resplandor, es el SEGUIMIENTO: un
+ *  elemento persiguiendo al puntero es movimiento. El resplandor en sí es un
+ *  cambio de color. Así que con la preferencia activa este componente deja de
+ *  escribir `--spot-x/--spot-y`, el degradado se queda quieto en el 50 %/50 %
+ *  por defecto, y lo único que ocurre al pasar el cursor es que aparece por
+ *  opacidad — que es la clase de respuesta que la preferencia sí permite.
+ *
+ *  Antes la capa se ocultaba entera con `display: none` en ese caso, y esos
+ *  visitantes se quedaban sin ninguna respuesta en las tarjetas. Ver la nota
+ *  de la media query en `globals.css`.
+ *
+ *  En un dispositivo sin puntero fino la capa sí desaparece del todo por CSS:
+ *  ahí no hay cursor que seguir ni hover que responder.
  * ============================================================================
  */
 export function SpotlightCard({ children, className = "" }: SpotlightCardProps) {
