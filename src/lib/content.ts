@@ -230,14 +230,21 @@ export const work: WorkItem[] = [
 /* -------------------------------------------------------------------------- */
 
 /**
- * ⚠️ Los niveles salen TAL CUAL del apartado HABILIDADES del CV
- * (`public/Elian-Caizapanta-CV-ES.pdf`). El CV sólo declara dos: «Experto» y
- * «Avanzado», y sólo para diez herramientas.
+ * ⚠️ Los niveles salen TAL CUAL del CV (`public/Elian-Caizapanta-CV-ES.pdf`),
+ * que sólo usa dos —«Experto» y «Avanzado»— y sólo los pone en SEIS
+ * herramientas: Linux, Pentesting, VirtualBox, Word, Excel y PowerPoint.
  *
  * **No inventes un nivel para una herramienta que el CV no puntúa.** Si algo no
  * tiene nivel declarado, va en `toolkit` de abajo, que es una lista sin
  * puntuar. Un medidor es una afirmación cuantitativa: o sale del CV o no se
  * pinta. Es el mismo criterio que hizo bajar el énfasis de la publicación.
+ *
+ * > Aquí hubo medidores para Python, Java, HTML·CSS·JavaScript y Microsoft
+ * > Azure, porque la versión anterior del CV sí les ponía «Experto» o
+ * > «Avanzado». La versión ATS de 2026 los reorganizó por categorías y les
+ * > quitó el nivel, así que se han movido a `toolkit`. Mantenerlos con medidor
+ * > habría dejado al sitio afirmando algo que el PDF descargable ya no dice, y
+ * > el PDF está a un clic.
  */
 export type SkillLevel = "expert" | "advanced";
 
@@ -250,34 +257,20 @@ export type SkillGroup = {
 
 export const skills: SkillGroup[] = [
   {
-    id: "dev",
-    group: { es: "lenguajes y desarrollo", en: "languages & development" },
-    items: [
-      { name: "Python", level: "expert" },
-      { name: "Java", level: "expert" },
-      { name: "HTML · CSS · JavaScript", level: "expert" },
-    ],
-  },
-  {
     id: "sys",
-    group: { es: "sistemas y nube", en: "systems & cloud" },
+    group: { es: "seguridad y sistemas", en: "security & systems" },
     items: [
       { name: "VirtualBox", level: "expert" },
       { name: "Linux", level: "advanced" },
-      { name: "Microsoft Azure", level: "advanced" },
+      { name: "Pentesting", level: "advanced" },
     ],
   },
   {
-    id: "sec",
-    group: { es: "seguridad ofensiva", en: "offensive security" },
-    items: [{ name: "Pentesting", level: "advanced" }],
-  },
-  {
     id: "office",
-    group: { es: "ofimática y datos", en: "office & data" },
+    group: { es: "ofimática", en: "productivity tools" },
     items: [
-      { name: "Microsoft Excel", level: "expert" },
       { name: "Microsoft Word", level: "expert" },
+      { name: "Microsoft Excel", level: "expert" },
       { name: "Microsoft PowerPoint", level: "expert" },
     ],
   },
@@ -287,27 +280,88 @@ export const skills: SkillGroup[] = [
 /*  RESTO DEL INSTRUMENTAL — sin nivel declarado                               */
 /* -------------------------------------------------------------------------- */
 
-/** Herramientas y conocimientos del CV que no llevan nivel. Sin medidor. */
-export const toolkit: { id: string; group: Localized; items: string[] }[] = [
+/**
+ * Herramientas y conocimientos del CV que NO llevan nivel. Sin medidor.
+ *
+ * Las categorías replican las del apartado «Conocimientos técnicos» del CV, que
+ * en la versión ATS de 2026 pasó a ser bastante más detallado: aparecen Azure,
+ * PostgreSQL, React, Next.js, Spring Boot, Django y DevOps, que antes no
+ * estaban en el sitio.
+ *
+ * ⚠️ Los items son `Localized`, no `string`. Antes eran cadenas sueltas y por
+ * eso la versión en inglés mostraba «Criptografía», «Automatización» y
+ * «Migración de bases de datos» en español — en un sitio cuyo público objetivo
+ * son reclutadores internacionales. Los nombres propios (React, Nessus, Git)
+ * se repiten idénticos en los dos idiomas a propósito: traducir una marca sería
+ * peor que no traducirla.
+ */
+export const toolkit: { id: string; group: Localized; items: Localized[] }[] = [
+  {
+    id: "web",
+    group: { es: "desarrollo web", en: "web development" },
+    items: [
+      { es: "HTML", en: "HTML" },
+      { es: "CSS", en: "CSS" },
+      { es: "JavaScript", en: "JavaScript" },
+      { es: "React", en: "React" },
+      { es: "Next.js", en: "Next.js" },
+      { es: "Tailwind CSS", en: "Tailwind CSS" },
+    ],
+  },
+  {
+    id: "backend",
+    group: { es: "backend y lenguajes", en: "backend & languages" },
+    items: [
+      { es: "Java", en: "Java" },
+      { es: "Spring Boot", en: "Spring Boot" },
+      { es: "Microservicios", en: "Microservices" },
+      { es: "Python", en: "Python" },
+      { es: "Django", en: "Django" },
+      { es: "APIs seguras", en: "Secure APIs" },
+    ],
+  },
+  {
+    id: "cloud",
+    group: { es: "nube y datos", en: "cloud & data" },
+    items: [
+      { es: "Microsoft Azure", en: "Microsoft Azure" },
+      { es: "Despliegue de VMs", en: "VM deployment" },
+      { es: "SQL Server", en: "SQL Server" },
+      { es: "PostgreSQL", en: "PostgreSQL" },
+    ],
+  },
   {
     id: "security",
     group: { es: "seguridad", en: "security" },
-    items: ["Nessus", "OWASP Top 10", "ISO/IEC 27001", "Criptografía", "SGSI"],
+    items: [
+      { es: "Nessus", en: "Nessus" },
+      { es: "OWASP Top 10", en: "OWASP Top 10" },
+      { es: "ISO/IEC 27001", en: "ISO/IEC 27001" },
+      { es: "SGSI", en: "ISMS" },
+      { es: "Criptografía", en: "Cryptography" },
+    ],
   },
   {
     id: "infra",
     group: { es: "sistemas y redes", en: "systems & networking" },
-    items: ["Windows Server", "Redes on-premise", "DataCenter", "HelpDesk"],
-  },
-  {
-    id: "data",
-    group: { es: "datos y empresa", en: "data & enterprise" },
-    items: ["SQL", "Genexus", "ERP", "Migración de bases de datos"],
+    items: [
+      { es: "Windows Server", en: "Windows Server" },
+      { es: "Redes on-premise", en: "On-premise networking" },
+      { es: "DataCenter", en: "DataCenter" },
+      { es: "HelpDesk", en: "HelpDesk" },
+      { es: "SharePoint", en: "SharePoint" },
+    ],
   },
   {
     id: "process",
     group: { es: "proceso", en: "process" },
-    items: ["Git", "Scrum", "Next.js", "Automatización"],
+    items: [
+      { es: "Git", en: "Git" },
+      { es: "GitHub", en: "GitHub" },
+      { es: "Scrum", en: "Scrum" },
+      { es: "DevOps", en: "DevOps" },
+      { es: "Desarrollo ágil", en: "Agile development" },
+    ],
   },
 ];
 
@@ -323,10 +377,10 @@ export const headlineStack = [
   "Python",
   "Java",
   "JavaScript",
+  "React",
+  "Next.js",
   "Linux",
-  "Microsoft Azure",
   "Nessus",
-  "OWASP Top 10",
   "ISO/IEC 27001",
 ];
 
@@ -458,8 +512,21 @@ export const counts = {
   certifications: certifications.length,
   publications: work.filter((item) => item.category === "research").length,
   roles: work.filter((item) => item.category !== "research").length,
-  /** Herramientas con nivel declarado en el CV. */
-  skills: skills.reduce((total, group) => total + group.items.length, 0),
+  /**
+   * Tecnologías declaradas en el CV: las que llevan nivel más el resto del
+   * instrumental.
+   *
+   * Antes esta cifra contaba SÓLO las que llevan nivel. Con el CV de 2026 eso
+   * pasó de diez a seis, y de esas seis tres son Word, Excel y PowerPoint: un
+   * «6» en la portada de un perfil de ingeniería, con la mitad siendo
+   * ofimática, decía menos de lo que Elian sabe hacer, no más. Contar el stack
+   * completo es igual de verificable —todo sale del PDF descargable— y
+   * representa mejor lo que el CV lista ahora que incluye Azure, PostgreSQL,
+   * React, Next.js, Spring Boot, Django y DevOps.
+   */
+  technologies:
+    skills.reduce((total, group) => total + group.items.length, 0) +
+    toolkit.reduce((total, group) => total + group.items.length, 0),
 } as const;
 
 /**

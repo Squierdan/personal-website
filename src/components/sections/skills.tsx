@@ -90,12 +90,15 @@ export function Skills() {
               {group.group[locale]}/
             </p>
             <ul className="mt-3 flex flex-wrap gap-1.5">
+              {/* `key={item.en}`: los items son bilingües y usar el texto
+                  traducido como clave remontaría la lista al cambiar de
+                  idioma, que es la trampa del §4.11. */}
               {group.items.map((item) => (
                 <li
-                  key={item}
+                  key={item.en}
                   className="border border-border px-2 py-1 font-mono text-data text-fg-muted transition-colors duration-[var(--dur-micro)] hover:border-border-strong hover:text-fg"
                 >
-                  {item}
+                  {item[locale]}
                 </li>
               ))}
             </ul>

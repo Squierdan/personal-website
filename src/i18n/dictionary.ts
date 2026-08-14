@@ -143,8 +143,8 @@ export const dictionaries: Record<Locale, Dictionary> = {
         },
         { value: String(counts.roles), label: "roles en TI y seguridad" },
         {
-          value: String(counts.skills),
-          label: "herramientas con nivel experto o avanzado",
+          value: String(counts.technologies),
+          label: "tecnologías declaradas en el CV",
         },
       ],
     },
@@ -293,8 +293,8 @@ export const dictionaries: Record<Locale, Dictionary> = {
         },
         { value: String(counts.roles), label: "roles in IT and security" },
         {
-          value: String(counts.skills),
-          label: "tools at expert or advanced level",
+          value: String(counts.technologies),
+          label: "technologies declared on the CV",
         },
       ],
     },

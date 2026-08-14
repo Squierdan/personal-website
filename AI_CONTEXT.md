@@ -53,7 +53,7 @@ declaran en `src/app/globals.css` dentro de `@theme inline`. El modo oscuro usa
 |---|---|
 | `src/lib/site.ts` | Datos personales: nombre, handle, rol, email, redes, URL, zona horaria, disponibilidad |
 | `src/i18n/dictionary.ts` | **Todas** las cadenas visibles, en `es` y `en` |
-| `src/lib/content.ts` | Servicios, experiencia/investigación, habilidades con nivel, instrumental, idiomas y certificaciones |
+| `src/lib/content.ts` | Servicios, experiencia/investigación, habilidades con nivel, instrumental, idiomas y certificaciones. **Todo sale del CV de `public/`**: si actualizas el PDF, revisa que estos datos sigan coincidiendo |
 
 ### Archivos de diseño — edita con cuidado
 
@@ -621,6 +621,21 @@ las quince certificaciones agrupadas por año; el orden pasa a perfil ·
 habilidades · experiencia · servicios · contacto, con la prueba por delante de
 la oferta; tira de tecnologías y contador en la portada; datos nuevos leídos del
 CV (niveles, inglés C1 y las dos certificaciones que faltaban).
+
+**Hecho al actualizar el CV a la versión ATS de 2026:** PDFs reemplazados
+(1,5 MB → 34 KB, texto seleccionable y legible por ATS); los medidores bajan de
+diez a **seis**, que son los únicos niveles que declara el CV nuevo —Python,
+Java, HTML·CSS·JS y Azure los perdieron y se movieron al instrumental—; el
+instrumental se reorganiza según las categorías del CV y gana Azure, PostgreSQL,
+React, Next.js, Spring Boot, Django y DevOps; los items del instrumental pasan
+de `string` a `Localized`, que corrige un fallo real —la versión en inglés
+mostraba «Criptografía», «Automatización» y «Migración de bases de datos» en
+español—; y la tercera cifra del hero pasa a contar el stack completo.
+
+> ⚠️ **Al actualizar el CV, comprueba SIEMPRE los niveles.** Es lo que más
+> silenciosamente se desincroniza: el sitio siguió afirmando «Python — experto»
+> después de que el CV dejara de decirlo, y el PDF que lo desmiente está a un
+> clic en la misma página. Ver §4.10.
 
 **Pendiente (requiere datos o decisiones del usuario):**
 
