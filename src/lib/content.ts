@@ -19,7 +19,8 @@ export type Service = {
   cmd: string;
   title: Localized;
   description: Localized;
-  keywords: string[];
+  /** Bilingües: si fueran `string[]` la versión EN mostraría «Remediación». */
+  keywords: Localized[];
 };
 
 export const services: Service[] = [
@@ -33,7 +34,12 @@ export const services: Service[] = [
       es: "Escaneo con Nessus, triaje y priorización por riesgo real, seguimiento de remediación e informes ejecutivos y técnicos comprensibles para ambos públicos.",
       en: "Nessus scanning, triage and prioritisation by real risk, remediation tracking, and executive and technical reports that both audiences can actually read.",
     },
-    keywords: ["Nessus", "CVSS", "Remediación", "Informes"],
+    keywords: [
+      { es: "Nessus", en: "Nessus" },
+      { es: "CVSS", en: "CVSS" },
+      { es: "Remediación", en: "Remediation" },
+      { es: "Informes", en: "Reporting" },
+    ],
   },
   {
     cmd: "comply --iso27001",
@@ -45,7 +51,12 @@ export const services: Service[] = [
       es: "Administración de un Sistema de Gestión de Seguridad de la Información bajo ISO/IEC 27001: políticas, controles, evidencias y acompañamiento durante la auditoría de certificación.",
       en: "Running an Information Security Management System under ISO/IEC 27001: policies, controls, evidence, and support throughout the certification audit.",
     },
-    keywords: ["ISO 27001", "SGSI", "Políticas", "Auditoría"],
+    keywords: [
+      { es: "ISO 27001", en: "ISO 27001" },
+      { es: "SGSI", en: "ISMS" },
+      { es: "Políticas", en: "Policies" },
+      { es: "Auditoría", en: "Audit" },
+    ],
   },
   {
     cmd: "pentest",
@@ -57,7 +68,12 @@ export const services: Service[] = [
       es: "Reconocimiento, identificación y explotación controlada de fallos en aplicaciones y redes, con foco en el OWASP Top 10 y evidencia reproducible de cada hallazgo.",
       en: "Reconnaissance, identification and controlled exploitation of flaws in applications and networks, focused on the OWASP Top 10, with reproducible evidence for every finding.",
     },
-    keywords: ["OWASP Top 10", "Criptografía", "Redes", "Linux"],
+    keywords: [
+      { es: "OWASP Top 10", en: "OWASP Top 10" },
+      { es: "Criptografía", en: "Cryptography" },
+      { es: "Redes", en: "Networking" },
+      { es: "Linux", en: "Linux" },
+    ],
   },
   {
     cmd: "admin --sys",
@@ -69,7 +85,12 @@ export const services: Service[] = [
       es: "Soporte especializado, endurecimiento de servidores Linux y Windows, virtualización, redes on-premise y reestructuración de infraestructura de centro de datos.",
       en: "Specialised support, Linux and Windows server hardening, virtualisation, on-premise networking, and data centre infrastructure restructuring.",
     },
-    keywords: ["Linux", "Microsoft Azure", "VirtualBox", "HelpDesk"],
+    keywords: [
+      { es: "Linux", en: "Linux" },
+      { es: "Microsoft Azure", en: "Microsoft Azure" },
+      { es: "VirtualBox", en: "VirtualBox" },
+      { es: "HelpDesk", en: "HelpDesk" },
+    ],
   },
   {
     cmd: "migrate",
@@ -81,7 +102,12 @@ export const services: Service[] = [
       es: "Migración de sistemas empresariales y bases de datos con continuidad de operación, más diseño de flujos internos que eliminan trabajo manual y dan trazabilidad.",
       en: "Enterprise system and database migrations without breaking operations, plus internal workflow design that removes manual work and adds traceability.",
     },
-    keywords: ["ERP", "Genexus", "Bases de datos", "Procesos"],
+    keywords: [
+      { es: "ERP", en: "ERP" },
+      { es: "Genexus", en: "Genexus" },
+      { es: "Bases de datos", en: "Databases" },
+      { es: "Procesos", en: "Processes" },
+    ],
   },
   {
     cmd: "build --web",
@@ -93,7 +119,12 @@ export const services: Service[] = [
       es: "Aplicaciones web con JavaScript, Java y Python, escritas con criterio de seguridad desde el diseño y no como un parche al final del proyecto.",
       en: "Web applications with JavaScript, Java and Python, written with security in mind from the design stage rather than patched in at the end.",
     },
-    keywords: ["JavaScript", "Java", "Python", "Next.js"],
+    keywords: [
+      { es: "JavaScript", en: "JavaScript" },
+      { es: "Java", en: "Java" },
+      { es: "Python", en: "Python" },
+      { es: "Next.js", en: "Next.js" },
+    ],
   },
 ];
 
@@ -128,7 +159,8 @@ export type WorkItem = {
   summary: Localized;
   /** Detalle que aparece al expandir la fila. */
   detail: Localized;
-  stack: string[];
+  /** Bilingües, por el mismo motivo que `Service.keywords`. */
+  stack: Localized[];
   link?: string;
   linkLabel?: Localized;
 };
@@ -165,7 +197,11 @@ export const work: WorkItem[] = [
       es: "Artículo revisado por pares publicado en Annals of Telecommunications (Springer Nature), sobre Nested-C, un protocolo de consenso para la arquitectura NestedChain. Formé parte de un equipo de ocho autores: mi aporte se centró en la redacción del artículo y en algunas ideas para el algoritmo del protocolo. Autores: Caizapanta, E., Maldonado-Ruiz, D., Tufiño, C., Vásconez, G., Castro, E., Pabón, T., Torres, J. y El Madhoun, N.",
       en: "Peer-reviewed article published in Annals of Telecommunications (Springer Nature) on Nested-C, a consensus protocol for the NestedChain architecture. I was part of an eight-author team: my contribution centred on writing the paper and on some ideas for the protocol's algorithm. Authors: Caizapanta, E., Maldonado-Ruiz, D., Tufiño, C., Vásconez, G., Castro, E., Pabón, T., Torres, J. and El Madhoun, N.",
     },
-    stack: ["Redacción técnica", "Protocolos de consenso", "Blockchain"],
+    stack: [
+      { es: "Redacción técnica", en: "Technical writing" },
+      { es: "Protocolos de consenso", en: "Consensus protocols" },
+      { es: "Blockchain", en: "Blockchain" },
+    ],
     link: "https://doi.org/10.1007/s12243-025-01104-1",
     linkLabel: { es: "ver artículo", en: "read paper" },
   },
@@ -185,7 +221,11 @@ export const work: WorkItem[] = [
       es: "Participé en la planificación y el diseño esquemático de un sistema interno de automatización orientado a optimizar los flujos de trabajo y la gestión documental de una consultora internacional. Colaboré en la estructuración de procesos operativos con foco en eficiencia y trazabilidad, y formé parte del equipo de gestión de expedientes EB-1A, revisando, organizando y consolidando documentación para clientes internacionales.",
       en: "I took part in the planning and schematic design of an internal automation system aimed at optimising workflows and document management at an international consultancy. I contributed to structuring operational processes with a focus on efficiency and traceability, and was part of the EB-1A case management team, reviewing, organising and consolidating documentation for international clients.",
     },
-    stack: ["Automatización", "Gestión documental", "Análisis operativo"],
+    stack: [
+      { es: "Automatización", en: "Automation" },
+      { es: "Gestión documental", en: "Document management" },
+      { es: "Análisis operativo", en: "Operational analysis" },
+    ],
   },
   {
     title: {
@@ -203,7 +243,12 @@ export const work: WorkItem[] = [
       es: "Gestión de vulnerabilidades con Nessus: escaneo, análisis, informes y seguimiento de remediación. Administré el Sistema de Gestión de Seguridad de la Información y trabajé en el cumplimiento de la norma ISO/IEC 27001, participando directamente en la auditoría de certificación. También apoyé en la reestructuración del DataCenter y en la gestión de equipos.",
       en: "Vulnerability management with Nessus: scanning, analysis, reporting and remediation follow-up. I administered the Information Security Management System and worked on ISO/IEC 27001 compliance, taking part directly in the certification audit. I also supported the DataCenter restructuring and equipment management.",
     },
-    stack: ["Nessus", "ISO 27001", "SGSI", "DataCenter"],
+    stack: [
+      { es: "Nessus", en: "Nessus" },
+      { es: "ISO 27001", en: "ISO 27001" },
+      { es: "SGSI", en: "ISMS" },
+      { es: "DataCenter", en: "DataCenter" },
+    ],
   },
   {
     title: {
@@ -221,7 +266,12 @@ export const work: WorkItem[] = [
       es: "Soporte de sistemas en modalidad HelpDesk con gestión de tickets, además de soporte en redes, ofimática e impresoras. Ejecuté la migración y el mantenimiento de la base de datos del ERP CANORUS desde Genexus 16 hacia Genexus 18 WorkWithPlus, y llevé el inventario de compras e insumos electrónicos.",
       en: "HelpDesk systems support with ticket management, plus support for networks, office software and printers. I carried out the migration and maintenance of the CANORUS ERP database from Genexus 16 to Genexus 18 WorkWithPlus, and managed the purchasing and electronic supplies inventory.",
     },
-    stack: ["Genexus", "ERP", "Bases de datos", "HelpDesk"],
+    stack: [
+      { es: "Genexus", en: "Genexus" },
+      { es: "ERP", en: "ERP" },
+      { es: "Bases de datos", en: "Databases" },
+      { es: "HelpDesk", en: "HelpDesk" },
+    ],
   },
 ];
 
@@ -419,7 +469,8 @@ export const languages: { id: string; name: Localized; level: Localized }[] = [
  * o los dos acabarán discrepando.
  */
 export type Certification = {
-  name: string;
+  /** Bilingüe: el CV en inglés trae su propio nombre para cada curso. */
+  name: Localized;
   issuer: string;
   /** `YYYY-MM` */
   date: string;
@@ -434,58 +485,58 @@ export type Certification = {
  * trece; la cifra del CV era la correcta y lo que faltaba eran los datos.
  */
 export const certifications: Certification[] = [
-  { name: "Hacking Ético", issuer: "Platzi", date: "2025-06" },
+  { name: { es: "Hacking Ético", en: "Ethical Hacking" }, issuer: "Platzi", date: "2025-06" },
   {
-    name: "OWASP Top 10: Riesgos en Aplicaciones",
+    name: { es: "OWASP Top 10: Riesgos en Aplicaciones", en: "OWASP Top 10: Application Security Risks" },
     issuer: "Platzi",
     date: "2025-06",
   },
-  { name: "Fundamentos de Criptografía", issuer: "Platzi", date: "2025-06" },
-  { name: "Redes de Internet — Profesional", issuer: "Platzi", date: "2025-06" },
-  { name: "Seguridad de Redes On-Premise", issuer: "Platzi", date: "2025-06" },
+  { name: { es: "Fundamentos de Criptografía", en: "Cryptography Fundamentals" }, issuer: "Platzi", date: "2025-06" },
+  { name: { es: "Redes de Internet — Profesional", en: "Internet Networking — Professional" }, issuer: "Platzi", date: "2025-06" },
+  { name: { es: "Seguridad de Redes On-Premise", en: "On-Premise Network Security" }, issuer: "Platzi", date: "2025-06" },
   {
-    name: "Ciberseguridad y Privacidad para Empresas",
+    name: { es: "Ciberseguridad y Privacidad para Empresas", en: "Cybersecurity and Privacy for Businesses" },
     issuer: "Platzi",
     date: "2025-05",
   },
-  { name: "Foundations of Cybersecurity", issuer: "Google", date: "2025-04" },
+  { name: { es: "Foundations of Cybersecurity", en: "Foundations of Cybersecurity" }, issuer: "Google", date: "2025-04" },
   {
-    name: "Introducción a la Terminal y Línea de Comandos",
+    name: { es: "Introducción a la Terminal y Línea de Comandos", en: "Introduction to the Terminal and Command Line" },
     issuer: "Platzi",
     date: "2025-04",
   },
   {
-    name: "Guía para Aprender Seguridad Informática",
+    name: { es: "Guía para Aprender Seguridad Informática", en: "Guide to Learning IT Security" },
     issuer: "Platzi",
     date: "2025-04",
   },
   {
-    name: "Career Essentials in Cybersecurity",
+    name: { es: "Career Essentials in Cybersecurity", en: "Career Essentials in Cybersecurity" },
     issuer: "Microsoft · LinkedIn Learning",
     date: "2025-03",
   },
   {
-    name: "Introduction to Cybersecurity",
+    name: { es: "Introduction to Cybersecurity", en: "Introduction to Cybersecurity" },
     issuer: "Cisco Networking Academy",
     date: "2024-05",
   },
   {
-    name: "Seguridad Informática y Protección de Datos Personales",
+    name: { es: "Seguridad Informática y Protección de Datos Personales", en: "Information Security and Personal Data Protection" },
     issuer: "CEC-EPN",
     date: "2024-05",
   },
   {
-    name: "NDG Linux Essentials",
+    name: { es: "NDG Linux Essentials", en: "NDG Linux Essentials" },
     issuer: "Cisco Networking Academy",
     date: "2023-08",
   },
   {
-    name: "Scrum Foundation Professional (SFPC)",
+    name: { es: "Scrum Foundation Professional (SFPC)", en: "Scrum Foundation Professional Certificate" },
     issuer: "CertiProf",
     date: "2023-06",
   },
   {
-    name: "Programación con Python aplicada a la Ingeniería",
+    name: { es: "Programación con Python aplicada a la Ingeniería", en: "Python Programming Applied to Engineering" },
     issuer: "CEC-EPN",
     date: "2020-03",
   },

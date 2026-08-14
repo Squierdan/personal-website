@@ -184,11 +184,11 @@ export function Skills() {
               {bucket.items.map((cert) => (
                 <RevealItem
                   as="li"
-                  key={cert.name}
+                  key={cert.name.en}
                   className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-0.5"
                 >
                   <span className="text-meta leading-snug text-fg">
-                    {cert.name}
+                    {cert.name[locale]}
                   </span>
                   <span className="font-mono text-data text-fg-subtle">
                     {cert.issuer}

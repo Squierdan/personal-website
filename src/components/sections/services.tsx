@@ -74,10 +74,10 @@ export function Services() {
               <ul className="mt-auto flex flex-wrap gap-1.5 pt-5">
                 {service.keywords.map((keyword) => (
                   <li
-                    key={keyword}
+                    key={keyword.en}
                     className="border border-border px-1.5 py-0.5 font-mono text-data text-fg-subtle"
                   >
-                    {keyword}
+                    {keyword[locale]}
                   </li>
                 ))}
               </ul>

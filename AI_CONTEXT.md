@@ -22,6 +22,12 @@ proyectos, métricas, años de experiencia ni tecnologías que no estén en
 No hay backend, no hay base de datos y no hay CMS: **todo el contenido está en
 archivos TypeScript**. El sitio se prerenderiza como estático.
 
+**Sobre el texto:** ninguna cadena visible explica de dónde sale el dato ni le
+dice al visitante lo que ya ve. Se eliminaron «tal como está declarado en el
+CV», «tecnologías declaradas en el CV», «formación continua en seguridad, redes
+y sistemas» y «filtra para explorar». Una etiqueta etiqueta; no justifica su
+propia procedencia.
+
 **Objetivo de diseño:** interfaz de "engineering terminal". Deliberadamente
 **no** es el patrón habitual de portafolio generado por IA (hero con degradado,
 rejilla de tarjetas con glassmorphism, iconos de colores). Si vas a añadir
@@ -102,6 +108,30 @@ const { t, locale, toggleLocale } = useLanguage();
 
 Para contenido de `content.ts`, que es `Localized = Record<Locale, string>`:
 `service.title[locale]`.
+
+> ⚠️ **Ningún campo visible puede ser `string` ni `string[]`.** Es la fuga más
+> difícil de ver, porque TypeScript no se queja: un `string[]` compila
+> perfectamente y simplemente muestra el mismo texto en los dos idiomas. Así
+> llegaron a producción dieciocho cadenas en español dentro de la versión
+> inglesa —los chips de servicios («Remediación», «Informes», «Políticas»,
+> «Auditoría»), el stack de cada experiencia y los nombres de nueve
+> certificaciones—, en un sitio cuyo público son reclutadores internacionales.
+> `keywords`, `stack`, `name` de certificación y los items del instrumental son
+> todos `Localized[]`.
+>
+> Los nombres propios se repiten idénticos en ambos idiomas a propósito:
+> «Escuela Politécnica Nacional», «Coris del Ecuador», React, Nessus, Git.
+> Traducir una marca o una institución sería peor que no traducirla.
+>
+> **Cómo detectarlo**, en la consola con el sitio en inglés:
+>
+> ```js
+> [...document.querySelector('main').querySelectorAll('*')]
+>   .filter(e => e.children.length === 0 && /[áéíóúñ¿¡]/i.test(e.textContent))
+>   .map(e => e.textContent.trim())
+> ```
+>
+> Sólo deberían salir nombres propios.
 
 ### 4.2 Colores
 Nunca uses colores literales de Tailwind (`text-slate-500`, `bg-gray-900`).

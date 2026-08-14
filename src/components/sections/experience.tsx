@@ -227,10 +227,10 @@ export function Experience() {
                         <ul className="mt-4 flex flex-wrap gap-2">
                           {item.stack.map((tag) => (
                             <li
-                              key={tag}
+                              key={tag.en}
                               className="border border-border px-2 py-0.5 font-mono text-data text-fg-subtle"
                             >
-                              {tag}
+                              {tag[locale]}
                             </li>
                           ))}
                         </ul>
