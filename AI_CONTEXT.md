@@ -667,6 +667,20 @@ español—; y la tercera cifra del hero pasa a contar el stack completo.
 > después de que el CV dejara de decirlo, y el PDF que lo desmiente está a un
 > clic en la misma página. Ver §4.10.
 
+**Hecho para el Taller B1 de HCI (octubre 2026):** tres versiones de la hoja de
+vida como HTML estático en `public/cv/v1`, `v2` y `v3`, servidas en `/cv/v1…v3`
+por las reescrituras de `next.config.ts` (`/cv` redirige a `/cv/v3`). Son
+independientes de la app: no usan su layout, Tailwind ni React, y comparten
+sólo `public/cv/assets/` (foto sin EXIF y las dos fuentes copiadas de
+Fontsource). Las tres llevan `noindex`. El prompt, la matriz heurística y las
+decisiones de contexto están en `docs/taller-b1-hci.md`.
+
+> ⚠️ **V1 y V2 son defectuosas A PROPÓSITO.** Son el «antes» de un ejercicio
+> de evaluación heurística: los títulos en inglés, el `alert()`, los botones de
+> cuatro colores, el gris de 3.14:1 o la falta de ayuda son el contenido del
+> trabajo, no errores. No los «arregles». Sólo V3 debe cumplir las reglas de
+> este documento. Si editas los datos del CV, actualiza las tres.
+
 **Pendiente (requiere datos o decisiones del usuario):**
 
 1. **No hay sección de proyectos, y es el hueco más grande que queda.** Un
@@ -683,8 +697,11 @@ español—; y la tercera cifra del hero pasa a contar el stack completo.
    Para un perfil de seguridad de la información un dominio propio o Gmail
    proyecta mejor; decisión del usuario.
 4. **Formulario sin backend.** Compone un `mailto:`. Ver receta en §5.
-5. **Teléfono.** Deliberadamente NO publicado (está en el CV, pero exponerlo en
-   una web pública atrae spam). Añadirlo solo si el usuario lo pide.
+5. **Teléfono.** Deliberadamente NO publicado en el sitio principal (está en el
+   CV, pero exponerlo en una web pública atrae spam). Añadirlo solo si el
+   usuario lo pide. **Excepción:** `/cv/v1…v3` sí lo muestran, con WhatsApp,
+   porque en una hoja de vida ecuatoriana es el canal esperado; el número ya
+   estaba en el PDF público.
 6. **Dominio propio.** Hoy usa el subdominio `.vercel.app`. Si se compra uno,
    actualizar `site.url` y volver a desplegar.
 7. **Sin tests.** No hay Vitest ni Playwright configurados.

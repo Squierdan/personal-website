@@ -11,6 +11,20 @@ const nextConfig: NextConfig = {
   images: {
     formats: ["image/avif", "image/webp"],
   },
+  /* Taller de HCI (B1): tres versiones de la hoja de vida como HTML estático
+     en `public/cv/v1…v3/`. Son páginas independientes a propósito —no usan el
+     layout, los estilos ni el JavaScript de la app— para que cada versión se
+     evalúe por sí sola. Next no sirve `index.html` al pedir una carpeta, así
+     que estas reescrituras hacen que `/cv/v3` resuelva a su archivo. */
+  async rewrites() {
+    return ["v1", "v2", "v3"].map((version) => ({
+      source: `/cv/${version}`,
+      destination: `/cv/${version}/index.html`,
+    }));
+  },
+  async redirects() {
+    return [{ source: "/cv", destination: "/cv/v3", permanent: false }];
+  },
   async headers() {
     return [
       {
